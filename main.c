@@ -16,7 +16,6 @@ char *out_post = ".ob";
 char *ext_post = ".ext";
 char *ent_post = ".ent";
 
-
 I_table_row main_table[MEMORY_SIZE];
 
 int main(int argc , char *argv[])

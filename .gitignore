@@ -1,0 +1,7 @@
+# To Ignore 
+*.o
+*output
+main
+
+# But not these files...
+!gitignore
