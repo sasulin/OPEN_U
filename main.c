@@ -3,8 +3,18 @@
 #include <string.h>
 #include "aux_func.h"
 
-#define MEMORY_SIZE 256
+char *reserved_words[]={"mov","cmp","add",
+					  "sub","not","clr",
+	 				  "lea","inc","dec",
+      				  "jmp","bne","red",
+      				  "prn","jsr","rts","stop",
+					  "r0","r1","r2","r3","r4","r5","r6","r7"
+					  "data","strings","mat"};
 
+char *in_post = ".as";
+char *out_post = ".ob";
+char *ext_post = ".ext";
+char *ent_post = ".ent";
 
 
 I_table_row main_table[MEMORY_SIZE];
@@ -12,10 +22,11 @@ I_table_row main_table[MEMORY_SIZE];
 int main(int argc , char *argv[])
 {
 	int i;
-	char buf[MAX_ROW_LEN];	
+	char *input_file;	
 
 /*Input file*/
 	FILE *fp;
+	input_file = strcat(argv[1],in_post);
 
 	if (argc==1) /*No arguments*/
 	{
@@ -23,7 +34,7 @@ int main(int argc , char *argv[])
 		exit(1);
 	}	
 
-	fp=fopen(argv[1],"r");
+	fp=fopen(input_file,"r");
 	if (!fp)
 	{
 		fprintf(stderr,
@@ -31,12 +42,9 @@ int main(int argc , char *argv[])
 		exit(1);
 	}	
 
-
-/*Loop on input file*/
-	while(fgets(buf,MAX_ROW_LEN,fp) !=NULL)
-	{
-		printf("%s\n",buf);
-	}   
+	first_scan(fp);
+/*	second_scan(fp);*/
+	
 
 /*Initializing & Printing Instruction table*/	
 	putchar('\n');

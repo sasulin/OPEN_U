@@ -1,0 +1,1000 @@
+  645  vi example_test00.c
+  646  make example_test00
+  647  ckear
+  648  clear
+  649  ckear
+  650  make example_test00
+  651  vi example_test00.c
+  652  make example_test00
+  653  make example_test00;./example_test00
+  654  clear
+  655  make example_test00;./example_test00
+  656  vi example_test00.c
+  657  make example_test00;./example_test00
+  658  clear
+  659  make example_test00;./example_test00
+  660  vi example_test00.c
+  661  make example_test00;./example_test00
+  662  clear
+  663  make example_test00;./example_test00
+  664  vi example_test00.c
+  665  make example_test00;./example_test00
+  666  vi example_test00.c
+  667  make example_test00;./example_test00
+  668  clear
+  669  make example_test00;./example_test00
+  670  vi
+  671  make example_test00;./example_test00
+  672  vi example_test00.c
+  673  make example_test00;./example_test00
+  674  vi example_test00.c
+  675  make example_test00;./example_test00
+  676  vi example_test00.c
+  677  make example_test00;./example_test00
+  678  vi example_test00.c
+  679  make example_test00;./example_test00
+  680  vi example_test00.c
+  681  make example_test00;./example_test00
+  682  vi example_test00.c
+  683  make example_test00;./example_test00
+  684  vi example_test00.c
+  685  make example_test00;./example_test00
+  686  clear
+  687  vi example_test00.c
+  688  clear
+  689  make example_test00;./example_test00
+  690  vi example_test00.c
+  691  make example_test00;./example_test00
+  692  vi example_test00.c
+  693  make example_test00;./example_test00
+  694  clear
+  695  make example_test00;./example_test00
+  696  vi example_test00.c
+  697  make example_test00;./example_test00
+  698  vi example_test00.c
+  699  make example_test00;./example_test00
+  700  clear
+  701  make example_test00;./example_test00
+  702  vi example_test00.c
+  703  make example_test00;./example_test00
+  704  vi example_test00.c
+  705  make example_test00;./example_test00
+  706  vi example_test00.c
+  707  make example_test00;./example_test00
+  708  vi example_test00.c
+  709  make example_test00;./example_test00
+  710  vi example_test00.c
+  711  make example_test00;./example_test00
+  712  vi example_test00.c
+  713  make example_test00;./example_test00
+  714  vi example_test00.c
+  715  make example_test00;./example_test00
+  716  vi example_test00.c
+  717  make example_test00;./example_test00
+  718  clear
+  719  make example_test00;./example_test00
+  720  vi example_test00.c
+  721  make example_test00;./example_test00
+  722  vi example_test00.c
+  723  make example_test00;./example_test00
+  724  clear
+  725  make example_test00;./example_test00
+  726  make example_test00;./example_test00
+  727  vi example_test00.c
+  728  make example_test00;./example_test00
+  729  vi example_test00.c
+  730  make example_test00;./example_test00
+  731  vi example_test00.c
+  732  make example_test00;./example_test00
+  733  clear
+  734  make example_test00;./example_test00
+  735  vi example_test00.c
+  736  make example_test00;./example_test00
+  737  vi example_test00.c
+  738  make example_test00;./example_test00
+  739  vi example_test00.c
+  740  make example_test00;./example_test00
+  741  vi example_test00.c
+  742  make example_test00;./example_test00
+  743  vi example_test00.c
+  744  make example_test00;./example_test00
+  745  vi example_test00.c
+  746  make example_test00;./example_test00
+  747  clear
+  748  make example_test00;./example_test00
+  749  vi example_test00.c
+  750  make example_test00;./example_test00
+  751  vi example_test00.c
+  752  make example_test00;./example_test00
+  753  vi example_test00.c
+  754  make example_test00;./example_test00
+  755  vi example_test00.c
+  756  make example_test00;./example_test00
+  757  vi example_test00.c
+  758  make example_test00;./example_test00
+  759  vi example_test00.c
+  760  make example_test00;./example_test00
+  761  clear
+  762  make example_test00;./example_test00
+  763  vi example_test00.c
+  764  make example_test00;./example_test00
+  765  vi example_test00.c
+  766  make example_test00;./example_test00
+  767  vi example_test00.c
+  768  make example_test00;./example_test00
+  769  vi example_test00.c
+  770  make example_test00;./example_test00
+  771  clear
+  772  make example_test00;./example_test00
+  773  vi example_test00.c
+  774  make example_test00;./example_test00
+  775  vi example_test00.c
+  776  make example_test00;./example_test00
+  777  vi example_test00.c
+  778  make example_test00;./example_test00
+  779  vi example_test00.c
+  780  make example_test00;./example_test00
+  781  vi example_test00.c
+  782  make example_test00;./example_test00
+  783  vi example_test00.c
+  784  make example_test00;./example_test00
+  785  vi example_test00.c
+  786  make example_test00;./example_test00
+  787  vi example_test00.c
+  788  make example_test00;./example_test00
+  789  clear
+  790  make example_test00;./example_test00
+  791  vi example_test00.c
+  792  make example_test00;./example_test00
+  793  vi example_test00.c
+  794  make example_test00;./example_test00
+  795  vi example_test00.c
+  796  make example_test00;./example_test00
+  797  clear
+  798  make example_test00;./example_test00
+  799  vi example_test00.c
+  800  make example_test00;./example_test00
+  801  vi example_test00.c
+  802  make example_test00;./example_test00
+  803  vi example_test00.c
+  804  make example_test00;./example_test00
+  805  vi example_test00.c
+  806  make example_test00;./example_test00
+  807  vi example_test00.c
+  808  make example_test00;./example_test00
+  809  vi example_test00.c
+  810  make example_test00;./example_test00
+  811  vi example_test00.c
+  812  make example_test00;./example_test00
+  813  clear
+  814  make example_test00;./example_test00
+  815  vi example_test00.c
+  816  make example_test00;./example_test00
+  817  vi example_test00.c
+  818  make example_test00;./example_test00
+  819  vi example_test00.c
+  820  make example_test00;./example_test00
+  821  vi example_test00.c
+  822  make example_test00;./example_test00
+  823  vi example_test00.c
+  824  make example_test00;./example_test00
+  825  vi example_test00.c
+  826  make example_test00;./example_test00
+  827  vi example_test00.c
+  828  make example_test00;./example_test00
+  829  vi example_test00.c
+  830  make example_test00;./example_test00
+  831  vi example_test00.c
+  832  make example_test00;./example_test00
+  833  vi example_test00.c
+  834  vi linked_lists.c
+  835  vi makefile
+  836  make linked_lists
+  837  clear
+  838  vi linked_lists
+  839  vi linked_lists.c
+  840  ls
+  841  vi linked_lists.c
+  842  ./linked_lists
+  843  ls
+  844  ./linked_lists
+  845  ls -al
+  846  ./linked_lists
+  847  vi linked_lists.c
+  848  make linked_lists
+  849  ./linked_lists
+  850  vi linked_lists.c
+  851  vi test.txt
+  852  vi linked_lists.c
+  853  vi test.txt 
+  854  vi linked_lists.c
+  855  vi test.txt 
+  856  ./linked_lists
+  857  vi test.txt 
+  858  ./linked_lists
+  859  vi test.txt 
+  860  ./linked_lists
+  861  vi test.txt 
+  862  ./linked_lists
+  863  clear
+  864  ./linked_lists
+  865  vi linked_lists.c
+  866  ./linked_lists
+  867  vi linked_lists.c
+  868  vi test.txt 
+  869  vi linked_lists.c
+  870  vi test.txt 
+  871  make linked_lists;./linked_lists
+  872  vi test.txt 
+  873  vi linked_lists.c
+  874  vi test.txt 
+  875  make linked_lists;./linked_lists
+  876  vi test.txt 
+  877  vi linked_lists.c
+  878  make linked_lists;./linked_lists
+  879  ls
+  880  ls -al
+  881  history
+  882  history |grep cd
+  883  ls
+  884  cd Ubuntu_Shared/
+  885  ls
+  886  cd Test_prep/
+  887  ls
+  888  vu linked_lists.c
+  889  vi linked_lists.c
+  890  make linked_lists;./linked_lists
+  891  vi linked_lists.c
+  892  vi test.txt 
+  893  cp test.txt test2.txt
+  894  vi test2.txt 
+  895  vi linked_lists.c
+  896  make linked_lists;./linked_lists
+  897  vi linked_lists.c
+  898  make linked_lists;./linked_lists
+  899  vi linked_lists.c
+  900  vi test2.txt 
+  901  make linked_lists;./linked_lists
+  902  vi test2.txt 
+  903  ls
+  904  vi test_90
+  905  vi test_90.c
+  906  make test_90
+  907  vi test_90.c
+  908  vi void_func.c
+  909  vi makefile
+  910  make void_function
+  911  vi makefile
+  912  make void_function
+  913  vi makefile
+  914  make void_function
+  915  ls
+  916  vi makefile
+  917  make void_function
+  918  vi makefile
+  919  l
+  920  vi void_func.c
+  921  make void_function
+  922  make void_func
+  923  vi void_func.c
+  924  make void_func
+  925  clear
+  926  make void_func
+  927  vi void_func.c
+  928  make void_func
+  929  cLEAR
+  930  clear
+  931  make void_func
+  932  vi void_func.c
+  933  make void_func
+  934  clear
+  935  make void_func
+  936  vi void_func.c
+  937  make void_func
+  938  clear
+  939  make void_func
+  940  vi void_func.c
+  941  make void_func
+  942  vi void_func.c
+  943  make void_func
+  944  cleR
+  945  vi void_func.c
+  946  make void_func
+  947  vi void_func.c
+  948  make void_func
+  949  clear
+  950  make void_func
+  951  vi void_func.c
+  952  make void_func
+  953  ./void_func
+  954  vi void_func.c
+  955  ./void_func
+  956  make void_func
+  957  ./void_func
+  958  vi void_func.c
+  959  ./void_func
+  960  make void_func
+  961  ./void_func
+  962  vi void_func.c
+  963  ./void_func
+  964  make void_func
+  965  ./void_func
+  966  vi void_func.c
+  967  make void_func
+  968  ./void_func
+  969  vi void_func.c
+  970  make void_func
+  971  ./void_func
+  972  vi void_func.c
+  973  make void_func
+  974  ./void_func
+  975  vi void_func.c
+  976  make void_func
+  977  ./void_func
+  978  vi void_func.c
+  979  make void_func
+  980  vi void_func.c
+  981  make
+  982  make void_func
+  983  ./void_func
+  984  vi void_func.c
+  985  ./void_func
+  986  make void_func
+  987  vi void_func.c
+  988  make void_func
+  989  vi void_func.c
+  990  make void_func
+  991  ./void_func
+  992  vi void_func.c
+  993  make void_func
+  994  vi void_func.c
+  995  make void_func
+  996  vi void_func.c
+  997  make void_func
+  998  clear
+  999  make void_func
+ 1000  ./void_func
+ 1001  vi void_func.c
+ 1002  make
+ 1003  make void_func
+ 1004  vi void_func.c
+ 1005  make void_func
+ 1006  ./void_func
+ 1007  vi void_func.c
+ 1008  make void_func
+ 1009  ./void_func
+ 1010  vi void_func.c
+ 1011  make void_func
+ 1012  ./void_func
+ 1013  vi void_func.c
+ 1014  make void_func
+ 1015  ./void_func
+ 1016  vi void_func.c
+ 1017  ./void_func
+ 1018  make void_func
+ 1019  ./void_func
+ 1020  vi void_func.c
+ 1021  make void_func
+ 1022  ./void_func
+ 1023  vi void_func.c
+ 1024  make void_func
+ 1025  ./void_func
+ 1026  vi void_func.c
+ 1027  clear
+ 1028  make void_func
+ 1029* 
+ 1030  vi void_func.c
+ 1031  make void_func
+ 1032  vi void_func.c
+ 1033  make void_func
+ 1034  ./void_func
+ 1035  vi void_func.c
+ 1036  make void_func
+ 1037  ./void_func
+ 1038  vi void_func.c
+ 1039  make void_func
+ 1040  ./void_func
+ 1041  vi void_func.c
+ 1042  make void_func
+ 1043  ./void_func
+ 1044  vi void_func.c
+ 1045  make void_func
+ 1046  ./void_func
+ 1047  vi void_func.c
+ 1048  ./void_func
+ 1049  make void_func
+ 1050  ./void_func
+ 1051  vi void_func.c
+ 1052  make void_func
+ 1053  ./void_func
+ 1054  vi void_func.c
+ 1055  make void_func
+ 1056  ./void_func
+ 1057  vi void_func.c
+ 1058  ./void_func
+ 1059  make void_func
+ 1060  ./void_func
+ 1061  vi void_func.c
+ 1062  make void_func
+ 1063  vi void_func.c
+ 1064  ls
+ 1065  make linked_lists
+ 1066  make linked_lists/./linked_lists
+ 1067  make linked_lists ./linked_lists
+ 1068  make linked_lists ; ./linked_lists
+ 1069  vi linked_lists.c
+ 1070  ls
+ 1071  vi test_90
+ 1072  vi test_90.c
+ 1073  vi test_1.c
+ 1074  vi test_82_q4sol.c
+ 1075  vi example_test00.c
+ 1076  make example_test00 ; ./example_test00
+ 1077  clear
+ 1078  make example_test00 ; ./example_test00
+ 1079  vi example_test00.c
+ 1080  make example_test00 ; ./example_test00
+ 1081  vi example_test00.c
+ 1082  make example_test00 ; ./example_test00
+ 1083  vi example_test00.c
+ 1084  make example_test00 ; ./example_test00
+ 1085  vi example_test00.c
+ 1086  make example_test00 ; ./example_test00
+ 1087  vi example_test00.c
+ 1088  make example_test00 ; ./example_test00
+ 1089  vi example_test00.c
+ 1090  make example_test00 ; ./example_test00
+ 1091  vi example_test00.c
+ 1092  make example_test00 ; ./example_test00
+ 1093  vi example_test00.c
+ 1094  make example_test00 ; ./example_test00
+ 1095  vi example_test00.c
+ 1096  make example_test00 ; ./example_test00
+ 1097  vi example_test00.c
+ 1098  make example_test00 ; ./example_test00
+ 1099  vi example_test00.c
+ 1100  make example_test00 ; ./example_test00
+ 1101  vi example_test00.c
+ 1102  make example_test00 ; ./example_test00
+ 1103  vi example_test00.c
+ 1104  make example_test00 ; ./example_test00
+ 1105  vi example_test00.c
+ 1106  make example_test00 ; ./example_test00
+ 1107  vi example_test00.c
+ 1108  make example_test00 ; ./example_test00
+ 1109  vi example_test00.c
+ 1110  make example_test00 ; ./example_test00
+ 1111  vi example_test00.c
+ 1112  make example_test00 ; ./example_test00
+ 1113  vi example_test00.c
+ 1114  make example_test00 ; ./example_test00
+ 1115  vi example_test00.c
+ 1116  make example_test00 ; ./example_test00
+ 1117  vi example_test00.c
+ 1118  make example_test00 ; ./example_test00
+ 1119  vi example_test00.c
+ 1120  make example_test00 ; ./example_test00
+ 1121  vi example_test00.c
+ 1122  make example_test00 ; ./example_test00
+ 1123  :q
+ 1124  vi example_test00.c
+ 1125  :q
+ 1126  make example_test00 ; ./example_test00
+ 1127  vi example_test00.c
+ 1128  make example_test00 ; ./example_test00
+ 1129  vi example_test00.c
+ 1130  make example_test00 ; ./example_test00
+ 1131  :q
+ 1132  vi example_test00.c
+ 1133  make example_test00 ; ./example_test00
+ 1134  vi example_test00.c
+ 1135  make example_test00 ; ./example_test00
+ 1136  vi example_test00.c
+ 1137  make example_test00 ; ./example_test00
+ 1138  vi example_test00.c
+ 1139  make example_test00 ; ./example_test00
+ 1140  vi example_test00.c
+ 1141  make example_test00 ; ./example_test00
+ 1142  vi example_test00.c
+ 1143  make example_test00 ; ./example_test00
+ 1144  vi example_test00.c
+ 1145  make example_test00 ; ./example_test00
+ 1146  vi example_test00.c
+ 1147  make example_test00 ; ./example_test00
+ 1148  vi example_test00.c
+ 1149  make example_test00 ; ./example_test00
+ 1150  vi example_test00.c
+ 1151  make example_test00 ; ./example_test00
+ 1152  vi example_test00.c
+ 1153  make example_test00 ; ./example_test00
+ 1154  vi example_test00.c
+ 1155  make example_test00 ; ./example_test00
+ 1156  vi example_test00.c
+ 1157  make example_test00 ; ./example_test00
+ 1158  vi example_test00.c
+ 1159  make example_test00 ; ./example_test00
+ 1160  vi example_test00.c
+ 1161  make example_test00 ; ./example_test00
+ 1162  vi example_test00.c
+ 1163  make example_test00 ; ./example_test00
+ 1164  vi example_test00.c
+ 1165  make example_test00 ; ./example_test00
+ 1166  vi example_test00.c
+ 1167  make example_test00 ; ./example_test00
+ 1168  vi example_test00.c
+ 1169  make example_test00 ; ./example_test00
+ 1170  cat /proc/sys/fs/file-max
+ 1171  vi macro_ex.c
+ 1172  vi makefile
+ 1173  make macro_ex
+ 1174  ./macro_ex
+ 1175  vi macro_ex.c
+ 1176  make macro_ex
+ 1177  vi macro_ex.c
+ 1178  make macro_ex
+ 1179  ./macro_ex
+ 1180  vi macro_ex.c
+ 1181  ./macro_ex
+ 1182  make macro_ex
+ 1183  ./macro_ex
+ 1184  vi macro_ex.c
+ 1185  make macro_ex
+ 1186  ./macro_ex
+ 1187  vi macro_ex.c
+ 1188  make macro_ex
+ 1189  ./macro_ex
+ 1190  vi macro_ex.c
+ 1191  make macro_ex
+ 1192  ./macro_ex
+ 1193  vi macro_ex.c
+ 1194  make macro_ex
+ 1195  ./macro_ex
+ 1196  vi macro_ex.c
+ 1197  make macro_ex
+ 1198  vi macro_ex.c
+ 1199  make macro_ex
+ 1200  vi macro_ex.c
+ 1201  make macro_ex
+ 1202  vi macro_ex.c
+ 1203  make macro_ex
+ 1204  vi macro_ex.c
+ 1205  cd ..
+ 1206  ls
+ 1207  cd Maman_14
+ 1208  sudo apt-get install git
+ 1209  git config --global user.name HumusBepita
+ 1210  git config --global user.email yotam.klein@gmail.com
+ 1211  git config --global user.name "HumusBepita"
+ 1212  git config --global user.email "yotam.klein@gmail.com"
+ 1213  ls
+ 1214  cd My_Proj/
+ 1215  ls
+ 1216  cd ..
+ 1217  vi tc.as
+ 1218  pull
+ 1219  ls
+ 1220  cd My_Proj/
+ 1221  ls
+ 1222  cd ..
+ 1223  vi tc.as
+ 1224  touch main.c
+ 1225  touch first_pass.c
+ 1226  touch second_pass.c
+ 1227  ls ../
+ 1228  ls ../Maman_22
+ 1229  cp ../Maman_22/makefile .
+ 1230  vi makefile
+ 1231  touch aux.h
+ 1232  ls
+ 1233  vi main.c
+ 1234  ls
+ 1235  vi first_pass.c
+ 1236  vi aux%.h 
+ 1237  ls
+ 1238  mv aux%.h aux.h
+ 1239  rm -f aux%.h
+ 1240  vi aux.h
+ 1241  ls
+ 1242  vi first_pass.c 
+ 1243  vi main.c 
+ 1244  vi first_pass.c 
+ 1245  vi main.c 
+ 1246  make
+ 1247  vi main.c 
+ 1248  vi aux.h
+ 1249  vi main.c 
+ 1250  make
+ 1251  vi main.c 
+ 1252  vi aux.h
+ 1253  make
+ 1254  vi aux.h
+ 1255  make
+ 1256  vi aux.h
+ 1257  clear
+ 1258  make
+ 1259  vi aux.h
+ 1260  make
+ 1261  vi aux.h
+ 1262  make
+ 1263  vi aux.h
+ 1264  make
+ 1265  vi aux.h
+ 1266  make
+ 1267  vi aux.h
+ 1268  ls
+ 1269  vi aux.h 
+ 1270  ls -al
+ 1271  mv aux%.h aux.h
+ 1272  vi aux.h 
+ 1273  make
+ 1274  vi aux.h 
+ 1275  make
+ 1276  clear
+ 1277  vi aux.h
+ 1278  vi main.c
+ 1279  vi aux.h
+ 1280  vi main.c
+ 1281  vi aux.h
+ 1282  make
+ 1283  vi aux.h
+ 1284  make
+ 1285  vi aux.h
+ 1286  make
+ 1287  vi aux.h
+ 1288  make
+ 1289  clear
+ 1290  make
+ 1291  vi aux.h
+ 1292  vi main.c
+ 1293  vi aux.h
+ 1294  vi main.c
+ 1295  vi aux.h
+ 1296  vi main.c
+ 1297  make
+ 1298  vi main.c
+ 1299  make
+ 1300  vi main.c
+ 1301  make
+ 1302  ./main
+ 1303  ./main >output
+ 1304  vi output
+ 1305  ./main > output
+ 1306  vi output
+ 1307  vi main.c
+ 1308  make ./main > output
+ 1309  make ; ./main > output
+ 1310  vi main.c
+ 1311  make ; ./main > output
+ 1312  make ; ./main > output ; vi output
+ 1313  vi main.c
+ 1314  make ; ./main > output ; vi output
+ 1315  make
+ 1316  clear
+ 1317  make
+ 1318  vi main.c
+ 1319  make
+ 1320  clear
+ 1321  make
+ 1322  vi main.c
+ 1323  make
+ 1324  vi main.c
+ 1325  make
+ 1326  vi main.c
+ 1327  make
+ 1328  clear
+ 1329  vi main.c
+ 1330  vi makefile
+ 1331  ls
+ 1332  mv first_pass.c first_scan.c
+ 1333  mv first_pass.o first_scan.o
+ 1334  mv second_pass.c second_scan.c
+ 1335  vi tc.as
+ 1336  vi main.c
+ 1337  make
+ 1338  vi main.c
+ 1339  make
+ 1340  vi main.c
+ 1341  make
+ 1342  vi main.c
+ 1343  make
+ 1344  clear
+ 1345  make
+ 1346  vi main.c
+ 1347  make
+ 1348  make ; ./main > output ; vi output
+ 1349  vi main.c
+ 1350  vi aux.
+ 1351  vi aux.h
+ 1352  make ; ./main > output ; vi output
+ 1353  vi aux.h
+ 1354  vi main.c
+ 1355  make
+ 1356  make ; ./main > output ; vi output
+ 1357  vi main.c
+ 1358  make
+ 1359  make ; ./main > output ; vi output
+ 1360  vi main.c
+ 1361  make ; ./main > output ; vi output
+ 1362  vi main.c
+ 1363  make ; ./main > output ; vi output
+ 1364  vi main.c
+ 1365  make
+ 1366  make ; ./main > output ; vi output
+ 1367  vi main.c
+ 1368  make
+ 1369  make ; ./main > output ; vi output
+ 1370  vi main.c
+ 1371  make ; ./main > output ; vi output
+ 1372  vi main.c
+ 1373  make ; ./main > output ; vi output
+ 1374  vi main.c
+ 1375  make ; ./main > output ; vi output
+ 1376  vi main.c
+ 1377  make ; ./main > output ; vi output
+ 1378  vi main.c
+ 1379  make ; ./main > output ; vi output
+ 1380  vi main.c
+ 1381  make ; ./main > output ; vi output
+ 1382  vi main.c
+ 1383  make ; ./main > output ; vi output
+ 1384  vi main.c
+ 1385  make ; ./main > output ; vi output
+ 1386  vi main.c
+ 1387  make ; ./main > output ; vi output
+ 1388  vi main.c
+ 1389  make ; ./main > output ; vi output
+ 1390  make
+ 1391  vi main.c
+ 1392  make
+ 1393  vi main.c
+ 1394  make ; ./main > output ; vi output
+ 1395  vi main.c
+ 1396  make ; ./main > output ; vi output
+ 1397  vi main.c
+ 1398  make ; ./main > output ; vi output
+ 1399  vi main.c
+ 1400  make ; ./main > output ; vi output
+ 1401  vi main.c
+ 1402  make ; ./main > output ; vi output
+ 1403  vi main.c
+ 1404  make
+ 1405  make ; ./main > output ; vi output
+ 1406  vi main.c
+ 1407  make ; ./main > output ; vi output
+ 1408  vi main.c
+ 1409  make ; ./main > output ; vi output
+ 1410  vi main.c
+ 1411  make ; ./main > output ; vi output
+ 1412  vi main.c
+ 1413  make ; ./main > output ; vi output
+ 1414  make
+ 1415  vi main.c
+ 1416  make
+ 1417  vi main.c
+ 1418  make
+ 1419  make ; ./main > output ; vi output
+ 1420  vi main.c
+ 1421  make ; ./main > output ; vi output
+ 1422  vi main.c
+ 1423  make ; ./main > output ; vi output
+ 1424  vi main.c
+ 1425  make
+ 1426  vi main.c
+ 1427  make
+ 1428  make ; ./main > output ; vi output
+ 1429  vi main.c
+ 1430  make ; ./main > output ; vi output
+ 1431  vi main.c
+ 1432  make ; ./main > output ; vi output
+ 1433  make
+ 1434  vi main.c
+ 1435  make
+ 1436  make ; ./main > output ; vi output
+ 1437  vi main.c
+ 1438  make ; ./main > output ; vi output
+ 1439  vi main.c
+ 1440  make ; ./main > output ; vi output
+ 1441  vi main.c
+ 1442  make ; ./main > output ; vi output
+ 1443  vi main.c
+ 1444  make ; ./main > output ; vi output
+ 1445  vi main.c
+ 1446  make ; ./main > output ; vi output
+ 1447  make
+ 1448  make ; ./main > output ; vi output
+ 1449  vi main.c
+ 1450  make ; ./main > output ; vi output
+ 1451  vi main.c
+ 1452  make ; ./main > output ; vi output
+ 1453  vi main.c
+ 1454  make ; ./main > output ; vi output
+ 1455  vi main.c
+ 1456  make
+ 1457  make ; ./main > output ; vi output
+ 1458  vi main.c
+ 1459  make ; ./main > output ; vi output
+ 1460  vi main.c
+ 1461  make ; ./main > output ; vi output
+ 1462* 
+ 1463  make ; ./main > output ; vi output
+ 1464  vi main.c
+ 1465  make ; ./main > output ; vi output
+ 1466  vi main.c
+ 1467  make ; ./main > output ; vi output
+ 1468  vi main.c
+ 1469  make ; ./main > output ; vi output
+ 1470  vi main.c
+ 1471  make
+ 1472  make ; ./main > output ; vi output
+ 1473  vi main.c
+ 1474  make ; ./main > output ; vi output
+ 1475  vi main.c
+ 1476  make ; ./main > output ; vi output
+ 1477  vi main.c
+ 1478  make ; ./main > output ; vi output
+ 1479  vi main.c
+ 1480  vi aux.h
+ 1481  vi main.c
+ 1482  vi aux.h
+ 1483  vi main.c
+ 1484  make
+ 1485  vi main.c
+ 1486  vi first_scan.c 
+ 1487  make
+ 1488  vi first_scan.c 
+ 1489  vi main.c
+ 1490  vi first_scan.c 
+ 1491  vi main.c
+ 1492  make
+ 1493  vi main.c
+ 1494  make
+ 1495  make ; ./main > output ; vi output
+ 1496  vi main.c
+ 1497  vi first_scan.c 
+ 1498  make ; ./main > output ; vi output
+ 1499  vi main.c
+ 1500  make ; ./main > output ; vi output
+ 1501  vi main.c
+ 1502  make
+ 1503  make ; ./main > output ; vi output
+ 1504  ./main
+ 1505  :q
+ 1506  ./main
+ 1507  vi main.c
+ 1508  ./main
+ 1509  make ; ./main > output ; vi output
+ 1510  vi main.c
+ 1511  ./main tc.as
+ 1512  vi main.c
+ 1513  make
+ 1514  vi main.c
+ 1515  make
+ 1516  vi main.c
+ 1517  make
+ 1518  vi main.c
+ 1519  make
+ 1520  ./main tc.as
+ 1521  ./main tcc.as
+ 1522  vi main.c
+ 1523  ./main tcc.as
+ 1524  make
+ 1525  ./main tcc.as
+ 1526  vi main.c
+ 1527  ./main tcc.as
+ 1528  make
+ 1529  vi main.c
+ 1530  make
+ 1531  ./main tc.as
+ 1532  ./main tcd.as
+ 1533  vi main.c
+ 1534  vi aux.h
+ 1535  vi main.c
+ 1536  ls
+ 1537  vi first_scan.c
+ 1538  vi aux.h
+ 1539  vi main.c
+ 1540  vi first_scan.c 
+ 1541  vi aux.h
+ 1542  vi main.c
+ 1543  make
+ 1544  vi main.c
+ 1545  make
+ 1546  vi aux.h
+ 1547  make
+ 1548  vi first_scan.c 
+ 1549  make
+ 1550  ./main tc.as
+ 1551  vi first_scan.c 
+ 1552  vi main,c
+ 1553  vi main.c
+ 1554  ./main tc.as
+ 1555  make
+ 1556  ./main tc.as
+ 1557  vi main.c
+ 1558  ./main tc.as
+ 1559  vi main.c
+ 1560  make
+ 1561  ./main tc.as
+ 1562  :q
+ 1563  vi main.c
+ 1564  make
+ 1565  ./main tc.as
+ 1566  vi main.c
+ 1567  ls
+ 1568  mkdir 31_7_17
+ 1569  cp first_scan.c main.c makefile aux.h tc.as 31_7_17/
+ 1570  cd 31_7_17/
+ 1571  ls
+ 1572  vi aux.h
+ 1573  mv aux.h aux_func.h
+ 1574  ls
+ 1575  cd ..
+ 1576  mv aux.h aux_func.h
+ 1577  vi *c
+ 1578  vi makefile 
+ 1579  cp first_scan.c main.c makefile aux_func.h tc.as 31_7_17/
+ 1580  make
+ 1581  ./main tc.as
+ 1582  ls
+ 1583  mvdir My_Proj/ My_git
+ 1584  rmdir My_Proj/
+ 1585  mkdir My_git
+ 1586  cd My_git/
+ 1587  git init
+ 1588  ls
+ 1589  cd ..
+ 1590  cd My_git/
+ 1591  ls
+ 1592  ls -al
+ 1593  cd .git
+ 1594  ls
+ 1595  git add *.c
+ 1596  ls
+ 1597  cd branches/
+ 1598  ls
+ 1599  ls -al
+ 1600  cd ..
+ 1601  ls -al
+ 1602  clear
+ 1603  git clone https://github.com/sasulin/OPEN_U
+ 1604  ls -a
+ 1605  ls -al
+ 1606  cd OPEN_U
+ 1607  ls
+ 1608  touch second_scan.c
+ 1609  git status
+ 1610  git add second_scan.c 
+ 1611  git status
+ 1612  git commit -m "Test"
+ 1613  ls
+ 1614  ls -al
+ 1615  git push
+ 1616  ls
+ 1617  git pull
+ 1618  ls
+ 1619  vi aux_func.h
+ 1620  make
+ 1621  vi aux_func.h
+ 1622  make
+ 1623  vi aux_func.h
+ 1624  make
+ 1625  vi aux_func.h
+ 1626  vi main.c
+ 1627  vi aux_func.h
+ 1628  make
+ 1629  vi aux_func.h
+ 1630  vi main.c
+ 1631  make
+ 1632  vi main.c
+ 1633  make
+ 1634  ./main tc
+ 1635  :q
+ 1636  ./main tc.as
+ 1637  ./main tc
+ 1638  vi main.c
+ 1639  make
+ 1640  ./main tc
+ 1641  ./main tc.as
+ 1642  vi main.c
+ 1643  vi first_scan.c 
+ 1644  history > history_3_8_17
