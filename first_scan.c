@@ -13,6 +13,9 @@ int is_comment(char *arr , char *arr_tmp);
 int is_empty(char *arr);
 char *tok_label(char * arr,char * arr_tmp);
 void no_space(char *str);
+sym_row_p sym_alloc(void);
+void add_symbol(sym_row_p head, char *label);
+void print_sym_table(sym_row_p head);
 
 void first_scan(FILE *fp)
 {
@@ -22,9 +25,9 @@ void first_scan(FILE *fp)
 	char row_buf[MAX_ROW_LEN];	
 	char arr_tmp[MAX_ROW_LEN];	
 	char *label;
-	symbol_p sym_head;
-	
-	sym_head=(symbol_p)malloc(sym_size);
+	sym_row_p sym_head;
+
+	sym_head=sym_alloc();
 	sym_head->next=NULL;
 
 	IC=INITIAL_IC;
@@ -39,8 +42,9 @@ void first_scan(FILE *fp)
 	{
 		/*	1) CHECK AND IGNORE COMMENT LINES*/	
 		if (is_comment(row_buf,arr_tmp))
+		{
 			continue;
-
+		}
 		/*	2) CHECK AND IGNORE EMPTY LINES	*/
 /*		if (is_empty(row_buf))
 			continue;
@@ -51,7 +55,10 @@ void first_scan(FILE *fp)
 		if(label!=NULL)
 		{
 			is_label=YES;	
+			no_space(label);			
 			printf("row #%d, %s\n",row,label);
+			add_symbol(sym_head,label);			
+
 		}
 		else
 		{ 
@@ -65,9 +72,10 @@ void first_scan(FILE *fp)
 
 	if (error)				/*End of lines*/
 		exit(1);
+	
+	print_sym_table(sym_head);
 
 }
-
 
 void reverse (char *string) 
 {
@@ -178,4 +186,52 @@ void no_space(char *str)
 	   
    }
    *p1 = '\0';
+}
+
+
+void add_symbol(sym_row_p head, char *label)
+{
+	sym_row_p tmp;
+	if (head->next==NULL)
+	{
+		strcpy(head->label,label);		
+		head->next=sym_alloc();
+		head->next->next=NULL;
+		return;
+	}	
+	else
+	{
+		tmp=head;
+		while(tmp->next!=NULL)
+			tmp=tmp->next;	
+			strcpy(tmp->label,label);      
+			tmp->next=sym_alloc();
+        	tmp->next->next=NULL;
+	}
+	
+        
+}
+
+sym_row_p sym_alloc(void)
+{
+	sym_row_p node;
+	node=(sym_row_p)malloc(sym_size);
+	if (!node)
+	{
+		printf("Failed to allocate memory!!!\n");
+		exit(1);
+	}
+
+	else return node;
+}
+
+void print_sym_table(sym_row_p head)
+{
+	sym_row_p tmp;
+	printf("CONTENT OF SYMBOL TABLE:\n");
+    for(tmp=head;tmp->next!=NULL;tmp=tmp->next)
+	{
+		printf("Label is: %s\n",tmp->label);	
+	}
+
 }
