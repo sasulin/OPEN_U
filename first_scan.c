@@ -6,12 +6,34 @@
 
 #define INITIAL_IC 100
 #define INITIAL_DC 0
+#define MAX_OP_LEN 8
+#define OP_NUM 16
+#define DATA_OP_NUM 3
+
+const char *reserved_words[]={"mov","cmp","add",
+					  "sub","not","clr",
+	 				  "lea","inc","dec",
+      				  "jmp","bne","red",
+      				  "prn","jsr","rts","stop",
+					  "r0","r1","r2","r3","r4","r5","r6","r7",
+					  "data","string","mat"};
+
+const char *op_words[]={"mov","cmp","add",
+					  "sub","not","clr",
+	 				  "lea","inc","dec",
+      				  "jmp","bne","red",
+      				  "prn","jsr","rts","stop"};
+
+const char *data_op_words[]={".data",".string",".mat"};
+
 
 const short int sym_size = sizeof(symbol_row);
 
-int is_comment(char *arr , char *arr_tmp);
-int is_empty(char *arr);
+bool is_comment(char *arr , char *arr_tmp);
+bool is_empty(char *arr);
+bool check_op (char *op_string, bool * , bool *);
 char *tok_label(char * arr,char * arr_tmp);
+char *tok_op(char *arr , char *arr_tmp);
 void no_space(char *str);
 sym_row_p sym_alloc(void);
 void add_symbol(sym_row_p head, char *label);
@@ -19,12 +41,11 @@ void print_sym_table(sym_row_p head);
 
 void first_scan(FILE *fp)
 {
-
-	int IC,DC,row; /*Counters*/
-	bool error,is_label;
+	int IC,DC,row_num,row_len,label_len ,op_len; /*Counters*/
+	bool error,is_label,is_op,is_data_op;
 	char row_buf[MAX_ROW_LEN];	
 	char arr_tmp[MAX_ROW_LEN];	
-	char *label;
+	char *label ,*op_tok, *buf_p;
 	sym_row_p sym_head;
 
 	sym_head=sym_alloc();
@@ -36,43 +57,82 @@ void first_scan(FILE *fp)
 /*Loop on input file*/
 	
 	error=NO;
-	row=1;
+	row_num=1;
 
 	while(fgets(row_buf,MAX_ROW_LEN,fp) !=NULL)
 	{
+		buf_p=row_buf; /*Global pointer to search the recorded row*/
+		row_len=strlen(row_buf);
+		label_len=0;
+		op_len=0;
 		/*	1) CHECK AND IGNORE COMMENT LINES*/	
 		if (is_comment(row_buf,arr_tmp))
 		{
+/*			printf("in row#%d Found comment\n",row_num);*/
+			row_num++;
 			continue;
 		}
 		/*	2) CHECK AND IGNORE EMPTY LINES	*/
-/*		if (is_empty(row_buf))
+		
+		if (is_empty(row_buf))
+		{
+/*			printf("in row#%d Found empty line\n",row_num);*/
+			row_num++;
 			continue;
-*/	
+		}
+
 		/*	3)CHECK AND SAVE LABELS	*/
 		is_label=NO;	
 		label=tok_label(row_buf,arr_tmp);
+		
 		if(label!=NULL)
 		{
 			is_label=YES;	
 			no_space(label);			
-			printf("row #%d, %s\n",row,label);
+			printf("in row#%d Found label %s\n",row_num,label);
 			add_symbol(sym_head,label);			
-
+			buf_p=strchr(row_buf,':')+1;
 		}
 		else
 		{ 
 			is_label=NO;	
-		/*	printf("NO LABEL FOUND!\n");*/
 		}
+		
 	/*		4)IS DATA INSTRUCTION? .data, .string .mat?	*/
-
-		row++;
+				
+		is_op=NO;	
+		is_data_op=NO;	
+		op_tok=tok_op(buf_p,arr_tmp);
+		if(check_op(op_tok,&is_op,&is_data_op))
+		{
+			printf("in row#%d THE OPERATION IS: %s\n",row_num,op_tok);
+			buf_p=strstr(row_buf,op_tok);
+			op_len=strlen(op_tok);
+			buf_p+=op_len;
+			printf("in row#%d THE ARGUMENT STRING IS: %s\n",row_num,buf_p);
+						/*SEND TO ARGUMENT PARSING*/	
+		}
+		else
+		{ 
+			is_op=NO;
+			is_data_op=NO;
+			printf("in row#%d OPERATION %s DOESN'T EXIST\n",row_num,op_tok);				
+			error=YES;
+			row_num++;
+			continue;	
+		}
+		
+		row_num++;
 	}   
 
+
 	if (error)				/*End of lines*/
+	{
+		printf("ERRORS FOUND IN INPUT FILE!!!\n");					
 		exit(1);
-	
+	}
+
+
 	print_sym_table(sym_head);
 
 }
@@ -132,31 +192,31 @@ void quad_weird (char *quad_num)
 	}
 }
 
-int is_comment(char *arr , char *arr_tmp)
+bool is_comment(char *arr , char *arr_tmp)
 	{
 		strcpy(arr_tmp,arr);
 		no_space(arr_tmp);
 
 		if (*arr_tmp==';')
 		{
-			printf("COMMENT LINE\n");
-			return 1;
+			/*printf("COMMENT LINE\n");*/
+			return YES;
 		}
-		else return 0;	
+		else return NO;	
 	}
 
-int is_empty(char *arr)
+bool is_empty(char *arr)
 	{
-		int i;
+		int i,empty_flag;
+		empty_flag=1;
 		for (i=0; (i<MAX_ROW_LEN) && (arr[i]!='\0') ;i++)
 		{
 			if( isspace(arr[i]) )
 				continue;
-			else 
-				return 0;
+			else
+				empty_flag=0;
 		}
-			printf("EMPTY LINE\n"); /*NEVER REACHES HERE*/
-			return 1;
+		return empty_flag;
 	}
 
 
@@ -165,7 +225,6 @@ char *tok_label(char *arr , char *arr_tmp)
 	strcpy(arr_tmp,arr);
 /*	printf("%s\n",arr_tmp);*/
 	strtok(arr_tmp,":");
-/*	printf("%s\n",arr_tmp);*/
 
 	if (!(strcmp(arr_tmp,arr)))
 		return NULL;	
@@ -228,10 +287,62 @@ sym_row_p sym_alloc(void)
 void print_sym_table(sym_row_p head)
 {
 	sym_row_p tmp;
-	printf("CONTENT OF SYMBOL TABLE:\n");
+	printf("\n\nCONTENT OF SYMBOL TABLE:\n");
     for(tmp=head;tmp->next!=NULL;tmp=tmp->next)
 	{
 		printf("Label is: %s\n",tmp->label);	
 	}
 
+}
+
+char *tok_op(char *arr , char *arr_tmp)
+{
+	int i,j;
+/*	printf("%s\n",arr);
+*/
+	for(i=0;(i<MAX_ROW_LEN) && (arr[i]!='\0');i++)
+	{	
+		if(isspace(arr[i]))
+			continue;
+		else
+		{
+			for(j=0;(j<MAX_OP_LEN);i++,j++)	
+			{
+				arr_tmp[j]=arr[i];		
+				if(isspace(arr[i]))
+				{
+					arr_tmp[j]='\0'; 
+					break;
+				}
+			}	
+		}		
+	break;			
+	}
+		return arr_tmp;
+}
+
+bool check_op(char *op_string,bool *is_op, bool *is_data_op)
+{
+	int i;
+	for (i=0;i<OP_NUM;i++)
+	{
+		if(!strcmp(op_string,op_words[i]))			
+		{
+/*			printf("%s\n",op_string);*/
+			*is_op=YES;				
+			return YES;				
+		}
+	}
+	
+	for (i=0;i<DATA_OP_NUM;i++)
+	{
+		if(!strcmp(op_string,data_op_words[i]))			
+		{
+			/*printf("%s\n",op_string);*/
+			*is_data_op=YES;		
+			return YES;				
+		}
+	}
+	/*printf("OPERATION %s DOESN'T EXIST\n",op_string);*/
+	return NO;
 }

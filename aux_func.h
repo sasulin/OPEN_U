@@ -13,6 +13,10 @@ void reverse (char *string);
 void dec_to_quad  (char *quad_num ,int dec_num);
 void quad_weird (char *quad_num);
 
+
+
+
+
 enum INSTRUCTION
 {
 	MOV,CMP,ADD,
@@ -41,7 +45,7 @@ typedef struct I_table_row
 
 
 /*Defining a row in the DATA table*/
-/*typedef struct D_table_row * D_row_p*/;
+/*typedef struct D_table_row * D_row_p*/
 
 typedef struct D_table_row
 {
