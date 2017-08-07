@@ -1,14 +1,71 @@
-COMMENT LINE
-COMMENT LINE
-COMMENT LINE
-row #7, MAIN
-row #9, LOOP
-row #18, END
-row #19, STR
-row #20, LENGTH
-row #21, K
-row #22, M1
-COMMENT LINE
+in row#3 THE OPERATION IS: .entry
+in row#3 THE ARGUMENT STRING IS:  LOOP
+
+in row#4 THE OPERATION IS: .entry
+in row#4 THE ARGUMENT STRING IS:  LENGTH
+
+in row#5 THE OPERATION IS: .extern
+in row#5 THE ARGUMENT STRING IS:  L3
+
+in row#6 THE OPERATION IS: .extern
+in row#6 THE ARGUMENT STRING IS:  W
+
+in row#11 Found label MAIN
+in row#11 THE OPERATION IS: mov
+in row#11 THE ARGUMENT STRING IS: 	M1[r2][r7],LENGTH
+
+in row#12 THE OPERATION IS: add
+in row#12 THE ARGUMENT STRING IS: 	r2,STR
+
+in row#13 Found label LOOP
+in row#13 THE OPERATION IS: jmp
+in row#13 THE ARGUMENT STRING IS: 	END
+
+in row#15 THE OPERATION IS: prn
+in row#15 THE ARGUMENT STRING IS: 	#-5
+
+in row#16 THE OPERATION IS: sub
+in row#16 THE ARGUMENT STRING IS: 	r1,r4
+
+in row#17 THE OPERATION IS: inc
+in row#17 THE ARGUMENT STRING IS: 	K
+
+in row#18 THE OPERATION IS: mov
+in row#18 THE ARGUMENT STRING IS:  M1[r3][r3],r3
+
+in row#19 THE OPERATION IS: bne
+in row#19 THE ARGUMENT STRING IS:  LOOP
+
+in row#20 Found label END
+in row#20 THE OPERATION IS: stop
+in row#20 THE ARGUMENT STRING IS: 
+
+in row#21 Found label STR
+in row#21 THE OPERATION IS: .string
+in row#21 THE ARGUMENT STRING IS:  "abcdef"
+
+in row#22 Found label LENGTH
+in row#22 THE OPERATION IS: .data
+in row#22 THE ARGUMENT STRING IS:  6,-9,15
+
+in row#23 Found label K
+in row#23 THE OPERATION IS: .data
+in row#23 THE ARGUMENT STRING IS: 	22
+
+in row#24 Found label M1
+in row#24 THE OPERATION IS: .mat
+in row#24 THE ARGUMENT STRING IS:  [2][2] 1,2,3,4
+
+
+
+CONTENT OF SYMBOL TABLE:
+Label is: MAIN
+Label is: LOOP
+Label is: END
+Label is: STR
+Label is: LENGTH
+Label is: K
+Label is: M1
 
 100	bcba
 101	bcbb
