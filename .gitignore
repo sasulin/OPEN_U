@@ -1,6 +1,6 @@
 # To Ignore 
 *.o
-*output
+output
 main
 
 # But not these files...
