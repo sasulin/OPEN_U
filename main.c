@@ -18,7 +18,6 @@ int main(int argc , char *argv[])
 
 /*Input file*/
 	FILE *fp;
-	input_file = strcat(argv[1],in_post);
 
 	if (argc==1) /*No arguments*/
 	{
@@ -26,6 +25,7 @@ int main(int argc , char *argv[])
 		exit(1);
 	}	
 
+	input_file = strcat(argv[1],in_post);
 	fp=fopen(input_file,"r");
 	if (!fp)
 	{
