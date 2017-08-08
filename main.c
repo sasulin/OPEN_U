@@ -25,16 +25,21 @@ int main(int argc , char *argv[])
 		exit(1);
 	}	
 
-	input_file = strcat(argv[1],in_post);
+	while( --argc > 0 )
+	{
+	input_file = strcat(argv[argc],in_post);
 	fp=fopen(input_file,"r");
+	
 	if (!fp)
 	{
 		fprintf(stderr,
-		"Cannot open %s	No such input file!!!\n", argv[1]);
+		"Cannot open %s	No such input file!!!\n", argv[argc]);
 		exit(1);
 	}	
-
+	printf("input file:%s\n****************\n",input_file);
 	first_scan(fp);
+
+	}
 /*	second_scan(fp);*/
 	
 
