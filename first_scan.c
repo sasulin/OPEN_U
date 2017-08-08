@@ -8,7 +8,7 @@
 #define INITIAL_DC 0
 #define MAX_OP_LEN 8
 #define OP_NUM 16
-#define DATA_OP_NUM 3
+#define DATA_OP_NUM 5
 
 const char *reserved_words[]={"mov","cmp","add",
 					  "sub","not","clr",
@@ -16,7 +16,7 @@ const char *reserved_words[]={"mov","cmp","add",
       				  "jmp","bne","red",
       				  "prn","jsr","rts","stop",
 					  "r0","r1","r2","r3","r4","r5","r6","r7",
-					  "data","string","mat"};
+					  "data","string","mat",".entry",".extern","999"};
 
 const char *op_words[]={"mov","cmp","add",
 					  "sub","not","clr",
@@ -24,35 +24,41 @@ const char *op_words[]={"mov","cmp","add",
       				  "jmp","bne","red",
       				  "prn","jsr","rts","stop"};
 
-const char *data_op_words[]={".data",".string",".mat"};
+const char *data_op_words[]={".data",".string",".mat",".entry",".extern"};
 
 
 const short int sym_size = sizeof(symbol_row);
 
-bool is_comment(char *arr , char *arr_tmp);
-bool is_empty(char *arr);
-bool check_op (char *op_string, bool * , bool *);
-char *tok_label(char * arr,char * arr_tmp);
-char *tok_op(char *arr , char *arr_tmp);
-void no_space(char *str);
-sym_row_p sym_alloc(void);
-void add_symbol(sym_row_p head, char *label);
-void print_sym_table(sym_row_p head);
+bool 		is_comment(char *arr , char *arr_tmp);
+bool 		is_empty(char *arr);
+bool 		check_op (char *op_string,bool*,bool*,bool*,bool*);
+bool 		check_label(char *label);
+char 		*tok_label(char * arr,char * arr_tmp);
+char 		*tok_op(char *arr , char *arr_tmp);
+void 		no_space(char *str);
+sym_row_p 	sym_alloc(void);
+void 		add_symbol(sym_row_p head, char *label,int IC,bool is_ext, bool is_op);
+void 		print_sym_table(sym_row_p head);
+
+
 
 void first_scan(FILE *fp)
 {
 	int IC,DC,row_num,row_len,label_len ,op_len; /*Counters*/
-	bool error,is_label,is_op,is_data_op;
+	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
 	char row_buf[MAX_ROW_LEN];	
 	char arr_tmp[MAX_ROW_LEN];	
+	char label_buf[LABEL_SIZE*2];
 	char *label ,*op_tok, *buf_p;
 	sym_row_p sym_head;
 
-	sym_head=sym_alloc();
-	sym_head->next=NULL;
 
 	IC=INITIAL_IC;
 	DC=INITIAL_DC;
+
+	sym_head=sym_alloc();
+	sym_head->next=NULL;
+	sym_head->dec_add=IC;
 
 /*Loop on input file*/
 	
@@ -65,6 +71,13 @@ void first_scan(FILE *fp)
 		row_len=strlen(row_buf);
 		label_len=0;
 		op_len=0;
+
+		is_op=NO;	
+		is_data_op=NO;	
+		is_label=NO;	
+		is_ext=NO;	
+		is_ent=NO;	
+
 		/*	1) CHECK AND IGNORE COMMENT LINES*/	
 		if (is_comment(row_buf,arr_tmp))
 		{
@@ -82,28 +95,28 @@ void first_scan(FILE *fp)
 		}
 
 		/*	3)CHECK AND SAVE LABELS	*/
-		is_label=NO;	
 		label=tok_label(row_buf,arr_tmp);
 		
 		if(label!=NULL)
 		{
-			is_label=YES;	
 			no_space(label);			
+			strcpy(label_buf,label);
 			printf("in row#%d Found label %s\n",row_num,label);
-			add_symbol(sym_head,label);			
 			buf_p=strchr(row_buf,':')+1;
+			is_label=check_label(label_buf);
 		}
 		else
 		{ 
 			is_label=NO;	
 		}
+
 		
-	/*		4)IS DATA INSTRUCTION? .data, .string .mat?	*/
-				
-		is_op=NO;	
-		is_data_op=NO;	
+	/*		4)IS DATA INSTRUCTION? .data, .string .mat?	
+			Or ne of the 15 operations	*/																	
 		op_tok=tok_op(buf_p,arr_tmp);
-		if(check_op(op_tok,&is_op,&is_data_op))
+
+		if(check_op(
+		op_tok,&is_op,&is_data_op,&is_ext,&is_ent))
 		{
 			printf("in row#%d THE OPERATION IS: %s\n",row_num,op_tok);
 			buf_p=strstr(row_buf,op_tok);
@@ -121,6 +134,9 @@ void first_scan(FILE *fp)
 			row_num++;
 			continue;	
 		}
+	
+	if (is_label)		
+			add_symbol(sym_head,label_buf,IC,is_ext,is_op);	
 		
 		row_num++;
 	}   
@@ -132,10 +148,9 @@ void first_scan(FILE *fp)
 		exit(1);
 	}
 
-
 	print_sym_table(sym_head);
+} /*End of First Scan*/
 
-}
 
 void reverse (char *string) 
 {
@@ -248,12 +263,15 @@ void no_space(char *str)
 }
 
 
-void add_symbol(sym_row_p head, char *label)
+void add_symbol(sym_row_p head,char *label,int IC,
+				bool is_ext, bool is_op)
 {
 	sym_row_p tmp;
 	if (head->next==NULL)
 	{
-		strcpy(head->label,label);		
+		strcpy(head->label,label);
+		head->is_ext=is_ext;
+		head->is_op=is_op;	
 		head->next=sym_alloc();
 		head->next->next=NULL;
 		return;
@@ -264,6 +282,9 @@ void add_symbol(sym_row_p head, char *label)
 		while(tmp->next!=NULL)
 			tmp=tmp->next;	
 			strcpy(tmp->label,label);      
+			tmp->dec_add=IC;
+			tmp->is_ext=is_ext;
+			tmp->is_op=is_op;	
 			tmp->next=sym_alloc();
         	tmp->next->next=NULL;
 	}
@@ -287,10 +308,16 @@ sym_row_p sym_alloc(void)
 void print_sym_table(sym_row_p head)
 {
 	sym_row_p tmp;
-	printf("\n\nCONTENT OF SYMBOL TABLE:\n");
+	printf("\n****CONTENT OF SYMBOL TABLE****\n");
+
+		printf("%6s\t%6s\t%6s\t%6s\n",
+		"Label","add","ext","op");
+
     for(tmp=head;tmp->next!=NULL;tmp=tmp->next)
-	{
-		printf("Label is: %s\n",tmp->label);	
+	{	
+		printf("%6s\t%6d\t%6d\t%6d\n"
+		,tmp->label,tmp->dec_add,
+		tmp->is_ext,tmp->is_op);	
 	}
 
 }
@@ -321,7 +348,11 @@ char *tok_op(char *arr , char *arr_tmp)
 		return arr_tmp;
 }
 
-bool check_op(char *op_string,bool *is_op, bool *is_data_op)
+bool check_op(  char *op_string,
+				bool *is_op, 
+				bool *is_data_op,
+				bool *is_ext, 
+				bool *is_ent)
 {
 	int i;
 	for (i=0;i<OP_NUM;i++)
@@ -338,11 +369,55 @@ bool check_op(char *op_string,bool *is_op, bool *is_data_op)
 	{
 		if(!strcmp(op_string,data_op_words[i]))			
 		{
-			/*printf("%s\n",op_string);*/
+/*			if(!strcmp(op_string,".extern")) 
+			{
+				*is_ext=YES;
+			}
+			if(!strcmp(op_string,".entry"))	
+			{
+				*is_ent=YES;
+			}*/
 			*is_data_op=YES;		
-			return YES;				
+			return YES;			
 		}
 	}
 	/*printf("OPERATION %s DOESN'T EXIST\n",op_string);*/
 	return NO;
+}
+
+bool check_label(char *label)
+{
+/*This function tests if a label is OK
+it tests:
+	1) A letter at the first letter
+	2) Label length
+	3) If reserved word
+*/
+	int i;
+/*1*/
+	if (!isalpha(label[0]))
+	{ 
+		printf
+		("LABEL: %s is illegal!\nA LABEL has to start with a letter\n",label);
+		return NO;
+	}
+
+/*2*/
+	if (strlen(label)>30) 
+	{
+		printf
+		("LABEL: %s is illegal!\nA LABEL cannot be longer than %d\n",label,LABEL_SIZE);
+		return NO;
+	}	
+/*3*/
+	for (i=0;strcmp(reserved_words[i],"999");i++);
+	{
+		if (!strcmp(label,reserved_words[i]))
+		{
+			printf
+		("LABEL: %s is illegal!\n%s is a reserved word!\n",label,reserved_words[i]);
+			return NO;
+		}
+	}
+	return YES;
 }

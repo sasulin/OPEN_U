@@ -1,5 +1,10 @@
 ;file tc.as
 
+.entry LOOP
+.entry LENGTH
+.extern L3
+.extern W
+
   		;
 		;
 

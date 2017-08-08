@@ -1,3 +1,8 @@
+/*MAMAN 14 Final Project*/
+/*Shmuel Asulin*/
+/*Yotam Klein*/
+
+/*Assembler*/
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,9 +17,6 @@ void first_scan(FILE *fp);
 void reverse (char *string); 
 void dec_to_quad  (char *quad_num ,int dec_num);
 void quad_weird (char *quad_num);
-
-
-
 
 
 enum INSTRUCTION
@@ -52,11 +54,8 @@ typedef struct D_table_row
 	char label[LABEL_SIZE];
 	unsigned int dec_add;
 	char weird_four_add[ADD_SIZE];
-	char inst[INST_SIZE];
 	word row_word;
 }D_table_row;
-
-
 
 
 /*Defining a row in the symbol table*/
@@ -65,8 +64,9 @@ typedef struct symbol_table_row
 {
 	char label[LABEL_SIZE];
 	char weird_four_add[ADD_SIZE];
-	bool is_op;
+	int dec_add;
 	bool is_ext;
+	bool is_op;
     sym_row_p next;	
 
 }symbol_row;

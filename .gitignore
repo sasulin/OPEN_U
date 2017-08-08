@@ -2,6 +2,8 @@
 *.o
 output
 main
+backup*
+
 
 # But not these files...
 !gitignore
