@@ -5,7 +5,7 @@
 #define MAX_NUM_OF_TOKENS 100
 #define MAX_LABLE_NAME 100
 enum status {FIRST,NUM,ALPHA,ERROR,FIRST_IS_R,REG,DIGIT_AFTER_ALPHA,INSIDE_MATRIX_FIRST_IS_R,pound,FIRST_IS_BR,INSIDE_MATRIX_FIRST_IS_NUM} ;
-enum TYPE {TYPE_ERROR,TYPE_REG,TYPE_NUM,TYPE_LABEL,TYPE_DIRECT,TYPE_MATRIX};
+enum TYPE {TYPE_ERROR,TYPE_REG,TYPE_NUM,TYPE_LABEL,TYPE_DIRECT,TYPE_MATRIX,TYPE_STRING};
 enum encoding {A,R,E};
 enum INSTRUCTION
 {
@@ -26,7 +26,7 @@ int main(void)
   char temp_string[MAX_NUM_OF_TOKENS][MAX_LABLE_NAME];
   int  type[MAX_NUM_OF_TOKENS] = {0} , first_arg[MAX_NUM_OF_TOKENS] , secound_arg[MAX_NUM_OF_TOKENS] ; /* 10=int , 1-9 registers , 11 matrix , 12 */            
   char c = '\0',delimit[]=" \t\r\v\f,"; 
-  int i = 0, j ,state , instract = MOV , DC = 0 , AC = 0 ;
+  int i = 0, j ,state , instract = MOV , DC = 0 , AC = 0 , error_flag = 0;
 
   if(fgets(input, sizeof input, stdin)) 
                                         
@@ -72,11 +72,36 @@ int main(void)
 		    break;
 		}
 		else
+		if( c == '"' )
+		{
+		    type[i] = TYPE_STRING;
+		    error_flag = 1;
+		    state = STRING;
+		    break;
+		else
 		{
 		    state = ERROR;
 		    printf("ERROR in case FIRST");
 		    break;
 	        }
+
+
+	    case STRING:
+		if( c == '"' )
+		{
+		    type[i] = TYPE_STRING;
+		    state = STRING_END;
+		    strcpy(temp_string[i],token[i]);
+		    error_flag = 0;
+		    break;
+		{
+		break;
+
+	    case STRING_END:
+		error_flag = 1;
+		printf("ERROR in case STRING_END");
+		break;
+
 	    case pound:
 		if( isdigit(c) )
 		{

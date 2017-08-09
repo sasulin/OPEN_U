@@ -1,0 +1,128 @@
+#include <stdio.h>
+#include<string.h>
+#include <ctype.h>
+#include <stdlib.h>
+
+const char *byte_to_binary(int x);
+
+int encoding(operation_list *command D_table_row *DC_HASH I_table_row *IC_HASH sym_row_p *HEAD_SYMB CMD_LINE_ARGS *ARGS)
+{
+    int i = 0, j ,state , instract = MOV , DC = 0 , AC = 0 ;
+    switch(command->EnuM)
+    {
+/*case need DC encoding*/
+
+	case STRING:
+	    if(TYPE[0] != TYPE_STRING);
+	    {
+		printf("ERROR , Wrong argument to .string command");
+		break;
+	    }
+	    for(i=1;temp_string[0][i] != '"';i++)
+		{
+		byte_to_binary(temp_string[0][i],DC_ARRAY[DC]);
+		DC++;
+		}
+	    if(TYPE[1] != 0)
+		printf("ERROR , Too many arguments .string command");
+	    break;
+
+	    
+	case DATA:
+	    break;
+	case MAT:
+	    break;
+	
+/*IC encoding starts*/
+	strcpy(IC_ARRAY[IC],command->op_code_bin);
+	IC_ARRAY[IC][8] = '0';/*encoding of a command is always absulote 00*/
+	IC_ARRAY[IC][9] = '0';
+/*addressing modes*/
+	switch(type[0])
+		{		    
+		    case TYPE_MATRIX:
+			if(!command->src_matrix)
+			    printf("ERROR can't get type matrix");
+			IC_ARRAY[IC][4] = '1';
+			IC_ARRAY[IC][5] = '0';
+			break;
+
+		    
+		    case TYPE_REG:
+			if(!command->src_register)
+			    printf("ERROR can't get type reg");
+			IC_ARRAY[IC][4] = '1';
+			IC_ARRAY[IC][5] = '1';
+			break;
+
+
+		    case TYPE_DIRECT:
+			if(!command->src_immediate)
+			    printf("ERROR can't get type immediate");
+			IC_ARRAY[IC][4] = '0';
+			IC_ARRAY[IC][5] = '0';
+			break;
+		    
+		    case TYPE_LABEL:
+			if(!command->src_direct)
+			    printf("ERROR can't get type direct");
+			IC_ARRAY[IC][4] = '1';
+			IC_ARRAY[IC][5] = '0';
+			break;
+
+		    case TYPE_ERROR:
+			printf("\n missing args to cmd ");
+			break;
+		}
+		
+	switch(type[1])
+		{		    
+		    case TYPE_MATRIX:
+			if(!command->dest_matrix)
+			    printf("ERROR can't get type matrix");
+			IC_ARRAY[IC][4] = '1';
+			IC_ARRAY[IC][5] = '0';
+			break;
+
+		    
+		    case TYPE_REG:
+			if(!command->dest_register)
+			    printf("ERROR can't get type reg");
+			IC_ARRAY[IC][4] = '1';
+			IC_ARRAY[IC][5] = '1';
+			break;
+
+
+		    case TYPE_DIRECT:
+			if(!command->dest_immediate)
+			    printf("ERROR can't get type immediate");
+			IC_ARRAY[IC][4] = '0';
+			IC_ARRAY[IC][5] = '0';
+			break;
+		    
+		    case TYPE_LABEL:
+			if(!command->dest_direct)
+			    printf("ERROR can't get type direct");
+			IC_ARRAY[IC][4] = '1';
+			IC_ARRAY[IC][5] = '0';
+			break;
+
+		    case TYPE_ERROR:
+			printf("\n missing args to cmd ");
+			break;
+		}
+
+    }	
+
+
+void byte_to_binary(int x char *DC_HASH)
+{
+    DC_HASH[0] = '\0';
+
+    int z;
+    for (z = 256; z > 0; z >>= 1)
+    {
+        strcat(DC_HASH, ((x & z) == z) ? "1" : "0");
+    }
+}
+
