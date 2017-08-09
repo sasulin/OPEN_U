@@ -3,8 +3,8 @@
 /*Yotam Klein*/
 
 /*Assembler*/
-#include <stdio.h>
-#include <stdlib.h>
+/*#include <stdio.h>
+#include <stdlib.h>*/
 
 #define MEMORY_SIZE 256
 #define LABEL_SIZE 31 /*Defined in instructions*/
@@ -19,30 +19,24 @@ void dec_to_quad  (char *quad_num ,int dec_num);
 void quad_weird (char *quad_num);
 
 
-enum INSTRUCTION
-{
-	MOV,CMP,ADD,
-	SUB,NOT,CLR,
-	LEA,INC,DEC,
-	JMP,BNE,RED,
-	PRN,JSR,RTS,STOP   
-};
-
 
 typedef enum{NO,YES}bool;
 
-typedef unsigned short int word[WORD_SIZE];
+typedef char word[WORD_SIZE+1];
 
 /*Defining a row in the INSTRUCTION table*/
 /*typedef struct I_table_row * I_row_p;*/
+
+
+
 
 typedef struct I_table_row
 {
 	char label[LABEL_SIZE];
 	unsigned int dec_add;
 	char weird_four_add[ADD_SIZE];
-	char inst[INST_SIZE];
 	word row_word;
+	char weird_four_op[WORD_SIZE/2+1];
 }I_table_row;
 
 
@@ -55,6 +49,7 @@ typedef struct D_table_row
 	unsigned int dec_add;
 	char weird_four_add[ADD_SIZE];
 	word row_word;
+	char weird_four_op[WORD_SIZE/2+1];
 }D_table_row;
 
 
