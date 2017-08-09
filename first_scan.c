@@ -3,29 +3,13 @@
 #include <string.h>
 #include <ctype.h>
 #include "aux_func.h"
+#include "scan.h"
 
 #define INITIAL_IC 100
 #define INITIAL_DC 0
 #define MAX_OP_LEN 8
 #define OP_NUM 16
 #define DATA_OP_NUM 5
-
-const char *reserved_words[]={"mov","cmp","add",
-					  "sub","not","clr",
-	 				  "lea","inc","dec",
-      				  "jmp","bne","red",
-      				  "prn","jsr","rts","stop",
-					  "r0","r1","r2","r3","r4","r5","r6","r7",
-					  "data","string","mat",".entry",".extern","999"};
-
-const char *op_words[]={"mov","cmp","add",
-					  "sub","not","clr",
-	 				  "lea","inc","dec",
-      				  "jmp","bne","red",
-      				  "prn","jsr","rts","stop"};
-
-const char *data_op_words[]={".data",".string",".mat",".entry",".extern"};
-
 
 const short int sym_size = sizeof(symbol_row);
 
