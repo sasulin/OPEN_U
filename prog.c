@@ -188,7 +188,7 @@ int main(void)
 		DC_ARRAY[DC][1] = '0';  	
 		DC_ARRAY[DC][2] = '0';  	
 		DC_ARRAY[DC][3] = '0';
-		DC_ARRAY[DC][8] = '0';/*encoding of a command is always absulot 00*/
+		DC_ARRAY[DC][8] = '0';/*encoding of a command is always absulote 00*/
 		DC_ARRAY[DC][9] = '0';
 		DC_ARRAY[DC][10] = '\0';
 		switch(type[0]){
@@ -196,6 +196,7 @@ int main(void)
 		    {
 		    DC_ARRAY[DC][4] = '1';
 		    DC_ARRAY[DC][5] = '0';
+
 		    break;
 		    }
 		    case TYPE_REG:
