@@ -12,12 +12,7 @@
 #define WORD_SIZE 10 
 #define ADD_SIZE 5
 #define MAX_ROW_LEN 81
-
-void first_scan(FILE *fp);
-void reverse (char *string); 
-void dec_to_quad  (char *quad_num ,int dec_num);
-void quad_weird (char *quad_num);
-
+#define FILE_NAME_LEN 65000
 
 
 typedef enum{NO,YES}bool;
@@ -26,9 +21,6 @@ typedef char word[WORD_SIZE+1];
 
 /*Defining a row in the INSTRUCTION table*/
 /*typedef struct I_table_row * I_row_p;*/
-
-
-
 
 typedef struct I_table_row
 {
@@ -61,7 +53,19 @@ typedef struct symbol_table_row
 	char weird_four_add[ADD_SIZE];
 	int dec_add;
 	bool is_ext;
-	bool is_op;
+	bool is_data_op;
     sym_row_p next;	
 
 }symbol_row;
+
+
+
+
+bool first_scan(FILE *fp, sym_row_p head);
+void reverse (char *string); 
+void dec_to_quad  (char *quad_num ,int dec_num);
+void quad_weird (char *quad_num);
+sym_row_p 	sym_alloc(void);
+void 		print_sym_table(sym_row_p head);
+void initialize_sym_table(sym_row_p head);
+void 		no_space(char *str);

@@ -1,6 +1,16 @@
 ;file tc.as
 
-.entry LOOP
+LENGTH:	.data 6,-9,15
+
+
+
+
+.extern A
+.extern B
+.extern r
+.extern D
+.extern E 
+.extern F
 .entry LENGTH
 .extern L3
 .extern W
@@ -19,9 +29,8 @@ LOOP:	jmp	END
 		bne LOOP
 END:	stop
 STR			:	.string "abcdef"
-LENGTH:	.data 6,-9,15
 K:		.data	22
 M1:		.mat [2][2] 1,2,3,4
-
+.extern ASUL
 
 			;End of file

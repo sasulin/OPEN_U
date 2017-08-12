@@ -5,45 +5,31 @@
 #include "aux_func.h"
 #include "scan.h"
 
-#define INITIAL_IC 100
-#define INITIAL_DC 0
-#define MAX_OP_LEN 8
-#define OP_NUM 16
-#define DATA_OP_NUM 5
-
-const short int sym_size = sizeof(symbol_row);
-
-bool 		is_comment(char *arr , char *arr_tmp);
+bool 		is_comment(char *arr,char *arr_tmp);
 bool 		is_empty(char *arr);
 bool 		check_op (char *op_string,bool*,bool*,bool*,bool*);
-bool 		check_label(char *label);
-char 		*tok_label(char * arr,char * arr_tmp);
-char 		*tok_op(char *arr , char *arr_tmp);
-void 		no_space(char *str);
-sym_row_p 	sym_alloc(void);
-void 		add_symbol(sym_row_p head, char *label,int IC,bool is_ext, bool is_op);
-void 		print_sym_table(sym_row_p head);
+bool 		check_label(char *label,sym_row_p head,bool*);
+char 		*tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
+char 		*tok_get(char *arr , char *arr_tmp);
+void 		add_symbol(sym_row_p head, char *label,int IC,bool is_ext, bool is_data_op);
 
-
-
-void first_scan(FILE *fp)
+bool first_scan(FILE *fp , sym_row_p sym_head)
 {
-	int IC,DC,row_num,row_len,label_len ,op_len; /*Counters*/
+	int IC,DC  /*Counters*/
+		,row_num,
+		row_len,label_len,op_len;
+
 	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
 	char row_buf[MAX_ROW_LEN];	
 	char arr_tmp[MAX_ROW_LEN];	
 	char label_buf[LABEL_SIZE*2];
 	char *label ,*op_tok, *buf_p;
-	sym_row_p sym_head;
-
 
 	IC=INITIAL_IC;
 	DC=INITIAL_DC;
 
-	sym_head=sym_alloc();
-	sym_head->next=NULL;
 	sym_head->dec_add=IC;
-
+	
 /*Loop on input file*/
 	
 	error=NO;
@@ -78,26 +64,21 @@ void first_scan(FILE *fp)
 			continue;
 		}
 
-		/*	3)CHECK AND SAVE LABELS	*/
-		label=tok_label(row_buf,arr_tmp);
-		
+		/*	3)CHECK AND SAVE LABELS	(IF APPEAR AT BEGGINING OF LINE)*/
+
+		label=tok_label(row_buf,arr_tmp,START,&error);	
 		if(label!=NULL)
 		{
 			no_space(label);			
 			strcpy(label_buf,label);
 			printf("in row#%d Found label %s\n",row_num,label);
 			buf_p=strchr(row_buf,':')+1;
-			is_label=check_label(label_buf);
+			is_label=check_label(label_buf,sym_head,&error);
 		}
-		else
-		{ 
-			is_label=NO;	
-		}
-
-		
+		else is_label=NO;				
 	/*		4)IS DATA INSTRUCTION? .data, .string .mat?	
-			Or ne of the 15 operations	*/																	
-		op_tok=tok_op(buf_p,arr_tmp);
+			Or one of the 15 operations	*/																	
+		op_tok=tok_get(buf_p,arr_tmp);
 
 		if(check_op(
 		op_tok,&is_op,&is_data_op,&is_ext,&is_ent))
@@ -111,28 +92,42 @@ void first_scan(FILE *fp)
 		}
 		else
 		{ 
-			is_op=NO;
-			is_data_op=NO;
-			printf("in row#%d OPERATION %s DOESN'T EXIST\n",row_num,op_tok);				
+			printf("ERROR ,in row#%d OPERATION %s DOESN'T EXIST\n",row_num,op_tok);				
 			error=YES;
 			row_num++;
 			continue;	
 		}
 	
+	/*MANAGING EXTERNAL LABELS*/
+	if(is_ext)
+	{
+		arr_tmp[0]='\0';
+		label = tok_label(buf_p,arr_tmp,MID,&error); /*Call tok_label function to search in the middle of the line*/
+		if(label!=NULL)
+		{
+			no_space(label);			
+			strcpy(label_buf,label);
+			printf("in row#%d Found label %s\n",row_num,label);
+			is_label=check_label(label_buf,sym_head,&error);
+		}
+		else is_label=NO;			
+	}
+
 	if (is_label)		
-			add_symbol(sym_head,label_buf,IC,is_ext,is_op);	
-		
-		row_num++;
-	}   
+			add_symbol(sym_head,label_buf,IC,is_ext,is_data_op);	
+	
+	
+		row_num++; /*Line ends*/
+	} /*End of while(fgets...*/   
 
 
 	if (error)				/*End of lines*/
 	{
 		printf("ERRORS FOUND IN INPUT FILE!!!\n");					
-		exit(1);
 	}
-
-	print_sym_table(sym_head);
+	
+	return error;
+	/*print_sym_table(sym_head);*/
 } /*End of First Scan*/
 
 
@@ -160,7 +155,7 @@ void reverse (char *string)
 }
 
 void dec_to_quad (char *quad_num ,int dec_num)
-{   /* convert decimal to base four */
+{   /* Convert decimal int to base four string*/
    int i;
    for(i=0;i<4;i++)
    {
@@ -196,11 +191,7 @@ bool is_comment(char *arr , char *arr_tmp)
 		strcpy(arr_tmp,arr);
 		no_space(arr_tmp);
 
-		if (*arr_tmp==';')
-		{
-			/*printf("COMMENT LINE\n");*/
-			return YES;
-		}
+		if (*arr_tmp==';') return YES;
 		else return NO;	
 	}
 
@@ -210,26 +201,46 @@ bool is_empty(char *arr)
 		empty_flag=1;
 		for (i=0; (i<MAX_ROW_LEN) && (arr[i]!='\0') ;i++)
 		{
-			if( isspace(arr[i]) )
-				continue;
-			else
-				empty_flag=0;
+			if( isspace(arr[i]) ) continue;
+			else empty_flag=0;
 		}
 		return empty_flag;
 	}
 
 
-char *tok_label(char *arr , char *arr_tmp)
+char *tok_label(char *arr,char *arr_tmp,int label_pos,bool *error)
 {
-	strcpy(arr_tmp,arr);
-/*	printf("%s\n",arr_tmp);*/
-	strtok(arr_tmp,":");
 
-	if (!(strcmp(arr_tmp,arr)))
-		return NULL;	
-	else 
-		return arr_tmp;	
+	/*If row starts with a label*/
+	if (label_pos == START)
+	{
+		strcpy(arr_tmp,arr);
+	/*	printf("%s\n",arr_tmp);*/
+		strtok(arr_tmp,":");
+
+		if (!(strcmp(arr_tmp,arr)))
+			return NULL;	
+		else 
+			return arr_tmp;	
+	}
+	
+	/*If label appears after an external op*/
+	else if (label_pos == MID)
+	{
+		arr_tmp=tok_get(arr,arr_tmp);
+		no_space(arr_tmp);
+
+		if (*arr_tmp == '\0') 
+		{	
+			printf("ERROR!LABEL after extern is empty!!! expected label name\n");
+			*error=YES;
+			return NULL;
+		}
+		return arr_tmp;		
+	}
+	return NULL;
 }
+
 
 void no_space(char *str)
 {
@@ -248,14 +259,14 @@ void no_space(char *str)
 
 
 void add_symbol(sym_row_p head,char *label,int IC,
-				bool is_ext, bool is_op)
+				bool is_ext, bool is_data_op)
 {
 	sym_row_p tmp;
 	if (head->next==NULL)
 	{
 		strcpy(head->label,label);
 		head->is_ext=is_ext;
-		head->is_op=is_op;	
+		head->is_data_op=is_data_op;	
 		head->next=sym_alloc();
 		head->next->next=NULL;
 		return;
@@ -264,11 +275,12 @@ void add_symbol(sym_row_p head,char *label,int IC,
 	{
 		tmp=head;
 		while(tmp->next!=NULL)
-			tmp=tmp->next;	
+			tmp=tmp->next;
+	
 			strcpy(tmp->label,label);      
 			tmp->dec_add=IC;
 			tmp->is_ext=is_ext;
-			tmp->is_op=is_op;	
+			tmp->is_data_op=is_data_op;	
 			tmp->next=sym_alloc();
         	tmp->next->next=NULL;
 	}
@@ -276,41 +288,11 @@ void add_symbol(sym_row_p head,char *label,int IC,
         
 }
 
-sym_row_p sym_alloc(void)
-{
-	sym_row_p node;
-	node=(sym_row_p)malloc(sym_size);
-	if (!node)
-	{
-		printf("Failed to allocate memory!!!\n");
-		exit(1);
-	}
 
-	else return node;
-}
 
-void print_sym_table(sym_row_p head)
-{
-	sym_row_p tmp;
-	printf("\n****CONTENT OF SYMBOL TABLE****\n");
-
-		printf("%6s\t%6s\t%6s\t%6s\n",
-		"Label","add","ext","op");
-
-    for(tmp=head;tmp->next!=NULL;tmp=tmp->next)
-	{	
-		printf("%6s\t%6d\t%6d\t%6d\n"
-		,tmp->label,tmp->dec_add,
-		tmp->is_ext,tmp->is_op);	
-	}
-
-}
-
-char *tok_op(char *arr , char *arr_tmp)
+char *tok_get(char *arr , char *arr_tmp)
 {
 	int i,j;
-/*	printf("%s\n",arr);
-*/
 	for(i=0;(i<MAX_ROW_LEN) && (arr[i]!='\0');i++)
 	{	
 		if(isspace(arr[i]))
@@ -339,58 +321,68 @@ bool check_op(  char *op_string,
 				bool *is_ent)
 {
 	int i;
-	for (i=0;i<OP_NUM;i++)
+
+	no_space(op_string);
+	for (i=0;strcmp(op_words[i],"999");i++)
 	{
 		if(!strcmp(op_string,op_words[i]))			
 		{
-/*			printf("%s\n",op_string);*/
 			*is_op=YES;				
 			return YES;				
 		}
 	}
 	
-	for (i=0;i<DATA_OP_NUM;i++)
+	if( !strcmp(op_string,".extern") ) 
+	{
+		*is_ext=YES;
+		return YES;
+	}
+
+
+	if( !strcmp(op_string,".entry") ) 
+	{
+		*is_ent=YES;	
+		return YES;		
+	}
+
+	for (i=0;strcmp(data_op_words[i],"999");i++)
 	{
 		if(!strcmp(op_string,data_op_words[i]))			
 		{
-/*			if(!strcmp(op_string,".extern")) 
-			{
-				*is_ext=YES;
-			}
-			if(!strcmp(op_string,".entry"))	
-			{
-				*is_ent=YES;
-			}*/
 			*is_data_op=YES;		
 			return YES;			
 		}
 	}
-	/*printf("OPERATION %s DOESN'T EXIST\n",op_string);*/
+	
 	return NO;
 }
 
-bool check_label(char *label)
+bool check_label(char *label,sym_row_p head,bool *error)
 {
 /*This function tests if a label is OK
 it tests:
 	1) A letter at the first letter
 	2) Label length
 	3) If reserved word
+	4) If already exists in symbol_table
 */
 	int i;
+	sym_row_p tmp;
 /*1*/
 	if (!isalpha(label[0]))
 	{ 
 		printf
 		("LABEL: %s is illegal!\nA LABEL has to start with a letter\n",label);
+		*error=YES;
 		return NO;
 	}
 
 /*2*/
-	if (strlen(label)>30) 
+	if (strlen(label)>LABEL_SIZE) 
 	{
 		printf
 		("LABEL: %s is illegal!\nA LABEL cannot be longer than %d\n",label,LABEL_SIZE);
+		*error=YES;
 		return NO;
 	}	
 /*3*/
@@ -399,7 +391,20 @@ it tests:
 		if (!strcmp(label,reserved_words[i]))
 		{
 			printf
-		("LABEL: %s is illegal!\n%s is a reserved word!\n",label,reserved_words[i]);
+			("LABEL: %s is illegal!\n%s is a reserved word!\n",label,reserved_words[i]);
+			*error=YES;
+			return NO;
+		}
+	}
+/*4*/	
+
+    for(tmp=head;tmp->next!=NULL;tmp=tmp->next)
+	{	
+		if (!strcmp(label,tmp->label))
+		{
+			printf
+			("LABEL: %s already exists!!!\n",label);
+			*error=YES;
 			return NO;
 		}
 	}
