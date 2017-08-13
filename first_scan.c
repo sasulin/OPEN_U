@@ -13,11 +13,12 @@ char 		*tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
 char 		*tok_get(char *arr , char *arr_tmp);
 void 		add_symbol(sym_row_p head, char *label,int IC,bool is_ext, bool is_data_op);
 
-bool first_scan(FILE *fp , sym_row_p sym_head)
+bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_table )
 {
 	int IC,DC  /*Counters*/
 		,row_num,
-		row_len,label_len,op_len;
+	/*	row_len,label_len,*/
+		op_len;
 
 	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
 	char row_buf[MAX_ROW_LEN];	
@@ -35,11 +36,88 @@ bool first_scan(FILE *fp , sym_row_p sym_head)
 	error=NO;
 	row_num=1;
 
+
+/***************************************************************/	
+/*DATA HANDLING*/
+/*	strcpy (DC_table[5].binary_op,"0000000000");
+	printf("DATA IN BINARY:%s\n",DC_table[5].binary_op);*/
+	
+	DC+=IC;
+
+	dec_to_bin('a',DC_table[DC].binary_op);
+	bin_to_weird(DC_table[DC].binary_op,DC_table[DC].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[DC].weird_four_op);
+
+	dec_to_bin('b',DC_table[DC+1].binary_op);
+	bin_to_weird(DC_table[DC+1].binary_op,DC_table[DC+1].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[DC+1].weird_four_op);
+
+	dec_to_bin('c',DC_table[DC+2].binary_op);
+	bin_to_weird(DC_table[DC+2].binary_op,DC_table[DC+2].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[DC+2].weird_four_op);
+
+	dec_to_bin('d',DC_table[3].binary_op);
+	bin_to_weird(DC_table[3].binary_op,DC_table[3].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[3].weird_four_op);
+
+	dec_to_bin('e',DC_table[4].binary_op);
+	bin_to_weird(DC_table[4].binary_op,DC_table[4].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[4].weird_four_op);
+
+	dec_to_bin('f',DC_table[5].binary_op);
+	bin_to_weird(DC_table[5].binary_op,DC_table[5].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[5].weird_four_op);
+
+	dec_to_bin('\0',DC_table[6].binary_op);
+	bin_to_weird(DC_table[6].binary_op,DC_table[6].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[6].weird_four_op);
+
+	dec_to_bin(6,DC_table[7].binary_op);
+	bin_to_weird(DC_table[7].binary_op,DC_table[7].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[7].weird_four_op);
+
+	dec_to_bin(-9,DC_table[8].binary_op);
+	bin_to_weird(DC_table[8].binary_op,DC_table[8].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[8].weird_four_op);
+
+	dec_to_bin(15,DC_table[9].binary_op);
+	bin_to_weird(DC_table[9].binary_op,DC_table[9].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[9].weird_four_op);
+
+	dec_to_bin(22,DC_table[10].binary_op);
+	bin_to_weird(DC_table[10].binary_op,DC_table[10].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[10].weird_four_op);
+
+	dec_to_bin(1,DC_table[11].binary_op);
+	bin_to_weird(DC_table[11].binary_op,DC_table[11].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[11].weird_four_op);
+
+	dec_to_bin(2,DC_table[12].binary_op);
+	bin_to_weird(DC_table[12].binary_op,DC_table[12].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[12].weird_four_op);
+
+	dec_to_bin(3,DC_table[13].binary_op);
+	bin_to_weird(DC_table[13].binary_op,DC_table[13].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[13].weird_four_op);
+
+	dec_to_bin(4,DC_table[14].binary_op);
+	bin_to_weird(DC_table[14].binary_op,DC_table[14].weird_four_op);
+	printf("WEIRD:%s\n",DC_table[14].weird_four_op);
+
+/*	printf("DATA IN BINARY:%s\n",DC_table[0].binary_op);*/
+
+
+	/*word binary_op;
+	char weird_four_op[WORD_SIZE/2+1];*/
+
+
+/***************************************************************/
+
 	while(fgets(row_buf,MAX_ROW_LEN,fp) !=NULL)
 	{
 		buf_p=row_buf; /*Global pointer to search the recorded row*/
-		row_len=strlen(row_buf);
-		label_len=0;
+	/*	row_len=strlen(row_buf);*/
+	/*	label_len=0;*/
 		op_len=0;
 
 		is_op=NO;	
@@ -47,6 +125,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head)
 		is_label=NO;	
 		is_ext=NO;	
 		is_ent=NO;	
+
 
 		/*	1) CHECK AND IGNORE COMMENT LINES*/	
 		if (is_comment(row_buf,arr_tmp))
@@ -163,8 +242,12 @@ void dec_to_quad (char *quad_num ,int dec_num)
 	 quad_weird(&quad_num[i]);
 	 dec_num = dec_num / 4;
    }
+
    	quad_num[4]='\0';
 	reverse(quad_num);
+
+
+
 }
 
 void quad_weird (char *quad_num)
@@ -249,7 +332,6 @@ void no_space(char *str)
    while(*p2 != '\0')
    {
      *p1 = *p2++;
-     /*  if(!isspace(*p1)) */
        if(	((*p1)!='\t')  && ((*p1)!=(' '))) 
        	  p1++;
 	   
@@ -409,4 +491,31 @@ it tests:
 		}
 	}
 	return YES;
+}
+
+void dec_to_bin(int dec_num,char* word)
+{
+	int i;
+	for (i=10;i>0;i--)
+	{
+		if( (dec_num&( 1<<(i-1) )) !=0)
+		{
+			word[10-i]='1';	
+		}
+		else
+		{
+			word[10-i]='0';	
+		}	
+	}			
+}
+
+void bin_to_weird(char *bin,char *weird)
+{
+	int i;
+	int dec;
+	for (i=0;i<10;i+=2)
+	{
+		dec=(bin[i] - '0')*2+(bin[i+1]-'0');
+		weird[i/2]=('a'+dec);
+	}
 }

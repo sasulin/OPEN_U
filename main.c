@@ -10,27 +10,31 @@ char *out_post = ".ob";
 char *ext_post = ".ext";
 char *ent_post = ".ent";
 
-I_table_row main_table[MEMORY_SIZE];
 
 int main(int argc , char *argv[])
 {
+	I_table_row main_table[MEMORY_SIZE];
+	D_table_row data_table[MEMORY_SIZE];
+	I_row_p IC_p;
+	D_row_p DC_p;
+
 	int i;
 	char prefix[FILE_NAME_LEN];
 	char input_file[FILE_NAME_LEN];
 	char output_file[FILE_NAME_LEN];
 	char ext_file[FILE_NAME_LEN]; 
 	char ent_file[FILE_NAME_LEN];	
-
-	sym_row_p sym_head;
 	bool error;
+	sym_row_p sym_head;
 
-/*Input file*/
 	FILE *fp_in;
 	FILE *fp_out;
 	FILE *fp_ext;
 	FILE *fp_ent;
 
-	error=NO;
+	error=NO;;
+	IC_p = &main_table[0];
+	DC_p = &data_table[0];
 
 	if (argc==1) /*No arguments*/
 	{
@@ -67,7 +71,7 @@ int main(int argc , char *argv[])
 		printf("input file:%s\n****************\n",input_file);
 
 
-/*Initializing Instruction table*/	
+/*Initializing Instruction table (IC)*/	
 	putchar('\n');
 	for (i=100;i<MEMORY_SIZE;i++)
 	{
@@ -77,12 +81,22 @@ int main(int argc , char *argv[])
 	}
 
 
+/*Initializing Data table (DC)*/	
+	putchar('\n');
+	for (i=0;i<MEMORY_SIZE/2;i++)
+	{
+		data_table[i].dec_add=i;
+		dec_to_quad(data_table[i].weird_four_add,
+				  	 data_table[i].dec_add);
+	}
+
+
 /*Initializing Symbols table*/	
 		sym_head=sym_alloc();
 		sym_head->next=NULL;
 	
 
-		error = first_scan(fp_in,sym_head);
+		error = first_scan(fp_in,sym_head,IC_p,DC_p);
 		print_sym_table(sym_head);
 		initialize_sym_table(sym_head);
 		/*	second_scan(fp_in);*/
@@ -105,6 +119,14 @@ int main(int argc , char *argv[])
 			fprintf(fp_out,"%d\t%s\n",main_table[i].dec_add,
 			main_table[i].weird_four_add);
 		}
+
+
+		for (i=0;i<MEMORY_SIZE/2;i++)
+		{
+			fprintf(fp_out,"%d\t%s\t%s\n",data_table[i].dec_add,
+			data_table[i].weird_four_add,data_table[i].weird_four_op);
+		}
+
 
 		fp_ext=fopen(ext_file,"w+");
 	

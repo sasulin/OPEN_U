@@ -20,27 +20,26 @@ typedef enum{NO,YES}bool;
 typedef char word[WORD_SIZE+1];
 
 /*Defining a row in the INSTRUCTION table*/
-/*typedef struct I_table_row * I_row_p;*/
+typedef struct I_table_row *I_row_p;
 
 typedef struct I_table_row
 {
 	char label[LABEL_SIZE];
 	unsigned int dec_add;
 	char weird_four_add[ADD_SIZE];
-	word row_word;
+	word binary_op;
 	char weird_four_op[WORD_SIZE/2+1];
 }I_table_row;
 
 
 /*Defining a row in the DATA table*/
-/*typedef struct D_table_row * D_row_p*/
-
+typedef struct D_table_row *D_row_p;
 typedef struct D_table_row
 {
 	char label[LABEL_SIZE];
 	unsigned int dec_add;
 	char weird_four_add[ADD_SIZE];
-	word row_word;
+	word binary_op;
 	char weird_four_op[WORD_SIZE/2+1];
 }D_table_row;
 
@@ -58,10 +57,8 @@ typedef struct symbol_table_row
 
 }symbol_row;
 
-
-
-
-bool first_scan(FILE *fp, sym_row_p head);
+/*Functions declarations*/
+bool first_scan(FILE *fp, sym_row_p head,I_row_p,D_row_p);
 void reverse (char *string); 
 void dec_to_quad  (char *quad_num ,int dec_num);
 void quad_weird (char *quad_num);
@@ -69,3 +66,5 @@ sym_row_p 	sym_alloc(void);
 void 		print_sym_table(sym_row_p head);
 void initialize_sym_table(sym_row_p head);
 void 		no_space(char *str);
+void dec_to_bin(int n,char *word);
+void bin_to_weird(char *bin,char *weird);

@@ -1,24 +1,19 @@
-TARGET = main
-LIBS = -lm
 CC = gcc
-CFLAGS = -g -Wall -ansi -pedantic
+CFLAGS = -ansi -pedantic -Wall -g
 
-.PHONY: default all clean
+# -g flag is for debugging information
 
-all: default
-default: $(TARGET)
+main: main.o first_scan.o
+#A command that generates the target main:
+	$(CC) $(CFLAGS) -o main main.o first_scan.o -lm
 
-OBJECTS = $(patsubst %.c, %.o, $(wildcard *.c))
-HEADERS = $(wildcard *.h)
+main.o : main.c aux_func.h	
+	$(CC) $(CFLAGS) -c main.c 
 
-%.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
+first_scan.o : first_scan.c aux_func.h scan.h	
+	$(CC) $(CFLAGS) -c first_scan.c 
 
-.PRECIOUS: $(TARGET) $(OBJECTS)
-
-$(TARGET): $(OBJECTS)
-	$(CC) $(OBJECTS) -Wall -ansi -pedantic $(LIBS) -o $@
-
-clean:
-	-rm -f *.o
-	-rm -f $(TARGET)
+clean:  
+	rm main.o
+	rm first_scan.o	
+	
