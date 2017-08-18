@@ -14,6 +14,5 @@ first_scan.o : first_scan.c aux_func.h scan.h parser.c
 	$(CC) $(CFLAGS) -c first_scan.c 
 
 clean:  
-	rm main.o
-	rm first_scan.o	
+	rm *.o
 	

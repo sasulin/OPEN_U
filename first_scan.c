@@ -16,7 +16,6 @@ void 		add_symbol(sym_row_p head, char *label,int IC,bool is_ext, bool is_data_o
 
 
 
-
 bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_table )
 {
 	int IC,DC  /*Counters*/
@@ -25,10 +24,12 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 		op_len;
 
 	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
+	parser_table parser_t ;
 	char row_buf[MAX_ROW_LEN];	
 	char arr_tmp[MAX_ROW_LEN];	
 	char label_buf[MAX_LABEL_SIZE*2];
 	char *label ,*op_tok, *buf_p;
+	
 
 	IC=INITIAL_IC;
 	DC=INITIAL_DC;
@@ -107,7 +108,6 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	dec_to_bin(4,DC_table[14].binary_op);
 	bin_to_weird(DC_table[14].binary_op,DC_table[14].weird_four_op);
 	printf("WEIRD:%s\n",DC_table[14].weird_four_op);
-*/
 
 /***************************************************************/
 
@@ -169,7 +169,9 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 						/*SEND TO ARGUMENT PARSING*/
 
 			if (	(!is_ext) && (!is_ent)	)
-			    parser(buf_p);	
+			    parser(buf_p , &parser_t);	
+
+
 		}
 		else
 		{ 

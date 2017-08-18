@@ -57,6 +57,20 @@ typedef struct symbol_table_row
 
 }symbol_row;
 
+typedef struct parser_table *parser_table_p;
+typedef struct parser_table 
+{
+    char label_name[MAX_ROW_LEN][MAX_LABEL_SIZE];
+    char temp_string[MAX_ROW_LEN][MAX_LABEL_SIZE];
+    int  type[MAX_ROW_LEN];
+    int  first_arg[MAX_ROW_LEN];
+    int  secound_arg[MAX_ROW_LEN];
+
+} parser_table;
+
+
+
+
 /*Functions declarations*/
 bool first_scan(FILE *fp, sym_row_p head,I_row_p,D_row_p);
 void reverse (char *string); 
@@ -68,3 +82,4 @@ void initialize_sym_table(sym_row_p head);
 void 		no_space(char *str);
 void dec_to_bin(int n,char *word);
 void bin_to_weird(char *bin,char *weird);
+int parser(char *input ,parser_table_p parser_t_p);

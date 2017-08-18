@@ -1,4 +1,4 @@
-int parser(char *input)
+int parser(char *input ,parser_table_p parser_t_p)
 { 
     char *token[MAX_ROW_LEN];
     char label_name[MAX_ROW_LEN][MAX_LABEL_SIZE];
@@ -326,6 +326,14 @@ int parser(char *input)
           }
           	
          }
+
+	    strcpy(parser_t_p->label_name[i],label_name[i]);
+	    strcpy(parser_t_p->temp_string[i],temp_string[i]);
+	    strcpy(parser_t_p->label_name[i],label_name[i]);
+	    parser_t_p->type[i] = type[i]; 
+	    parser_t_p->first_arg[i] = first_arg[i]; 
+	    parser_t_p->secound_arg[i] = second_arg[i]; 
+
           printf("\n TYPE is %d "  , type[i] );
           printf("\n first_arg %d " , first_arg[i] );
           printf("\n second_arg %d " , second_arg[i] );
