@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include "aux_func.h"
 #include "scan.h"
+#include "parser.c"
 
 bool 		is_comment(char *arr,char *arr_tmp);
 bool 		is_empty(char *arr);
@@ -12,6 +13,9 @@ bool 		check_label(char *label,sym_row_p head,bool*);
 char 		*tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
 char 		*tok_get(char *arr , char *arr_tmp);
 void 		add_symbol(sym_row_p head, char *label,int IC,bool is_ext, bool is_data_op);
+
+
+
 
 bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_table )
 {
@@ -167,7 +171,9 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 			op_len=strlen(op_tok);
 			buf_p+=op_len;
 			printf("in row#%d THE ARGUMENT STRING IS: %s\n",row_num,buf_p);
-						/*SEND TO ARGUMENT PARSING*/	
+			
+						/*SEND TO ARGUMENT PARSING*/
+			parser(buf_p);
 		}
 		else
 		{ 
