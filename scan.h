@@ -30,15 +30,15 @@ const char *reserved_words[]={"mov","cmp","add",
                     "jmp","bne","red",
                     "prn","jsr","rts","stop",
                     "r0","r1","r2","r3","r4","r5","r6","r7",
-                    "data","string","mat",".entry",".extern","999"};
+                    "data","string","mat",".entry",".extern",LAST};
 
 const char *op_words[]={"mov","cmp","add",
            "sub","not","clr",
            "lea","inc","dec",
            "jmp","bne","red",
-           "prn","jsr","rts","stop","999"};
+           "prn","jsr","rts","stop",LAST};
 
-const char *data_op_words[]={".data",".string",".mat","999"};
+const char *data_op_words[]={".data",".string",".mat",LAST};
 
 enum INSTRUCTION
 {

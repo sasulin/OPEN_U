@@ -7,11 +7,17 @@
 {\
 		if(!FP)\
 		{\
-			fprintf(stderr,\
-			"Cannot open %s	No such input file!!!\n",F_NAME);\
+			fprintf(stderr,"Cannot open \"%s\"\nNo such input file!!!\n",F_NAME);\
 			exit(1);\
 		}\
 }\
+
+#define FILE_STRING(FILE_NAME,TEXT)\
+{\
+    strcpy(FILE_NAME,prefix);\
+    strcat(FILE_NAME,TEXT);\
+}\
+
 
 const short int sym_size = sizeof(symbol_row);
 
@@ -19,7 +25,6 @@ char *in_post = ".as";
 char *out_post = ".ob";
 char *ext_post = ".ext";
 char *ent_post = ".ent";
-
 
 int main(int argc , char *argv[])
 {
@@ -54,33 +59,32 @@ int main(int argc , char *argv[])
 
 	while( --argc > 0 )
 	{
-
 		strcpy(prefix,argv[argc]);
 
-		strcpy(input_file,prefix);
-		strcat(input_file,in_post);
+	    FILE_STRING(input_file,in_post)
+	    FILE_STRING(output_file,out_post)
+	    FILE_STRING(ext_file,ext_post)
+	    FILE_STRING(ent_file,ent_post)
 
+/*		strcpy(input_file,prefix);
+		strcat(input_file,in_post);
 		strcpy(output_file,prefix);
 		strcat(output_file,out_post);
-
 		strcpy(ext_file,prefix);
 		strcat(ext_file,ext_post);
-
 		strcpy(ent_file,prefix);
-		strcat(ent_file,ent_post);
-
+		strcat(ent_file,ent_post);*/
 	
 		fp_in=fopen(input_file,"r");
-
-
-		CHECK_OPEN(fp_in,argv[argc])	
-	/*	if (!fp_in)
+		CHECK_OPEN(fp_in,argv[argc])
+	
+/*		if (!fp_in)
 		{
 			fprintf(stderr,
 			"Cannot open %s	No such input file!!!\n", argv[argc]);
 			exit(1);
-		}	
-		printf("input file:%s\n****************\n",input_file);*/
+		}*/
+		printf("input file:%s\n****************\n",input_file);
 
 
 /*Initializing Instruction table (IC)*/	
@@ -88,7 +92,7 @@ int main(int argc , char *argv[])
 	for (i=100;i<MEMORY_SIZE;i++)
 	{
 		main_table[i].dec_add=i;
-		dec_to_quad(main_table[i].weird_four_add,
+		dec_to_weird(main_table[i].weird_four_add,
 				  	 main_table[i].dec_add);
 	}
 
@@ -98,7 +102,7 @@ int main(int argc , char *argv[])
 	for (i=0;i<MEMORY_SIZE/2;i++)
 	{
 		data_table[i].dec_add=i;
-		dec_to_quad(data_table[i].weird_four_add,
+		dec_to_weird(data_table[i].weird_four_add,
 				  	 data_table[i].dec_add);
 	}
 
@@ -116,13 +120,14 @@ int main(int argc , char *argv[])
 		if (error) continue;
 			
 		fp_out=fopen(output_file,"w+");
-
-		if (!fp_out)
+		CHECK_OPEN(fp_out,output_file)
+	
+/*		if (!fp_out)
 		{
 			fprintf(stderr,
-			"Cannot open %s\n", output_file);
+			"Cannot open %s\n",output_file);
 			exit(1);
-		}	
+		}*/
 
 		fprintf(fp_out,"input file:%s\n****************\n",input_file);	
 
@@ -141,24 +146,26 @@ int main(int argc , char *argv[])
 
 
 		fp_ext=fopen(ext_file,"w+");
+		CHECK_OPEN(fp_ext,ext_file)
 	
-		if (!fp_ext)
+/*		if (!fp_ext)
 		{
 			fprintf(stderr,
 			"Cannot open %s\n", ext_file);
 			exit(1);
-		}	
+		}	*/
 
 		fprintf(fp_ext,"input file:%s\n****************\n",input_file);
 
 		fp_ent=fopen(ent_file,"w+");
+		CHECK_OPEN(fp_ent,ent_file)
 
-		if (!fp_ent)
+/*		if (!fp_ent)
 		{
 			fprintf(stderr,
 			"Cannot open %s\n", ent_file);
 			exit(1);
-		}	
+		}*/	
 
 		fprintf(fp_ent,"input file:%s\n****************\n",input_file);
 	}/*end of while(--argc...)*/
