@@ -16,7 +16,6 @@ void 		add_symbol(sym_row_p head, char *label,int IC,bool is_ext, bool is_data_o
 
 
 
-
 bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_table )
 {
 	int IC,DC  /*Counters*/
@@ -173,7 +172,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 			printf("in row#%d THE ARGUMENT STRING IS: %s\n",row_num,buf_p);
 			
 						/*SEND TO ARGUMENT PARSING*/
-			parser(buf_p);
+			parser(buf_p &parser_t);
 		}
 		else
 		{ 
