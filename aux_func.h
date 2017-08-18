@@ -73,13 +73,13 @@ typedef struct parser_table
 
 /*Functions declarations*/
 bool first_scan(FILE *fp, sym_row_p head,I_row_p,D_row_p);
-void reverse (char *string); 
-void dec_to_weird  (char *quad_num ,int dec_num);
-void quad_weird (char *quad_num);
+void reverse(char *string); 
+void dec_to_weird(char *quad_num ,int dec_num);
+void quad_weird(char *quad_num);
 sym_row_p 	sym_alloc(void);
 void 		print_sym_table(sym_row_p head);
 void initialize_sym_table(sym_row_p head);
 void 		no_space(char *str);
-void dec_to_bin(int n,char *word);
+void dec_to_bin(int n,char *word , int j);
 void bin_to_weird(char *bin,char *weird);
 int parser(char *input ,parser_table_p parser_t_p);

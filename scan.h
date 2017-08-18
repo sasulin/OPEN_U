@@ -24,6 +24,18 @@
 #define MAX_OP_LEN 8
 #endif
 
+#ifndef REG_LEN
+#define REG_LEN 4
+#endif
+
+#ifndef WORD_LEN
+#define WORD_LEN 10
+#endif
+
+#ifndef COMMAND_LEN
+#define COMMAND_LEN 8
+#endif
+
 const char *reserved_words[]={"mov","cmp","add",
                     "sub","not","clr",
                     "lea","inc","dec",
@@ -46,8 +58,8 @@ enum INSTRUCTION
 	SUB,NOT,CLR,
 	LEA,INC,DEC,
 	JMP,BNE,RED,
-	PRN,JSR,RTS,STOP
-	/*,STRING,DATA,MAT */
+	PRN,JSR,RTS,STOP,
+	STRING,DATA,MAT
 };
 
 enum LABEL_POSITION {START,MID};
@@ -117,8 +129,8 @@ operation_list op_list[OP_NUM]={
 	{"jsr",JSR,"1101"		,NO,NO,NO,NO		,NO,YES,YES,YES},
 	{"rts",RTS,"1110"		,NO,NO,NO,NO		,NO,NO,NO,NO},
 	{"stop",STOP,"1111"		,NO,NO,NO,NO		,NO,NO,NO,NO},
-/*	{".string",STRING,"0"	,NO,NO,NO,NO		,NO,NO,NO,NO},
+	{".string",STRING,"0"	,NO,NO,NO,NO		,NO,NO,NO,NO},
 	{".data",DATA,"0"		,NO,NO,NO,NO		,NO,NO,NO,NO},
-	{".mat",MAT,"0"			,NO,NO,NO,NO		,NO,NO,NO,NO},*/
+	{".mat",MAT,"0"			,NO,NO,NO,NO		,NO,NO,NO,NO},
 																	};
 

@@ -1,8 +1,8 @@
 int parser(char *input ,parser_table_p parser_t_p)
 { 
-    char *token[MAX_ROW_LEN];
-    char label_name[MAX_ROW_LEN][MAX_LABEL_SIZE];
-    char temp_string[MAX_ROW_LEN][MAX_LABEL_SIZE];
+    char *token[MAX_ROW_LEN]= {0} ;
+    char label_name[MAX_ROW_LEN][MAX_LABEL_SIZE] = {{0}} ;
+    char temp_string[MAX_ROW_LEN][MAX_LABEL_SIZE] = {{0}} ;
     int  type[MAX_ROW_LEN] = {0} , 
          first_arg[MAX_ROW_LEN] = {0} , 
          second_arg[MAX_ROW_LEN]  = {0};
@@ -254,8 +254,8 @@ int parser(char *input ,parser_table_p parser_t_p)
               case INSIDE_MATRIX_FIRST_R:
           	if( ((c>='0') && (c<='7')) )
           	{
-          	    first_arg[i] = c;
-          	    printf("\n reg is r%c" , first_arg[i] );
+          	    first_arg[i] = c - '0' ;
+          	    printf("\n reg is r%d" , first_arg[i] );
           	    if(!(token[i][j + 1] == ']'))
           	    {
           		printf(" error in case INSIDE_MATRIX_FIRST_R expected ] but get %c ",  token[i][j + 1] );
@@ -287,8 +287,8 @@ int parser(char *input ,parser_table_p parser_t_p)
               case INSIDE_MATRIX_SECOUND_R:
           	if( ((c>='0') && (c<='7')) )
           	{
-          	    second_arg[i] = c;
-          	    printf("\n reg is r%c" , second_arg[i] );
+          	    second_arg[i] = c - '0';
+          	    printf("\n reg is r%d" , second_arg[i] );
           	    if(!(token[i][j + 1] == ']'))
           	    {
           		printf(" error in case INSIDE_MATRIX_SECOUND_R expected ] but get %c ",  token[i][j + 1] );
@@ -305,8 +305,8 @@ int parser(char *input ,parser_table_p parser_t_p)
           	if( ((c>='0') && (c<='7')) )
           	{
           	    type[i] = TYPE_REG;
-          	    first_arg[i] = c;
-          	    printf("\n reg is r%c" , first_arg[i] );
+          	    first_arg[i]  = c - '0';
+          	    printf("\n reg is r%d" , first_arg[i] );
           	    label_name[i][0] = 'r';
           	    label_name[i][j] = c;
           	    label_name[i][j+1] = '\0';
@@ -331,6 +331,7 @@ int parser(char *input ,parser_table_p parser_t_p)
 	    strcpy(parser_t_p->temp_string[i],temp_string[i]);
 	    strcpy(parser_t_p->label_name[i],label_name[i]);
 	    parser_t_p->type[i] = type[i]; 
+	    parser_t_p->type[i + 1] = type[i + 1]; 
 	    parser_t_p->first_arg[i] = first_arg[i]; 
 	    parser_t_p->secound_arg[i] = second_arg[i]; 
 
