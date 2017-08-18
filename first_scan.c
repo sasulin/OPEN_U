@@ -16,7 +16,6 @@ void 		add_symbol(sym_row_p head, char *label,int IC,bool is_ext, bool is_data_o
 
 
 
-
 bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_table )
 {
 	int IC,DC  /*Counters*/
@@ -27,7 +26,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
 	char row_buf[MAX_ROW_LEN];	
 	char arr_tmp[MAX_ROW_LEN];	
-	char label_buf[LABEL_SIZE*2];
+	char label_buf[MAX_LABEL_SIZE*2];
 	char *label ,*op_tok, *buf_p;
 
 	IC=INITIAL_IC;
@@ -47,7 +46,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	printf("DATA IN BINARY:%s\n",DC_table[5].binary_op);*/
 	
 	DC+=IC;
-
+/*
 	dec_to_bin('a',DC_table[DC].binary_op);
 	bin_to_weird(DC_table[DC].binary_op,DC_table[DC].weird_four_op);
 	printf("WEIRD:%s\n",DC_table[DC].weird_four_op);
@@ -107,13 +106,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	dec_to_bin(4,DC_table[14].binary_op);
 	bin_to_weird(DC_table[14].binary_op,DC_table[14].weird_four_op);
 	printf("WEIRD:%s\n",DC_table[14].weird_four_op);
-
-/*	printf("DATA IN BINARY:%s\n",DC_table[0].binary_op);*/
-
-
-	/*word binary_op;
-	char weird_four_op[WORD_SIZE/2+1];*/
-
+*/
 
 /***************************************************************/
 
@@ -147,7 +140,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 			continue;
 		}
 
-		/*	3)CHECK AND SAVE LABELS	(IF APPEAR AT BEGGINING OF LINE)*/
+		/*	3)CHECK AND SAVE LABELS	(IF APPEAR AT BEGINNING OF LINE)*/
 
 		label=tok_label(row_buf,arr_tmp,START,&error);	
 		if(label!=NULL)
@@ -173,7 +166,9 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 			printf("in row#%d THE ARGUMENT STRING IS: %s\n",row_num,buf_p);
 			
 						/*SEND TO ARGUMENT PARSING*/
-			parser(buf_p);
+
+			if (	(!is_ext) && (!is_ent)	)
+			    parser(buf_p);	
 		}
 		else
 		{ 
@@ -212,7 +207,6 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	}
 	
 	return error;
-	/*print_sym_table(sym_head);*/
 } /*End of First Scan*/
 
 
@@ -466,10 +460,10 @@ it tests:
 	}
 
 /*2*/
-	if (strlen(label)>LABEL_SIZE) 
+	if (strlen(label)>MAX_LABEL_SIZE) 
 	{
 		printf
-		("LABEL: %s is illegal!\nA LABEL cannot be longer than %d\n",label,LABEL_SIZE);
+		("LABEL: %s is illegal!\nA LABEL cannot be longer than %d\n",label,MAX_LABEL_SIZE);
 		*error=YES;
 		return NO;
 	}	

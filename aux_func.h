@@ -7,7 +7,7 @@
 #include <stdlib.h>*/
 
 #define MEMORY_SIZE 256
-#define LABEL_SIZE 31 /*Defined in instructions*/
+#define MAX_LABEL_SIZE 31 /*Defined in instructions*/
 #define INST_SIZE 10 
 #define WORD_SIZE 10 
 #define ADD_SIZE 5
@@ -24,7 +24,7 @@ typedef struct I_table_row *I_row_p;
 
 typedef struct I_table_row
 {
-	char label[LABEL_SIZE];
+	char label[MAX_LABEL_SIZE];
 	unsigned int dec_add;
 	char weird_four_add[ADD_SIZE];
 	word binary_op;
@@ -36,7 +36,7 @@ typedef struct I_table_row
 typedef struct D_table_row *D_row_p;
 typedef struct D_table_row
 {
-	char label[LABEL_SIZE];
+	char label[MAX_LABEL_SIZE];
 	unsigned int dec_add;
 	char weird_four_add[ADD_SIZE];
 	word binary_op;
@@ -48,7 +48,7 @@ typedef struct D_table_row
 typedef struct symbol_table_row *sym_row_p;
 typedef struct symbol_table_row
 {
-	char label[LABEL_SIZE];
+	char label[MAX_LABEL_SIZE];
 	char weird_four_add[ADD_SIZE];
 	int dec_add;
 	bool is_ext;

@@ -4,9 +4,6 @@
 
 /*Assembler*/
 
-/*#include <stdio.h>
-#include <stdlib.h>*/
-
 #ifndef OP_CODE_BIN_SIZE
 #define OP_CODE_BIN_SIZE 5
 #endif
@@ -26,13 +23,6 @@
 #ifndef MAX_OP_LEN
 #define MAX_OP_LEN 8
 #endif
-
-/*#ifndef OP_NUM
-#define OP_NUM 16
-#endif
-#ifndef DATA_OP_NUM
-#define DATA_OP_NUM 3
-#endif*/
 
 const char *reserved_words[]={"mov","cmp","add",
                     "sub","not","clr",
@@ -56,11 +46,40 @@ enum INSTRUCTION
 	SUB,NOT,CLR,
 	LEA,INC,DEC,
 	JMP,BNE,RED,
-	PRN,JSR,RTS,STOP,
-	STRING,DATA,MAT 
+	PRN,JSR,RTS,STOP
+	/*,STRING,DATA,MAT */
 };
 
 enum LABEL_POSITION {START,MID};
+
+enum status 
+             {
+                FIRST,
+                NUM,ALPHA,ERROR,
+                FIRST_CHAR_IN_TOKEN_IS_R,
+                REG,DIGIT_AFTER_ALPHA,POUND,
+                IN_STRING,STRING_END,
+                INSIDE_MATRIX_FIRST_R,READING_MATRIX_FIRST_ARG,
+                INSIDE_MATRIX_SECOUND_R,READING_MATRIX_SECOUND_ARG,
+                INSIDE_MATRIX_FIRST_IS_NUM,
+                DEF_METRIX_FIRST_ARG,
+                DEF_METRIX_SECOUND_ARG,
+                NO_MORE_ARGS
+             };
+
+enum TYPE  {
+               TYPE_ERROR,
+               TYPE_REG,
+               TYPE_NUM,
+               TYPE_LABEL,
+               TYPE_DIRECT,
+               TYPE_MATRIX,
+               TYPE_STRING,
+               TYPE_DEF_METRIX
+           };
+
+enum encoding {A,R,E};
+
 
 typedef struct operation_list
 {
@@ -98,8 +117,8 @@ operation_list op_list[OP_NUM]={
 	{"jsr",JSR,"1101"		,NO,NO,NO,NO		,NO,YES,YES,YES},
 	{"rts",RTS,"1110"		,NO,NO,NO,NO		,NO,NO,NO,NO},
 	{"stop",STOP,"1111"		,NO,NO,NO,NO		,NO,NO,NO,NO},
-	{".string",STRING,"0"	,NO,NO,NO,NO		,NO,NO,NO,NO},
+/*	{".string",STRING,"0"	,NO,NO,NO,NO		,NO,NO,NO,NO},
 	{".data",DATA,"0"		,NO,NO,NO,NO		,NO,NO,NO,NO},
-	{".mat",MAT,"0"			,NO,NO,NO,NO		,NO,NO,NO,NO},
+	{".mat",MAT,"0"			,NO,NO,NO,NO		,NO,NO,NO,NO},*/
 																	};
 

@@ -1,17 +1,12 @@
-#define MAX_NUM_OF_TOKENS 100
-#define MAX_LABLE_NAME 100
-
 int parser(char *input)
 { 
-
-    enum status {FIRST,NUM,ALPHA,ERROR,FIRST_CHAR_IN_TOKEN_IS_R,REG,DIGIT_AFTER_ALPHA,INSIDE_MATRIX_FIRST_R,pound,READING_MATRIX_FIRST_ARG,INSIDE_MATRIX_FIRST_IS_NUM,STRING,STRING_END,DEF_METRIX_FIRST_ARG,DEF_METRIX_SECOUND_ARG,INSIDE_MATRIX_SECOUND_R,READING_MATRIX_SECOUND_ARG,NO_MORE_ARGS} ;
-    enum TYPE {TYPE_ERROR,TYPE_REG,TYPE_NUM,TYPE_LABEL,TYPE_DIRECT,TYPE_MATRIX,TYPE_STRING,TYPE_DEF_METRIX};
-    enum encoding {A,R,E};
-
-    char *token[MAX_NUM_OF_TOKENS];
-    char label_name[MAX_NUM_OF_TOKENS][MAX_LABLE_NAME];
-    char temp_string[MAX_NUM_OF_TOKENS][MAX_LABLE_NAME];
-    int  type[MAX_NUM_OF_TOKENS] = {0} , first_arg[MAX_NUM_OF_TOKENS] = { 0 } , secound_arg[MAX_NUM_OF_TOKENS]  = { 0 }; 
+    char *token[MAX_ROW_LEN];
+    char label_name[MAX_ROW_LEN][MAX_LABEL_SIZE];
+    char temp_string[MAX_ROW_LEN][MAX_LABEL_SIZE];
+    int  type[MAX_ROW_LEN] = {0} , 
+         first_arg[MAX_ROW_LEN] = {0} , 
+         second_arg[MAX_ROW_LEN]  = {0};
+ 
     char c = '\0',delimit[]=" \n\t\r\v\f,"; 
     int k ,i = 0, j ,state ,  found_digit_flag, found_br_flag ,sign_flag;
 
@@ -27,7 +22,7 @@ int parser(char *input)
          ( c=token[i][j] ) != '\0' && c != ' ' ;j++)
     
          {
-          printf("\n%d %c  %d\n", j , c , state);
+         /* printf("\n%d %c  %d\n", j , c , state);*/
           switch(state){
               case FIRST:
           	if(isalpha(c))
@@ -65,7 +60,7 @@ int parser(char *input)
           	if( c == '#' )
           	{
           	    type[i] = TYPE_DIRECT;
-          	    state = pound;
+          	    state = POUND;
 		    k = 0;
           	    break;
           	}
@@ -73,7 +68,7 @@ int parser(char *input)
           	if( c == '"' )
           	{
           	    type[i] = TYPE_STRING;
-          	    state = STRING;
+          	    state = IN_STRING;
           	    break;
           	}
           	else
@@ -140,7 +135,7 @@ int parser(char *input)
           		printf("ERROR in case DEF_METRIX no args in matrix");
           		return 1;
           	    }
-          	    secound_arg[i] = atoi(temp_string[i]); 
+          	    second_arg[i] = atoi(temp_string[i]); 
           	    state = NO_MORE_ARGS;
           	    break;
     
@@ -163,7 +158,7 @@ int parser(char *input)
               }
     
     
-              case STRING:
+              case IN_STRING:
           	if( c == '"' )
           	{
           	    type[i] = TYPE_STRING;
@@ -174,7 +169,7 @@ int parser(char *input)
           	break;
     
     
-              case pound:
+              case POUND:
           	if( c == '-' || c == '+' )
           	{
           	    if(sign_flag)
@@ -292,8 +287,8 @@ int parser(char *input)
               case INSIDE_MATRIX_SECOUND_R:
           	if( ((c>='0') && (c<='7')) )
           	{
-          	    secound_arg[i] = c;
-          	    printf("\n reg is r%c" , secound_arg[i] );
+          	    second_arg[i] = c;
+          	    printf("\n reg is r%c" , second_arg[i] );
           	    if(!(token[i][j + 1] == ']'))
           	    {
           		printf(" error in case INSIDE_MATRIX_SECOUND_R expected ] but get %c ",  token[i][j + 1] );
@@ -333,16 +328,16 @@ int parser(char *input)
          }
           printf("\n TYPE is %d "  , type[i] );
           printf("\n first_arg %d " , first_arg[i] );
-          printf("\n secound_arg %d " , secound_arg[i] );
+          printf("\n second_arg %d " , second_arg[i] );
           printf("\n temp_string %s " , temp_string[i] );
-          printf("\n label_name %s " , label_name[i] );
+          printf("\n label_name %s\n " , label_name[i] );
     
           i++;
         token[i]=strtok(NULL,delimit);
     
       }
         for (j=0;j<i;j++)
-      printf("%s", token[j]); 
+      printf("%s\n\n", token[j]); 
     }
     
     return 0;

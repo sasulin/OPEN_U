@@ -3,6 +3,16 @@
 #include <string.h>
 #include "aux_func.h"
 
+#define CHECK_OPEN(FP,F_NAME)\
+{\
+		if(!FP)\
+		{\
+			fprintf(stderr,\
+			"Cannot open %s	No such input file!!!\n",F_NAME);\
+			exit(1);\
+		}\
+}\
+
 const short int sym_size = sizeof(symbol_row);
 
 char *in_post = ".as";
@@ -61,14 +71,16 @@ int main(int argc , char *argv[])
 
 	
 		fp_in=fopen(input_file,"r");
-	
-		if (!fp_in)
+
+
+		CHECK_OPEN(fp_in,argv[argc])	
+	/*	if (!fp_in)
 		{
 			fprintf(stderr,
 			"Cannot open %s	No such input file!!!\n", argv[argc]);
 			exit(1);
 		}	
-		printf("input file:%s\n****************\n",input_file);
+		printf("input file:%s\n****************\n",input_file);*/
 
 
 /*Initializing Instruction table (IC)*/	
