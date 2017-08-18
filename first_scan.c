@@ -15,12 +15,10 @@ char 		*tok_get(char *arr , char *arr_tmp);
 void 		add_symbol(sym_row_p head, char *label,int IC,bool is_ext, bool is_data_op);
 
 
-
 bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_table )
 {
 	int IC,DC  /*Counters*/
 		,row_num,
-	/*	row_len,label_len,*/
 		op_len;
 
 	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
@@ -233,41 +231,22 @@ void reverse (char *string)
    }
 }
 
-void dec_to_quad (char *quad_num ,int dec_num)
+void dec_to_weird (char *quad_num ,int dec_num)
 {   /* Convert decimal int to base four string*/
    int i;
-   for(i=0;i<4;i++)
+   int base;
+   base=WEIRD_BASE;
+   for(i=0;i<base;i++)
    {
-	 quad_num[i] = (dec_num % 4) + '0';
-	 quad_weird(&quad_num[i]);
-	 dec_num = dec_num / 4;
+	 quad_num[i] = (dec_num % base) + 'a';
+	 dec_num = dec_num / base;
    }
 
-   	quad_num[4]='\0';
+   	quad_num[base]='\0';
 	reverse(quad_num);
 
-
-
 }
 
-void quad_weird (char *quad_num)
-{
-		switch(*quad_num)
-		{
-		case('0'):
-			*quad_num='a';
-			break;
-		case('1'):
-			*quad_num='b';
-			break;
-		case('2'):
-			*quad_num='c';
-			break;
-		case('3'):
-			*quad_num='d';
-			break;
-	}
-}
 
 bool is_comment(char *arr , char *arr_tmp)
 	{
@@ -405,7 +384,7 @@ bool check_op(  char *op_string,
 	int i;
 
 	no_space(op_string);
-	for (i=0;strcmp(op_words[i],"999");i++)
+	for (i=0;strcmp(op_words[i],LAST);i++)
 	{
 		if(!strcmp(op_string,op_words[i]))			
 		{
@@ -427,7 +406,7 @@ bool check_op(  char *op_string,
 		return YES;		
 	}
 
-	for (i=0;strcmp(data_op_words[i],"999");i++)
+	for (i=0;strcmp(data_op_words[i],LAST);i++)
 	{
 		if(!strcmp(op_string,data_op_words[i]))			
 		{
@@ -468,7 +447,7 @@ it tests:
 		return NO;
 	}	
 /*3*/
-	for (i=0;strcmp(reserved_words[i],"999");i++);
+	for (i=0;strcmp(reserved_words[i],LAST);i++);
 	{
 		if (!strcmp(label,reserved_words[i]))
 		{
@@ -513,7 +492,7 @@ void bin_to_weird(char *bin,char *weird)
 {
 	int i;
 	int dec;
-	for (i=0;i<10;i+=2)
+	for (i=0;i<WORD_SIZE;i+=2)
 	{
 		dec=(bin[i] - '0')*2+(bin[i+1]-'0');
 		weird[i/2]=('a'+dec);
