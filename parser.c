@@ -18,11 +18,11 @@ int parser(char *input ,parser_table_p parser_t_p)
       while(token[i]!=NULL)                    
       {
          printf("\n token [%d]=%s",i,token[i]);
-         for(j=0 , state=FIRST , found_digit_flag = 0 , sign_flag = 0 ; 
+         for(j=0 , state=FIRST , found_digit_flag = 0 , sign_flag = 0 , found_br_flag = 0; 
          ( c=token[i][j] ) != '\0' && c != ' ' ;j++)
     
          {
-         /* printf("\n%d %c  %d\n", j , c , state);*/
+          /*printf("\n%d %c  %d\n", j , c , state); */
           switch(state){
               case FIRST:
           	if(isalpha(c))
