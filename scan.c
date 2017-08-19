@@ -203,7 +203,20 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 			row_num++;
 			continue;
 		}
+		
 
+	strcpy(arr_tmp,row_buf);
+
+		strtok(arr_tmp,":") ;	
+
+		if (strcmp(arr_tmp,row_buf))
+			buf_p=strchr(row_buf,':')+1;
+
+
+		printf("DEBUGGING: %s\n",arr_tmp);
+	/*	printf("DEBUGGING: %s\n",buf_p);*/
+	
+		
 		op_tok=tok_get(buf_p,arr_tmp);
 
 		if(check_op(
@@ -225,6 +238,9 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 				}
 
 				/*SEND TO ARGUMENT PARSING*/
+			    parser(buf_p , &parser_t);
+			    encoding(&op_list[i],DC_table,IC_table,sym_head,
+									&parser_t,DC,IC);
 			}
 
 

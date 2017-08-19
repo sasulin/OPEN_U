@@ -4,12 +4,11 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 
     int k , label_address;
     bool error_flag = 0 ;
-    switch(command->EnuM)
-    {
 /*case need DC encoding*/
-	case (STRING || DATA || MAT):	    
+	if (command->EnuM==STRING || 
+		command->EnuM ==DATA  || 
+		command->EnuM==MAT)	    
 	return 0;
-    }
 
 
 	

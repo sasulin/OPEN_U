@@ -129,8 +129,15 @@ int main(int argc , char *argv[])
 		error = first_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
 		print_sym_table(sym_head);
 
+
+		if(!error)
+		{
+			fp_out=fopen(output_file,"w+");
+			CHECK_OPEN(fp_out,output_file)
+		}
+
 /*Printing IC Table*/
-		for (i=100;i<MEMORY_SIZE;i++)
+/*		for (i=100;i<MEMORY_SIZE;i++)
 		{
 			bin_to_weird(main_table[i].binary_op,main_table[i].weird_four_op);
 			fprintf(fp_out,"%d\t%s\t%s\t%s\n",
@@ -138,9 +145,9 @@ int main(int argc , char *argv[])
 												main_table[i].weird_four_add,
 												main_table[i].binary_op,
 												main_table[i].weird_four_op);
-		}
+		}*/
 /*Printing DC Table*/
-		for (i=0;i<MEMORY_SIZE/2;i++)
+/*		for (i=0;i<MEMORY_SIZE/2;i++)
 		{
 			bin_to_weird(data_table[i].binary_op,data_table[i].weird_four_op);
 			fprintf(fp_out,"%d\t%s\t%s\t%s\n",	
@@ -148,10 +155,11 @@ int main(int argc , char *argv[])
 												data_table[i].weird_four_add,
 												data_table[i].binary_op,
 												data_table[i].weird_four_op);
-		}
+		}*/
 /****************************************SECOND SCAN****************************************/
 		IC=INITIAL_IC;
 		DC=INITIAL_DC;
+		rewind(fp_in);
 		error = second_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
 
 /*Printing IC Table*/
@@ -182,8 +190,8 @@ int main(int argc , char *argv[])
 
 		if (error) continue;
 			
-		fp_out=fopen(output_file,"w+");
-		CHECK_OPEN(fp_out,output_file)
+	/*	fp_out=fopen(output_file,"w+");
+		CHECK_OPEN(fp_out,output_file)*/
 	
 /*		if (!fp_out)
 		{
