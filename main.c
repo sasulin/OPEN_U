@@ -33,7 +33,7 @@ int main(int argc , char *argv[])
 	I_row_p IC_p;
 	D_row_p DC_p;
 
-	int i;
+	int i,j;
 	char prefix[FILE_NAME_LEN];
 	char input_file[FILE_NAME_LEN];
 	char output_file[FILE_NAME_LEN];
@@ -93,7 +93,10 @@ int main(int argc , char *argv[])
 	{
 		main_table[i].dec_add=i;
 		dec_to_weird(main_table[i].weird_four_add,
-				  	 main_table[i].dec_add);
+				  	 		main_table[i].dec_add);
+
+	 for(j=0;j<WORD_SIZE;j++)	
+	 	main_table[i].binary_op[j]='0';
 	}
 
 
@@ -104,6 +107,8 @@ int main(int argc , char *argv[])
 		data_table[i].dec_add=i;
 		dec_to_weird(data_table[i].weird_four_add,
 				  	 data_table[i].dec_add);
+
+
 	}
 
 
@@ -131,17 +136,28 @@ int main(int argc , char *argv[])
 
 		fprintf(fp_out,"input file:%s\n****************\n",input_file);	
 
+/*Printing IC Table*/
+
 		for (i=100;i<MEMORY_SIZE;i++)
 		{
-			fprintf(fp_out,"%d\t%s\n",main_table[i].dec_add,
-			main_table[i].weird_four_add);
+			fprintf(fp_out,"%d\t%s\t%s\t%s\n",
+												main_table[i].dec_add,
+												main_table[i].weird_four_add,
+												main_table[i].binary_op,
+												main_table[i].weird_four_op);
 		}
 
+/*Printing DC Table*/
 
 		for (i=0;i<MEMORY_SIZE/2;i++)
 		{
-			fprintf(fp_out,"%d\t%s\t%s\n",data_table[i].dec_add,
-			data_table[i].weird_four_add,data_table[i].weird_four_op);
+			fprintf(fp_out,"%d\t%s\t%s\t%s\n",	
+												data_table[i].dec_add,
+												data_table[i].weird_four_add,
+												data_table[i].binary_op,
+												data_table[i].weird_four_op);
+/*,data_table[i].dec_add,
+			data_table[i].weird_four_add,data_table[i].weird_four_op);*/
 		}
 
 

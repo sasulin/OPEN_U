@@ -1,3 +1,12 @@
+/*#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#include "aux_func.h"
+#include "scan.h"*/
+
+
 int parser(char *input ,parser_table_p parser_t_p)
 { 
     char *token[MAX_ROW_LEN]= {0} ;
@@ -85,7 +94,7 @@ int parser(char *input ,parser_table_p parser_t_p)
           	    printf("ERROR in case FIRST");
           	    break;
                   }
-          	printf("first is aplpha");
+          	printf("first is alpha");
     
     
               case DEF_METRIX_FIRST_ARG:
@@ -333,7 +342,7 @@ int parser(char *input ,parser_table_p parser_t_p)
 	    parser_t_p->type[i] = type[i]; 
 	    parser_t_p->type[i + 1] = type[i + 1]; 
 	    parser_t_p->first_arg[i] = first_arg[i]; 
-	    parser_t_p->secound_arg[i] = second_arg[i]; 
+	    parser_t_p->second_arg[i] = second_arg[i]; 
 
           printf("\n TYPE is %d "  , type[i] );
           printf("\n first_arg %d " , first_arg[i] );

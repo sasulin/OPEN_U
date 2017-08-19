@@ -64,7 +64,7 @@ typedef struct parser_table
     char temp_string[MAX_ROW_LEN][MAX_LABEL_SIZE];
     int  type[MAX_ROW_LEN];
     int  first_arg[MAX_ROW_LEN];
-    int  secound_arg[MAX_ROW_LEN];
+    int  second_arg[MAX_ROW_LEN];
 
 } parser_table;
 
@@ -72,6 +72,7 @@ typedef struct parser_table
 
 
 /*Functions declarations*/
+int parser(char *input ,parser_table_p parser_t_p);
 bool first_scan(FILE *fp, sym_row_p head,I_row_p,D_row_p);
 void reverse(char *string); 
 void dec_to_weird(char *quad_num ,int dec_num);
@@ -82,4 +83,3 @@ void initialize_sym_table(sym_row_p head);
 void 		no_space(char *str);
 void dec_to_bin(int n,char *word , int j);
 void bin_to_weird(char *bin,char *weird);
-int parser(char *input ,parser_table_p parser_t_p);

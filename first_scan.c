@@ -13,7 +13,7 @@ bool 		check_op(char *op_string,bool*,bool*,bool*,bool*);
 bool 		check_label(char *label,sym_row_p head,bool*);
 char 		*tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
 char 		*tok_get(char *arr , char *arr_tmp);
-void 		add_symbol(sym_row_p head, char *label,int IC,bool is_ext, bool is_data_op);
+void 		add_symbol(sym_row_p head, char *label,int IC,int DC,bool is_ext, bool is_data_op);
 
 
 bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_table )
@@ -46,7 +46,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 /*	strcpy (DC_table[5].binary_op,"0000000000");
 	printf("DATA IN BINARY:%s\n",DC_table[5].binary_op);*/
 	
-	DC+=IC;
+/*	DC+=IC;
 
 	dec_to_bin('a',DC_table[DC].binary_op,WORD_LEN);
 	bin_to_weird(DC_table[DC].binary_op,DC_table[DC].weird_four_op);
@@ -107,14 +107,12 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	dec_to_bin(4,DC_table[14].binary_op,WORD_LEN);
 	bin_to_weird(DC_table[14].binary_op,DC_table[14].weird_four_op);
 	printf("WEIRD:%s\n",DC_table[14].weird_four_op);
-
+*/
 /***************************************************************/
 
 	while(fgets(row_buf,MAX_ROW_LEN,fp) !=NULL)
 	{
 		buf_p=row_buf; /*Global pointer to search the recorded row*/
-	/*	row_len=strlen(row_buf);*/
-	/*	label_len=0;*/
 		op_len=0;
 
 		is_op=NO;	
@@ -208,7 +206,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	}
 
 	if (is_label)		
-			add_symbol(sym_head,label_buf,IC,is_ext,is_data_op);	
+			add_symbol(sym_head,label_buf,IC,DC,is_ext,is_data_op);	
 	
 	
 		row_num++; /*Line ends*/
@@ -336,7 +334,7 @@ void no_space(char *str)
 }
 
 
-void add_symbol(sym_row_p head,char *label,int IC,
+void add_symbol(sym_row_p head,char *label,int IC,int DC,
 				bool is_ext, bool is_data_op)
 {
 	sym_row_p tmp;
@@ -356,7 +354,12 @@ void add_symbol(sym_row_p head,char *label,int IC,
 			tmp=tmp->next;
 	
 			strcpy(tmp->label,label);      
-			tmp->dec_add=IC;
+
+			if (is_data_op)
+				tmp->dec_add=DC;
+			else
+				tmp->dec_add=IC;
+
 			tmp->is_ext=is_ext;
 			tmp->is_data_op=is_data_op;	
 			tmp->next=sym_alloc();
@@ -489,18 +492,18 @@ it tests:
 	return YES;
 }
 
-void dec_to_bin(int dec_num,char* word, int j)
+void dec_to_bin(int dec_num,char* word, int size)
 {
 	int i;
-	for (i=j ;i>0;i--)
+	for (i=size ;i>0;i--)
 	{
 		if( (dec_num&( 1<<(i-1) )) !=0)
 		{
-			word[j-i]='1';	
+			word[size-i]='1';	
 		}
 		else
 		{
-			word[j-i]='0';	
+			word[size-i]='0';	
 		}	
 	}			
 }

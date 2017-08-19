@@ -133,4 +133,3 @@ operation_list op_list[OP_NUM]={
 	{".data",DATA,"0"		,NO,NO,NO,NO		,NO,NO,NO,NO},
 	{".mat",MAT,"0"			,NO,NO,NO,NO		,NO,NO,NO,NO},
 																	};
-
