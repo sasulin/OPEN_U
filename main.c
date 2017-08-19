@@ -108,6 +108,8 @@ int main(int argc , char *argv[])
 		dec_to_weird(data_table[i].weird_four_add,
 				  	 data_table[i].dec_add);
 
+	 for(j=0;j<WORD_SIZE;j++)	
+	 	data_table[i].binary_op[j]='0';
 
 	}
 
@@ -140,6 +142,7 @@ int main(int argc , char *argv[])
 
 		for (i=100;i<MEMORY_SIZE;i++)
 		{
+			bin_to_weird(main_table[i].binary_op,main_table[i].weird_four_op);
 			fprintf(fp_out,"%d\t%s\t%s\t%s\n",
 												main_table[i].dec_add,
 												main_table[i].weird_four_add,
@@ -151,6 +154,7 @@ int main(int argc , char *argv[])
 
 		for (i=0;i<MEMORY_SIZE/2;i++)
 		{
+			bin_to_weird(data_table[i].binary_op,data_table[i].weird_four_op);
 			fprintf(fp_out,"%d\t%s\t%s\t%s\n",	
 												data_table[i].dec_add,
 												data_table[i].weird_four_add,
