@@ -33,7 +33,7 @@ int main(int argc , char *argv[])
 	I_row_p IC_p;
 	D_row_p DC_p;
 
-	int i,j;
+	int i,j,IC,DC;
 	char prefix[FILE_NAME_LEN];
 	char input_file[FILE_NAME_LEN];
 	char output_file[FILE_NAME_LEN];
@@ -50,6 +50,12 @@ int main(int argc , char *argv[])
 	error=NO;;
 	IC_p = &main_table[0];
 	DC_p = &data_table[0];
+
+	
+	IC=INITIAL_IC;
+	DC=INITIAL_DC;
+
+
 
 	if (argc==1) /*No arguments*/
 	{
@@ -119,15 +125,73 @@ int main(int argc , char *argv[])
 		sym_head->next=NULL;
 	
 
-		error = first_scan(fp_in,sym_head,IC_p,DC_p);
+/****************************************FIRST SCAN****************************************/
+		error = first_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
 		print_sym_table(sym_head);
+
+
+		if(!error)
+		{
+			fp_out=fopen(output_file,"w+");
+			CHECK_OPEN(fp_out,output_file)
+		}
+
+/*Printing IC Table*/
+/*		for (i=100;i<MEMORY_SIZE;i++)
+		{
+			bin_to_weird(main_table[i].binary_op,main_table[i].weird_four_op);
+			fprintf(fp_out,"%d\t%s\t%s\t%s\n",
+												main_table[i].dec_add,
+												main_table[i].weird_four_add,
+												main_table[i].binary_op,
+												main_table[i].weird_four_op);
+		}*/
+/*Printing DC Table*/
+/*		for (i=0;i<MEMORY_SIZE/2;i++)
+		{
+			bin_to_weird(data_table[i].binary_op,data_table[i].weird_four_op);
+			fprintf(fp_out,"%d\t%s\t%s\t%s\n",	
+												data_table[i].dec_add,
+												data_table[i].weird_four_add,
+												data_table[i].binary_op,
+												data_table[i].weird_four_op);
+		}*/
+/****************************************SECOND SCAN****************************************/
+		IC=INITIAL_IC;
+		DC=INITIAL_DC;
+		rewind(fp_in);
+		error = second_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
+
+/*Printing IC Table*/
+		for (i=100;i<MEMORY_SIZE;i++)
+		{
+			bin_to_weird(main_table[i].binary_op,main_table[i].weird_four_op);
+			fprintf(fp_out,"%d\t%s\t%s\t%s\n",
+												main_table[i].dec_add,
+												main_table[i].weird_four_add,
+												main_table[i].binary_op,
+												main_table[i].weird_four_op);
+		}
+/*Printing DC Table*/
+		for (i=0;i<MEMORY_SIZE/2;i++)
+		{
+			bin_to_weird(data_table[i].binary_op,data_table[i].weird_four_op);
+			fprintf(fp_out,"%d\t%s\t%s\t%s\n",	
+												data_table[i].dec_add,
+												data_table[i].weird_four_add,
+												data_table[i].binary_op,
+												data_table[i].weird_four_op);
+		}
+
+
+/****************************************END SCAN****************************************/
+
 		initialize_sym_table(sym_head);
-		/*	second_scan(fp_in);*/
 
 		if (error) continue;
 			
-		fp_out=fopen(output_file,"w+");
-		CHECK_OPEN(fp_out,output_file)
+	/*	fp_out=fopen(output_file,"w+");
+		CHECK_OPEN(fp_out,output_file)*/
 	
 /*		if (!fp_out)
 		{
@@ -138,31 +202,6 @@ int main(int argc , char *argv[])
 
 		fprintf(fp_out,"input file:%s\n****************\n",input_file);	
 
-/*Printing IC Table*/
-
-		for (i=100;i<MEMORY_SIZE;i++)
-		{
-			bin_to_weird(main_table[i].binary_op,main_table[i].weird_four_op);
-			fprintf(fp_out,"%d\t%s\t%s\t%s\n",
-												main_table[i].dec_add,
-												main_table[i].weird_four_add,
-												main_table[i].binary_op,
-												main_table[i].weird_four_op);
-		}
-
-/*Printing DC Table*/
-
-		for (i=0;i<MEMORY_SIZE/2;i++)
-		{
-			bin_to_weird(data_table[i].binary_op,data_table[i].weird_four_op);
-			fprintf(fp_out,"%d\t%s\t%s\t%s\n",	
-												data_table[i].dec_add,
-												data_table[i].weird_four_add,
-												data_table[i].binary_op,
-												data_table[i].weird_four_op);
-/*,data_table[i].dec_add,
-			data_table[i].weird_four_add,data_table[i].weird_four_op);*/
-		}
 
 
 		fp_ext=fopen(ext_file,"w+");
