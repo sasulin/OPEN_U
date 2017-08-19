@@ -161,6 +161,7 @@ int main(int argc , char *argv[])
 		DC=INITIAL_DC;
 		rewind(fp_in);
 		error = second_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
+		print_sym_table(sym_head);
 
 /*Printing IC Table*/
 		for (i=100;i<MEMORY_SIZE;i++)
@@ -237,13 +238,13 @@ void print_sym_table(sym_row_p head)
 	sym_row_p tmp;
 	printf("\n****CONTENT OF SYMBOL TABLE****\n");
 
-		printf("%6s\t%6s\t%6s\t%6s\n",
-		"Label","add","ext","data");
+		printf("%6s\t%6s\t%6s\t%6s\t%6s\n",
+		"Label","add","ent","ext","data");
 
     for(tmp=head;tmp->next!=NULL;tmp=tmp->next)
 	{	
-		printf("%6s\t%6d\t%6d\t%6d\n"
-		,tmp->label,tmp->dec_add,
+		printf("%6s\t%6d\t%6d\t%6d\t%6d\n"
+		,tmp->label,tmp->dec_add,tmp->is_ent,
 		tmp->is_ext,tmp->is_data_op);	
 	}
 

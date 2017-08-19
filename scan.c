@@ -48,9 +48,6 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 		IC_NOW=*IC;
 		DC_NOW=*DC;
 
-/*		printf("IC VALUE IS %d\n",IC);
-		printf("DC VALUE IS %d\n",DC);*/
-
 		/*	1) CHECK AND IGNORE COMMENT LINES*/	
 		if (is_comment(row_buf,arr_tmp))
 		{
@@ -129,8 +126,10 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 		else is_label=NO;			
 	}
 
+			
+
 	if (is_label)		
-			add_symbol(sym_head,label_buf,IC_NOW,DC_NOW,is_ext,is_data_op);	
+			add_symbol(sym_head,label_buf,IC_NOW,DC_NOW,is_ent,is_ext,is_data_op);	
 	
 	
 		row_num++; /*Line ends*/
@@ -158,14 +157,14 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC)
 {
 
-	int row_num,i,op_len;
+	int row_num,i,op_len,ent_add;
 
 	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
 	parser_table parser_t ;
 	char row_buf[MAX_ROW_LEN];	
 	char arr_tmp[MAX_ROW_LEN];	
-/*	char label_buf[MAX_LABEL_SIZE*2];*/
-/*	char *label*/
+	char label_buf[MAX_LABEL_SIZE*2];
+	char *label;
 	char *op_tok, *buf_p;
 	
 	sym_head->dec_add=*IC;
@@ -213,10 +212,6 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 			buf_p=strchr(row_buf,':')+1;
 
 
-		printf("DEBUGGING: %s\n",arr_tmp);
-	/*	printf("DEBUGGING: %s\n",buf_p);*/
-	
-		
 		op_tok=tok_get(buf_p,arr_tmp);
 
 		if(check_op(
@@ -252,7 +247,25 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 			row_num++;
 			continue;	
 		}
-		
+	
+/*Managing labels after ".entry"*/
+	if(is_ent)
+	{
+		arr_tmp[0]='\0';
+		label = tok_label(buf_p,arr_tmp,MID,&error); /*Call tok_label function to search in the middle of the line*/
+		if(label!=NULL)
+		{
+			no_space(label);			
+			strcpy(label_buf,label);
+			printf("in row#%d Found label %s\n",row_num,label);
+			is_label=check_label(label_buf,sym_head,&error,NO);
+			ent_add=return_label_address(label,sym_head);
+		}
+		else is_label=NO;			
+	}
+/*	if (is_label)	*/
+				
+	
 		row_num++; /*Line ends*/
 	} /*End of while(fgets...*/   
 
@@ -373,7 +386,7 @@ void no_space(char *str)
 }
 
 
-void add_symbol(sym_row_p head,char *label,int IC,int DC,
+void add_symbol(sym_row_p head,char *label,int IC,int DC,bool is_ent,
 				bool is_ext, bool is_data_op)
 {
 	sym_row_p tmp;
@@ -388,6 +401,7 @@ void add_symbol(sym_row_p head,char *label,int IC,int DC,
 			head->dec_add=0;			
 
 		strcpy(head->label,label);
+		head->is_ent=is_ent;
 		head->is_ext=is_ext;
 		head->is_data_op=is_data_op;	
 		head->next=sym_alloc();
@@ -410,6 +424,7 @@ void add_symbol(sym_row_p head,char *label,int IC,int DC,
 			if(is_ext)
 				tmp->dec_add=0;			
 
+			tmp->is_ent=is_ent;
 			tmp->is_ext=is_ext;
 			tmp->is_data_op=is_data_op;	
 			tmp->next=sym_alloc();
@@ -570,7 +585,6 @@ int return_label_address(char *label,sym_row_p head)
 		}
 	}
     return 0;
-
 }
 
 

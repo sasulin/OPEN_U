@@ -57,6 +57,7 @@ typedef struct symbol_table_row
 	char label[MAX_LABEL_SIZE];
 	char weird_four_add[WEIRD_BASE+1];
 	int dec_add;
+	bool is_ent;
 	bool is_ext;
 	bool is_data_op;
     sym_row_p next;	
@@ -98,7 +99,7 @@ bool 		check_op(char *op_string,bool*,bool*,bool*,bool*);
 bool 		check_label(char *label,sym_row_p head,bool* , bool);
 char 		*tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
 char 		*tok_get(char *arr , char *arr_tmp);
-void 		add_symbol(sym_row_p head, char *label,int IC,int DC,bool is_ext, bool is_data_op);
+void 		add_symbol(sym_row_p head, char *label,int IC,int DC,bool is_ent, bool is_ext, bool is_data_op);
 int 		return_label_address(char *label,sym_row_p head);
 bool check_label(char *label,sym_row_p head,bool* , bool);
 int return_label_address(char *label,sym_row_p head);
