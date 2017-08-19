@@ -18,7 +18,7 @@
 #define INITIAL_IC 100
 #endif
 #ifndef INITIAL_DC
-#define INITIAL_DC 1
+#define INITIAL_DC 0
 #endif
 #ifndef MAX_OP_LEN
 #define MAX_OP_LEN 8
