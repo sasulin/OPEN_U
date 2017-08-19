@@ -31,7 +31,7 @@ int parser(char *input ,parser_table_p parser_t_p)
          ( c=token[i][j] ) != '\0' && c != ' ' ;j++)
     
          {
-          /*printf("\n%d %c  %d\n", j , c , state); */
+          printf("\n%d %c  %d\n", j , c , state); 
           switch(state){
               case FIRST:
           	if(isalpha(c))
@@ -40,6 +40,7 @@ int parser(char *input ,parser_table_p parser_t_p)
 		    {
           	    state = ALPHA;
           	    j--;
+          	    break;
 		    }
           	    if( c == 'r' )
           	    {

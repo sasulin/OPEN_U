@@ -36,6 +36,13 @@
 #define COMMAND_LEN 8
 #endif
 
+#ifndef MAX_NUM
+#define MAX_NUM 512
+#endif
+
+
+
+
 const char *reserved_words[]={"mov","cmp","add",
                     "sub","not","clr",
                     "lea","inc","dec",
