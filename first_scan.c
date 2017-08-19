@@ -15,7 +15,6 @@ char 		*tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
 char 		*tok_get(char *arr , char *arr_tmp);
 void 		add_symbol(sym_row_p head, char *label,int IC,int DC,bool is_ext, bool is_data_op);
 
-
 bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_table )
 {
 	int IC,DC  /*Counters*/
@@ -29,7 +28,6 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	char label_buf[MAX_LABEL_SIZE*2];
 	char *label ,*op_tok, *buf_p;
 	
-
 	IC=INITIAL_IC;
 	DC=INITIAL_DC;
 
@@ -39,7 +37,6 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	
 	error=NO;
 	row_num=1;
-
 
 /***************************************************************/	
 /*DATA HANDLING*/
@@ -262,7 +259,6 @@ void dec_to_weird (char *quad_num ,int dec_num)
 
 }
 
-
 bool is_comment(char *arr , char *arr_tmp)
 	{
 		strcpy(arr_tmp,arr);
@@ -273,7 +269,7 @@ bool is_comment(char *arr , char *arr_tmp)
 	}
 
 bool is_empty(char *arr)
-	{
+{
 		int i,empty_flag;
 		empty_flag=1;
 		for (i=0; (i<MAX_ROW_LEN) && (arr[i]!='\0') ;i++)
@@ -282,7 +278,7 @@ bool is_empty(char *arr)
 			else empty_flag=0;
 		}
 		return empty_flag;
-	}
+}
 
 
 char *tok_label(char *arr,char *arr_tmp,int label_pos,bool *error)
