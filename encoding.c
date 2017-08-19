@@ -1,95 +1,15 @@
 
-
-int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC )
+int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC  )
 {
 
-    int i = 0 ,k , error_flag = 0;
+    int k , label_address;
+    bool error_flag = 0 ;
     switch(command->EnuM)
     {
 /*case need DC encoding*/
-
-	case STRING:
-	    if(parser_t_p->type[0] != TYPE_STRING )
-	    {
-		
-		printf("\nERROR , Wrong argument to .string command %d != %d \n" , parser_t_p->type[0] ,TYPE_STRING);
-		break;
-	    } 
-	    for(i=1;parser_t_p->temp_string[0][i] != '"';i++)
-		{
-		dec_to_bin(parser_t_p->temp_string[0][i],DC_table[*DC].binary_op,WORD_LEN);
-		(*DC)++;
-		printf("DC value incrised by 1 %d" , *DC);		
-		}
-
-	    /*adding zero to the string end*/
-	    dec_to_bin(0,DC_table[*DC].binary_op,WORD_LEN);
-	    (*DC)++;
-	    /*Checking that there is no more ags after string*/
-	    if(parser_t_p->type[1] != 0)
-	    {
-		printf("ERROR , Too many arguments .string command %d ", parser_t_p->type[1]);
-		error_flag = 1 ;
-	    }
-	    return error_flag;
-
-	case DATA:
-	    for(i=0;parser_t_p->type[i];i++)
-	    {
-		/* check that all types are numbers */
-		if(parser_t_p->type[i] != TYPE_NUM )
-		{
-		printf("\nERROR , Wrong argument to .data command %d != %d \n" , parser_t_p->type[i] ,TYPE_NUM);
-		error_flag = 1 ;
-		break;
-		}
-		/* check that all |numbers| < MAX_NUM*/
-		if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (-MAX_NUM)))  )
-		{
-		printf("\nERROR , Number is Out Of Range  |%d| > MAX_NUM \n" , parser_t_p->first_arg[i] );
-		error_flag = 1 ;
-		break;
-		}
-
-		
-		dec_to_bin(parser_t_p->first_arg[i],DC_table[*DC].binary_op,WORD_LEN);
-		(*DC)++;
-		printf("DC value incrised by 1 %d" , *DC);
-	    }
-	    return error_flag;
-
-	case MAT:
-	    for(i=1;parser_t_p->type[i];i++)
-	    {
-		/* need to add check that all types are numbers */
-		if(parser_t_p->type[i] != TYPE_NUM )
-		{
-		printf("\nERROR , Wrong argument to .mat command %d != %d \n" , parser_t_p->type[i] ,TYPE_NUM);
-		error_flag = 1 ;
-		break;
-		}
-		/* check that all |numbers| < MAX_NUM*/
-		if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (-MAX_NUM)))  )
-		{
-		printf("\nERROR , Number is Out Of Range  |%d| > MAX_NUM \n" , parser_t_p->first_arg[i] );
-		error_flag = 1 ;
-		break;
-		}
-		
-		dec_to_bin(parser_t_p->first_arg[i],DC_table[*DC].binary_op,WORD_LEN);
-		(*DC)++;
-	    }
-	    /* padding data tabel with zeros */
-
-	    for(--i;(parser_t_p->first_arg[0])*(parser_t_p->second_arg[0]) > i;i++)
-	    {
-		dec_to_bin(0,DC_table[*DC].binary_op,WORD_LEN);
-		(*DC)++;
-		printf("DC value incrised by 1 %d" , *DC);
-
-	    }
-	    return error_flag;
-	}
+	case (STRING || DATA || MAT):	    
+	return 0;
+    }
 
 
 	
@@ -241,8 +161,14 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 	    switch(parser_t_p->type[0])
 		{		    
 		    case TYPE_MATRIX:
+			/*check label */
+			if(check_label( parser_t_p->label_name[0] , sym_head , &error_flag , YES))
+			{
+			return 1;
+			}
 			/* save word for mat label */
-			dec_to_bin(0,IC_table[*IC].binary_op,WORD_LEN);
+			label_address = return_label_address(parser_t_p->label_name[0] , sym_head);
+			dec_to_bin(label_address,IC_table[*IC].binary_op,WORD_LEN);
 			(*IC)++;
 			/* encode matrix */
 			dec_to_bin((parser_t_p->first_arg[0]),IC_table[*IC].binary_op,REG_LEN);
@@ -272,11 +198,20 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 			break;
 		    
 		    case TYPE_LABEL:
-			/* save word for label */
-			dec_to_bin(0,IC_table[*IC].binary_op,WORD_LEN);
-			/*need to find label */	
+			/*check label */
+			if(check_label( parser_t_p->label_name[0] , sym_head ,&error_flag , YES))
+			{
+			return 1;
+			}
+			/* find label */
+			label_address = return_label_address(parser_t_p->label_name[0] , sym_head);
+			dec_to_bin(label_address,IC_table[*IC].binary_op,COMMAND_LEN);
+			/* if not extern */	
+			if(!label_address)
+			{
 			IC_table[*IC].binary_op[8] = '0';
 			IC_table[*IC].binary_op[9] = '1';
+			}
 			break;
 
 		    
@@ -298,8 +233,14 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 	    switch(parser_t_p->type[k])
 		{		    
 		    case TYPE_MATRIX:
+			/*check label */
+			if(check_label( parser_t_p->label_name[k] , sym_head,&error_flag , YES))
+			{
+			return 1;
+			}		
 		    	/* save word for mat label */
-			dec_to_bin(0,IC_table[*IC].binary_op,WORD_LEN);
+			label_address = return_label_address(parser_t_p->label_name[k] , sym_head);
+			dec_to_bin(label_address,IC_table[*IC].binary_op,WORD_LEN);
 			(*IC)++;
 			/* encode matrix */
 			dec_to_bin((parser_t_p->first_arg[k]),IC_table[*IC].binary_op,REG_LEN);
@@ -323,11 +264,20 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 			break;
 		    
 		    case TYPE_LABEL:
-			/* save word for label */
-			dec_to_bin(0,IC_table[*IC].binary_op,WORD_LEN);
-			/*need to find label */	
+			/*check label */
+			if(check_label( parser_t_p->label_name[k] , sym_head ,&error_flag , YES))
+			{
+			return 1;
+			}
+		    	/* find label address*/
+			label_address = return_label_address(parser_t_p->label_name[k] , sym_head);
+			dec_to_bin(label_address,IC_table[*IC].binary_op,COMMAND_LEN);
+			/* if not extern */	
+			if(!label_address)
+			{
 			IC_table[*IC].binary_op[8] = '0';
 			IC_table[*IC].binary_op[9] = '1';
+			}
 			break;
 
 		}

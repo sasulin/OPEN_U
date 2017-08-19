@@ -83,3 +83,5 @@ void initialize_sym_table(sym_row_p head);
 void 		no_space(char *str);
 void dec_to_bin(int n,char *word , int j);
 void bin_to_weird(char *bin,char *weird);
+bool check_label(char *label,sym_row_p head,bool* , bool);
+int return_label_address(char *label,sym_row_p head);
