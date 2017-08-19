@@ -17,9 +17,18 @@ int parser(char *input ,parser_table_p parser_t_p)
          second_arg[MAX_ROW_LEN]  = {0};
  
     char c = '\0',delimit[]=" \n\t\r\v\f,"; 
-    int k ,i = 0, j ,state ,  found_digit_flag, found_br_flag ,sign_flag;
+    int k ,i = 0, j ,state=FIRST ,  found_digit_flag, found_br_flag ,sign_flag;
 
-                                         
+    
+    strcpy(parser_t_p->label_name[0],label_name[0]);
+    strcpy(parser_t_p->temp_string[0],temp_string[0]);
+    strcpy(parser_t_p->label_name[0],label_name[0]);
+    parser_t_p->type[0] = type[0]; 
+    parser_t_p->type[1] = type[1]; 
+    parser_t_p->first_arg[0] = first_arg[0]; 
+    parser_t_p->second_arg[0] = second_arg[0]; 
+
+
     {                                     
 	
       token[i]=strtok(input,delimit);
@@ -31,7 +40,7 @@ int parser(char *input ,parser_table_p parser_t_p)
          ( c=token[i][j] ) != '\0' && c != ' ' ;j++)
     
          {
-          /*printf("\n%d %c  %d\n", j , c , state); */
+          printf("\n%d %c  %d\n", j , c , state); 
           switch(state){
               case FIRST:
           	if(isalpha(c))
@@ -40,6 +49,7 @@ int parser(char *input ,parser_table_p parser_t_p)
 		    {
           	    state = ALPHA;
           	    j--;
+          	    break;
 		    }
           	    if( c == 'r' )
           	    {
@@ -354,8 +364,6 @@ int parser(char *input ,parser_table_p parser_t_p)
         token[i]=strtok(NULL,delimit);
     
       }
-        for (j=0;j<i;j++)
-      printf("%s\n\n", token[j]); 
     }
     
     return 0;

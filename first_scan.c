@@ -169,11 +169,11 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 				    
 				    if(strcmp(op_list[i].name,op_tok) == 0)
 					break;
-				    printf("\n %s != %s \n" , op_list[i].name , op_tok);
+				  /*  printf("\n %s != %s \n" , op_list[i].name , op_tok); */
 				}
 
 			    parser(buf_p , &parser_t);
-			    printf("\n THE  i%d  OPERATION IS: %d TYPE IS %d  \n",i,op_list[i].EnuM,parser_t.type[0]);
+			    /*printf("\n THE  i%d  OPERATION IS: %d TYPE IS %d  \n",i,op_list[i].EnuM,parser_t.type[0]); */
 			    encoding( &op_list[i],  DC_table ,  IC_table ,  sym_head ,&parser_t , &DC , &IC);
 			}
 
