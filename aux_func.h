@@ -78,6 +78,7 @@ typedef struct parser_table
 
 
 /*Functions declarations*/
+int parser(char *input ,parser_table_p parser_t_p);
 bool first_scan(FILE *fp, sym_row_p head,I_row_p,D_row_p,int *IC,int *DC);
 bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC);
 void reverse(char *string); 
@@ -90,7 +91,6 @@ void 		no_space(char *str);
 void dec_to_bin(int n,char *word , int j);
 void bin_to_weird(char *bin,char *weird);
 
-int parser(char *input ,parser_table_p parser_t_p);
 
 bool 		is_comment(char *arr,char *arr_tmp);
 bool 		is_empty(char *arr);
@@ -100,3 +100,5 @@ char 		*tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
 char 		*tok_get(char *arr , char *arr_tmp);
 void 		add_symbol(sym_row_p head, char *label,int IC,int DC,bool is_ext, bool is_data_op);
 int 		return_label_address(char *label,sym_row_p head);
+bool check_label(char *label,sym_row_p head,bool* , bool);
+int return_label_address(char *label,sym_row_p head);
