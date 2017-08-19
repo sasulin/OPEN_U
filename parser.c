@@ -10,13 +10,14 @@
 int parser(char *input ,parser_table_p parser_t_p)
 { 
     char *token[MAX_ROW_LEN]= {0} ;
+    char case_string_cat[MAX_ROW_LEN] = {'\0'} ;
     char label_name[MAX_ROW_LEN][MAX_LABEL_SIZE] = {{0}} ;
     char temp_string[MAX_ROW_LEN][MAX_LABEL_SIZE] = {{0}} ;
     int  type[MAX_ROW_LEN] = {0} , 
          first_arg[MAX_ROW_LEN] = {0} , 
          second_arg[MAX_ROW_LEN]  = {0};
  
-    char c = '\0',delimit[]=" \n\t\r\v\f,"; 
+    char c = '\0',delimit[]=" \n\t\r\v\f,",bad_token[] =",," ; 
     int k ,i = 0, j ,state=FIRST ,  found_digit_flag, found_br_flag ,sign_flag;
 
     
@@ -28,15 +29,28 @@ int parser(char *input ,parser_table_p parser_t_p)
     parser_t_p->first_arg[0] = first_arg[0]; 
     parser_t_p->second_arg[0] = second_arg[0]; 
 
-
-    {                                     
-	
+    if(strstr( bad_token , input ))
+    {
+    printf("\n Error recive bad_token %s ", bad_token);
+    return 1;
+    }
       token[i]=strtok(input,delimit);
     
       while(token[i]!=NULL)                    
       {
+	 if( state == IN_STRING)
+	 {
+	    strcat(case_string_cat,token[i-1]);
+	    strcat(case_string_cat,token[i]);
+	    token[--i] = case_string_cat;
+	 }
+	 else
+	 {
+	 state=FIRST;
+	 j = 0;
+	 }
          printf("\n token [%d]=%s",i,token[i]);
-         for(j=0 , state=FIRST , found_digit_flag = 0 , sign_flag = 0 , found_br_flag = 0; 
+         for( found_digit_flag = 0 , sign_flag = 0 , found_br_flag = 0; 
          ( c=token[i][j] ) != '\0' && c != ' ' ;j++)
     
          {
@@ -364,7 +378,6 @@ int parser(char *input ,parser_table_p parser_t_p)
         token[i]=strtok(NULL,delimit);
     
       }
-    }
     
     return 0;
 }
