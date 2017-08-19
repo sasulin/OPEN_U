@@ -160,14 +160,22 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 	    switch(parser_t_p->type[0])
 		{		    
 		    case TYPE_MATRIX:
-			/*check label */
+			/*check that label exiset */
 			if(check_label( parser_t_p->label_name[0] , sym_head , &error_flag , YES))
 			{
 			return 1;
 			}
-			/* save word for mat label */
+			/*encode mat label */
 			label_address = return_label_address(parser_t_p->label_name[0] , sym_head);
-			dec_to_bin(label_address,IC_table[*IC].binary_op,WORD_LEN);
+			dec_to_bin(label_address,IC_table[*IC].binary_op,COMMAND_LEN);
+			IC_table[*IC].binary_op[8] = '1';
+			IC_table[*IC].binary_op[9] = '0';
+			/* if  extern */	
+			if(!label_address)
+			{
+			IC_table[*IC].binary_op[8] = '0';
+			IC_table[*IC].binary_op[9] = '1';
+			}
 			(*IC)++;
 			/* encode matrix */
 			dec_to_bin((parser_t_p->first_arg[0]),IC_table[*IC].binary_op,REG_LEN);
@@ -205,7 +213,9 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 			/* find label */
 			label_address = return_label_address(parser_t_p->label_name[0] , sym_head);
 			dec_to_bin(label_address,IC_table[*IC].binary_op,COMMAND_LEN);
-			/* if not extern */	
+			IC_table[*IC].binary_op[8] = '1';
+			IC_table[*IC].binary_op[9] = '0';
+			/* if  extern */	
 			if(!label_address)
 			{
 			IC_table[*IC].binary_op[8] = '0';
@@ -232,18 +242,26 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 	    switch(parser_t_p->type[k])
 		{		    
 		    case TYPE_MATRIX:
-			/*check label */
-			if(check_label( parser_t_p->label_name[k] , sym_head,&error_flag , YES))
+		    	/*check that label exiset */
+			if(check_label( parser_t_p->label_name[k] , sym_head , &error_flag , YES))
 			{
 			return 1;
-			}		
-		    	/* save word for mat label */
+			}
+			/*encode mat label */
 			label_address = return_label_address(parser_t_p->label_name[k] , sym_head);
-			dec_to_bin(label_address,IC_table[*IC].binary_op,WORD_LEN);
+			dec_to_bin(label_address,IC_table[*IC].binary_op,COMMAND_LEN);
+			IC_table[*IC].binary_op[8] = '1';
+			IC_table[*IC].binary_op[9] = '0';
+			/* if  extern */	
+			if(!label_address)
+			{
+			IC_table[*IC].binary_op[8] = '0';
+			IC_table[*IC].binary_op[9] = '1';
+			}
 			(*IC)++;
 			/* encode matrix */
-			dec_to_bin((parser_t_p->first_arg[k]),IC_table[*IC].binary_op,REG_LEN);
-			dec_to_bin((parser_t_p->second_arg[k]),IC_table[*IC].binary_op + 4,REG_LEN);
+			dec_to_bin((parser_t_p->first_arg[0]),IC_table[*IC].binary_op,REG_LEN);
+			dec_to_bin((parser_t_p->second_arg[0]),IC_table[*IC].binary_op + 4,REG_LEN);
 			IC_table[*IC].binary_op[8] = '0';
 			IC_table[*IC].binary_op[9] = '0';
 			break;
@@ -271,6 +289,8 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 		    	/* find label address*/
 			label_address = return_label_address(parser_t_p->label_name[k] , sym_head);
 			dec_to_bin(label_address,IC_table[*IC].binary_op,COMMAND_LEN);
+			IC_table[*IC].binary_op[8] = '1';
+			IC_table[*IC].binary_op[9] = '0';
 			/* if not extern */	
 			if(!label_address)
 			{
