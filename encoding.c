@@ -1,9 +1,9 @@
 
 
-int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC)
+int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC )
 {
 
-    int i = 0 ,k ;
+    int i = 0 ,k , error_flag = 0;
     switch(command->EnuM)
     {
 /*case need DC encoding*/
@@ -27,9 +27,11 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 	    (*DC)++;
 	    /*Checking that there is no more ags after string*/
 	    if(parser_t_p->type[1] != 0)
+	    {
 		printf("ERROR , Too many arguments .string command %d ", parser_t_p->type[1]);
-
-	    return 0;
+		error_flag = 1 ;
+	    }
+	    return error_flag;
 
 	case DATA:
 	    for(i=0;parser_t_p->type[i];i++)
@@ -38,12 +40,14 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 		if(parser_t_p->type[i] != TYPE_NUM )
 		{
 		printf("\nERROR , Wrong argument to .data command %d != %d \n" , parser_t_p->type[i] ,TYPE_NUM);
+		error_flag = 1 ;
 		break;
 		}
 		/* check that all |numbers| < MAX_NUM*/
 		if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (-MAX_NUM)))  )
 		{
 		printf("\nERROR , Number is Out Of Range  |%d| > MAX_NUM \n" , parser_t_p->first_arg[i] );
+		error_flag = 1 ;
 		break;
 		}
 
@@ -52,7 +56,7 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 		(*DC)++;
 		printf("DC value incrised by 1 %d" , *DC);
 	    }
-	    return 0;
+	    return error_flag;
 
 	case MAT:
 	    for(i=1;parser_t_p->type[i];i++)
@@ -61,12 +65,14 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 		if(parser_t_p->type[i] != TYPE_NUM )
 		{
 		printf("\nERROR , Wrong argument to .mat command %d != %d \n" , parser_t_p->type[i] ,TYPE_NUM);
+		error_flag = 1 ;
 		break;
 		}
 		/* check that all |numbers| < MAX_NUM*/
 		if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (-MAX_NUM)))  )
 		{
 		printf("\nERROR , Number is Out Of Range  |%d| > MAX_NUM \n" , parser_t_p->first_arg[i] );
+		error_flag = 1 ;
 		break;
 		}
 		
@@ -82,7 +88,7 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 		printf("DC value incrised by 1 %d" , *DC);
 
 	    }
-	    return 0;
+	    return error_flag;
 	}
 
 
@@ -107,34 +113,47 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 /*Encrypting encoding number*/
 		    case TYPE_DIRECT:
 			if(!command->src_immediate)
+			{
 			    printf("ERROR can't get type immediate");
+			    error_flag = 1 ;
+			}
 			IC_table[*IC].binary_op[4] = '0';
 			IC_table[*IC].binary_op[5] = '0';
 			break;
 		    
 		    case TYPE_MATRIX:
 			if(!command->src_matrix)
-				printf("ERROR can't get type matrix");
+			{
+			    printf("ERROR can't get type matrix");
+			    error_flag = 1 ;
+			}
 			IC_table[*IC].binary_op[4] = '1';
 			IC_table[*IC].binary_op[5] = '0';
 			break;
 
 		    case TYPE_LABEL:
 			if(!command->src_direct)
+			{
 			    printf("ERROR can't get type direct");
+			    error_flag = 1 ;
+			}
 			IC_table[*IC].binary_op[4] = '0';
 			IC_table[*IC].binary_op[5] = '1';
 			break;
 
 		    case TYPE_REG:
 			if(!command->src_register)
+			{
 			    printf("ERROR can't get type reg");
+			    error_flag = 1 ;
+			}
 			IC_table[*IC].binary_op[4] = '1';
 			IC_table[*IC].binary_op[5] = '1';
 			break;
 
 		    case TYPE_ERROR:
-			printf("\n missing args to cmd ");
+			printf("\n ERROR missing args to cmd ");
+			error_flag = 1 ;
 			IC_table[*IC].binary_op[4] = '0';
 			IC_table[*IC].binary_op[5] = '0';
 			break;
@@ -153,14 +172,20 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 
 		    case TYPE_DIRECT:
 			if(!command->dest_immediate)
+			{
+			    error_flag = 1 ;
 			    printf("ERROR can't get type immediate");
+			}
 			IC_table[*IC].binary_op[6] = '0';
 			IC_table[*IC].binary_op[7] = '0';
 			break;
 
 		    case TYPE_MATRIX:
 			if(!command->dest_matrix)
+			{
+			    error_flag = 1 ;
 			    printf("ERROR can't get type matrix");
+			}
 			IC_table[*IC].binary_op[6] = '1';
 			IC_table[*IC].binary_op[7] = '0';
 			break;
@@ -168,21 +193,33 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 
 		    case TYPE_LABEL:
 			if(!command->dest_direct)
+			{
+			    error_flag = 1 ;
 			    printf("ERROR can't get type direct");
+			}
 			IC_table[*IC].binary_op[6] = '0';
 			IC_table[*IC].binary_op[7] = '1';
 			break;
 
 		    case TYPE_REG:
 			if(!command->dest_register)
+			{
+			    error_flag = 1 ;
 			    printf("ERROR can't get type reg");
+			}
 			IC_table[*IC].binary_op[6] = '1';
 			IC_table[*IC].binary_op[7] = '1';
 			break;
 
 		    case TYPE_ERROR:
-			if(command->dest_direct || command->dest_immediate || command->dest_register || command->dest_matrix)
-			printf("\n missing args to cmd ");
+			if(command->dest_direct || 
+			    command->dest_immediate || 
+			    command->dest_register || 
+			    command->dest_matrix)
+			{    
+			    error_flag = 1 ;
+			    printf("\n missing args to cmd ");
+			}
 			IC_table[*IC].binary_op[6] = '0';
 			IC_table[*IC].binary_op[7] = '0';
 
@@ -242,11 +279,9 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 			IC_table[*IC].binary_op[9] = '1';
 			break;
 
-		    case TYPE_ERROR:
-			if(command->dest_direct || command->dest_immediate || command->dest_register || command->dest_matrix)
-			printf("\n missing args to cmd ");
-			break;
+		    
 		}
+
 	    (*IC)++;
 
 
@@ -295,14 +330,10 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 			IC_table[*IC].binary_op[9] = '1';
 			break;
 
-		    case TYPE_ERROR:
-			if(command->dest_direct || command->dest_immediate || command->dest_register || command->dest_matrix)
-			printf("\n missing args to cmd ");
-			break;
 		}
 	    (*IC)++;
 
     	
-return 0;
+return error_flag;
 }
 

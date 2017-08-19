@@ -6,14 +6,16 @@
 #include "scan.h"
 #include "parser.c"
 #include "encoding.c"
+#include "encoding_first_scan.c"
 
 bool 		is_comment(char *arr,char *arr_tmp);
 bool 		is_empty(char *arr);
 bool 		check_op(char *op_string,bool*,bool*,bool*,bool*);
-bool 		check_label(char *label,sym_row_p head,bool*);
+bool 		check_label(char *label,sym_row_p head,bool* , bool);
 char 		*tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
 char 		*tok_get(char *arr , char *arr_tmp);
 void 		add_symbol(sym_row_p head, char *label,int IC,int DC,bool is_ext, bool is_data_op);
+int 		return_label_address(char *label,sym_row_p head);
 
 
 bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_table )
@@ -147,7 +149,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 			strcpy(label_buf,label);
 			printf("in row#%d Found label %s\n",row_num,label);
 			buf_p=strchr(row_buf,':')+1;
-			is_label=check_label(label_buf,sym_head,&error);
+			is_label=check_label(label_buf,sym_head,&error,NO);
 		}
 		else is_label=NO;				
 	/*		4)IS DATA INSTRUCTION? .data, .string .mat?	
@@ -177,7 +179,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 
 			    parser(buf_p , &parser_t);
 			    /*printf("\n THE  i%d  OPERATION IS: %d TYPE IS %d  \n",i,op_list[i].EnuM,parser_t.type[0]); */
-			    encoding( &op_list[i],  DC_table ,  IC_table ,  sym_head ,&parser_t , &DC , &IC);
+			    encoding_first_scan( &op_list[i],  DC_table ,  IC_table ,  sym_head ,&parser_t , &DC , &IC);
 			}
 
 
@@ -200,7 +202,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 			no_space(label);			
 			strcpy(label_buf,label);
 			printf("in row#%d Found label %s\n",row_num,label);
-			is_label=check_label(label_buf,sym_head,&error);
+			is_label=check_label(label_buf,sym_head,&error,NO);
 		}
 		else is_label=NO;			
 	}
@@ -438,17 +440,18 @@ bool check_op(  char *op_string,
 	return NO;
 }
 
-bool check_label(char *label,sym_row_p head,bool *error)
+bool check_label(char *label,sym_row_p head,bool *error , bool should_exists)
 {
 /*This function tests if a label is OK
 it tests:
-	1) A letter at the first letter
+	1) A letter at the first char
 	2) Label length
 	3) If reserved word
 	4) If already exists in symbol_table
 */
 	int i;
-	sym_row_p tmp;
+	sym_row_p tmp; 
+	bool exists = NO;
 /*1*/
 	if (!isalpha(label[0]))
 	{ 
@@ -483,14 +486,46 @@ it tests:
 	{	
 		if (!strcmp(label,tmp->label))
 		{
-			printf
-			("LABEL: %s already exists!!!\n",label);
-			*error=YES;
-			return NO;
+			exists = YES;
 		}
 	}
+    if (should_exists)
+    {
+	if(exists)
+	return NO;
+	printf("LABEL: %s does not exists!!!\n",label);
+	*error=YES;
 	return YES;
+    }
+    else 
+    {
+	if(exists)
+	{
+	    printf
+	    ("LABEL: %s already exists!!!\n",label);
+	    *error=YES;
+	    return NO;
+	}    
+    }
+    return YES;
+
 }
+
+int return_label_address(char *label,sym_row_p head)
+{
+    sym_row_p tmp; 
+
+    for(tmp=head;tmp->next!=NULL;tmp=tmp->next)
+	{	
+		if (!strcmp(label,tmp->label))
+		{
+		    return tmp->dec_add ; 	
+		}
+	}
+    return 0;
+
+}
+
 
 void dec_to_bin(int dec_num,char* word, int size)
 {
