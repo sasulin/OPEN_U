@@ -46,6 +46,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 
 	while(fgets(row_buf,MAX_ROW_LEN,fp) !=NULL)
 	{
+
 		buf_p=row_buf; /*Global pointer to search the recorded row*/
 		op_len=0;
 
@@ -58,10 +59,12 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 		IC_NOW=IC;
 		DC_NOW=DC;
 
+		printf("IC VALUE IS %d\n",IC);
+		printf("DC VALUE IS %d\n",DC);
+
 		/*	1) CHECK AND IGNORE COMMENT LINES*/	
 		if (is_comment(row_buf,arr_tmp))
 		{
-/*			printf("in row#%d Found comment\n",row_num);*/
 			row_num++;
 			continue;
 		}
@@ -69,7 +72,6 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 		
 		if (is_empty(row_buf))
 		{
-/*			printf("in row#%d Found empty line\n",row_num);*/
 			row_num++;
 			continue;
 		}
@@ -99,7 +101,6 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 			buf_p+=op_len;
 			printf("in row#%d THE ARGUMENT STRING IS: %s\n",row_num,buf_p);
 			
-						/*SEND TO ARGUMENT PARSING*/
 
 			if (	(!is_ext) && (!is_ent)	)
 			{
@@ -111,9 +112,11 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 				  /*  printf("\n %s != %s \n" , op_list[i].name , op_tok); */
 				}
 
+				/*SEND TO ARGUMENT PARSING*/
 			    parser(buf_p , &parser_t);
 			    /*printf("\n THE  i%d  OPERATION IS: %d TYPE IS %d  \n",i,op_list[i].EnuM,parser_t.type[0]); */
-			    encoding_first_scan( &op_list[i],  DC_table ,  IC_table ,  sym_head ,&parser_t , &DC , &IC);
+			    encoding_first_scan(&op_list[i],DC_table,IC_table,sym_head,
+									&parser_t,&DC,&IC);
 			}
 
 
@@ -153,6 +156,8 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	{
 		printf("ERRORS FOUND IN INPUT FILE!!!\n");					
 	}
+
+	--IC; /*IC is always one step ahead*/
 
 /*Adding IC final value to DC value*/
     for(tmp=sym_head;tmp->next!=NULL;tmp=tmp->next)
@@ -203,6 +208,7 @@ void dec_to_weird (char *quad_num ,int dec_num)
 	reverse(quad_num);
 
 }
+
 
 bool is_comment(char *arr , char *arr_tmp)
 	{
@@ -320,7 +326,6 @@ void add_symbol(sym_row_p head,char *label,int IC,int DC,
 	
         
 }
-
 
 
 char *tok_get(char *arr , char *arr_tmp)
