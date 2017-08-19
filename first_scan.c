@@ -17,21 +17,20 @@ char 		*tok_get(char *arr , char *arr_tmp);
 void 		add_symbol(sym_row_p head, char *label,int IC,int DC,bool is_ext, bool is_data_op);
 int 		return_label_address(char *label,sym_row_p head);
 
-
 bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_table )
 {
-	int IC,DC  /*Counters*/
+	int IC,DC,IC_NOW,DC_NOW  /*Counters*/
 		,row_num,i,
 		op_len;
 
 	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
 	parser_table parser_t ;
+	sym_row_p tmp;
 	char row_buf[MAX_ROW_LEN];	
 	char arr_tmp[MAX_ROW_LEN];	
 	char label_buf[MAX_LABEL_SIZE*2];
 	char *label ,*op_tok, *buf_p;
 	
-
 	IC=INITIAL_IC;
 	DC=INITIAL_DC;
 
@@ -42,74 +41,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	error=NO;
 	row_num=1;
 
-
 /***************************************************************/	
-/*DATA HANDLING*/
-/*	strcpy (DC_table[5].binary_op,"0000000000");
-	printf("DATA IN BINARY:%s\n",DC_table[5].binary_op);*/
-	
-/*	DC+=IC;
-
-	dec_to_bin('a',DC_table[DC].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[DC].binary_op,DC_table[DC].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[DC].weird_four_op);
-
-	dec_to_bin('b',DC_table[DC+1].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[DC+1].binary_op,DC_table[DC+1].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[DC+1].weird_four_op);
-
-	dec_to_bin('c',DC_table[DC+2].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[DC+2].binary_op,DC_table[DC+2].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[DC+2].weird_four_op);
-
-	dec_to_bin('d',DC_table[3].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[3].binary_op,DC_table[3].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[3].weird_four_op);
-
-	dec_to_bin('e',DC_table[4].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[4].binary_op,DC_table[4].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[4].weird_four_op);
-
-	dec_to_bin('f',DC_table[5].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[5].binary_op,DC_table[5].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[5].weird_four_op);
-
-	dec_to_bin('\0',DC_table[6].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[6].binary_op,DC_table[6].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[6].weird_four_op);
-
-	dec_to_bin(6,DC_table[7].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[7].binary_op,DC_table[7].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[7].weird_four_op);
-
-	dec_to_bin(-9,DC_table[8].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[8].binary_op,DC_table[8].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[8].weird_four_op);
-
-	dec_to_bin(15,DC_table[9].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[9].binary_op,DC_table[9].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[9].weird_four_op);
-
-	dec_to_bin(22,DC_table[10].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[10].binary_op,DC_table[10].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[10].weird_four_op);
-
-	dec_to_bin(1,DC_table[11].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[11].binary_op,DC_table[11].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[11].weird_four_op);
-
-	dec_to_bin(2,DC_table[12].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[12].binary_op,DC_table[12].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[12].weird_four_op);
-
-	dec_to_bin(3,DC_table[13].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[13].binary_op,DC_table[13].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[13].weird_four_op);
-
-	dec_to_bin(4,DC_table[14].binary_op,WORD_LEN);
-	bin_to_weird(DC_table[14].binary_op,DC_table[14].weird_four_op);
-	printf("WEIRD:%s\n",DC_table[14].weird_four_op);
-*/
 /***************************************************************/
 
 	while(fgets(row_buf,MAX_ROW_LEN,fp) !=NULL)
@@ -123,6 +55,8 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 		is_ext=NO;	
 		is_ent=NO;	
 
+		IC_NOW=IC;
+		DC_NOW=DC;
 
 		/*	1) CHECK AND IGNORE COMMENT LINES*/	
 		if (is_comment(row_buf,arr_tmp))
@@ -208,7 +142,7 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	}
 
 	if (is_label)		
-			add_symbol(sym_head,label_buf,IC,DC,is_ext,is_data_op);	
+			add_symbol(sym_head,label_buf,IC_NOW,DC_NOW,is_ext,is_data_op);	
 	
 	
 		row_num++; /*Line ends*/
@@ -219,9 +153,15 @@ bool first_scan(FILE *fp , sym_row_p sym_head, I_row_p IC_table , D_row_p DC_tab
 	{
 		printf("ERRORS FOUND IN INPUT FILE!!!\n");					
 	}
-	
+
+/*Adding IC final value to DC value*/
+    for(tmp=sym_head;tmp->next!=NULL;tmp=tmp->next)
+	{	
+		if (tmp->is_data_op==YES)
+				tmp->dec_add+=IC;
+	}
+
 	return error;
-	/*print_sym_table(sym_head);*/
 } /*End of First Scan*/
 
 
@@ -264,7 +204,6 @@ void dec_to_weird (char *quad_num ,int dec_num)
 
 }
 
-
 bool is_comment(char *arr , char *arr_tmp)
 	{
 		strcpy(arr_tmp,arr);
@@ -275,7 +214,7 @@ bool is_comment(char *arr , char *arr_tmp)
 	}
 
 bool is_empty(char *arr)
-	{
+{
 		int i,empty_flag;
 		empty_flag=1;
 		for (i=0; (i<MAX_ROW_LEN) && (arr[i]!='\0') ;i++)
@@ -284,7 +223,7 @@ bool is_empty(char *arr)
 			else empty_flag=0;
 		}
 		return empty_flag;
-	}
+}
 
 
 char *tok_label(char *arr,char *arr_tmp,int label_pos,bool *error)
@@ -342,6 +281,14 @@ void add_symbol(sym_row_p head,char *label,int IC,int DC,
 	sym_row_p tmp;
 	if (head->next==NULL)
 	{
+
+		if (is_data_op)
+			head->dec_add=DC;
+		else
+			head->dec_add=IC;
+		if(is_ext)
+			head->dec_add=0;			
+
 		strcpy(head->label,label);
 		head->is_ext=is_ext;
 		head->is_data_op=is_data_op;	
@@ -357,10 +304,13 @@ void add_symbol(sym_row_p head,char *label,int IC,int DC,
 	
 			strcpy(tmp->label,label);      
 
+/*Updating counters*/
 			if (is_data_op)
 				tmp->dec_add=DC;
 			else
 				tmp->dec_add=IC;
+			if(is_ext)
+				tmp->dec_add=0;			
 
 			tmp->is_ext=is_ext;
 			tmp->is_data_op=is_data_op;	
