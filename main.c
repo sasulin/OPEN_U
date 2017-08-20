@@ -55,8 +55,6 @@ int main(int argc , char *argv[])
 	IC=INITIAL_IC;
 	DC=INITIAL_DC;
 
-
-
 	if (argc==1) /*No arguments*/
 	{
 		fprintf(stderr,"No input files!!!\n");
@@ -65,6 +63,7 @@ int main(int argc , char *argv[])
 
 	while( --argc > 0 )
 	{
+		initialize_sym_table(sym_head);
 		strcpy(prefix,argv[argc]);
 
 	    FILE_STRING(input_file,in_post)
@@ -72,26 +71,8 @@ int main(int argc , char *argv[])
 	    FILE_STRING(ext_file,ext_post)
 	    FILE_STRING(ent_file,ent_post)
 
-/*		strcpy(input_file,prefix);
-		strcat(input_file,in_post);
-		strcpy(output_file,prefix);
-		strcat(output_file,out_post);
-		strcpy(ext_file,prefix);
-		strcat(ext_file,ext_post);
-		strcpy(ent_file,prefix);
-		strcat(ent_file,ent_post);*/
-	
 		fp_in=fopen(input_file,"r");
 		CHECK_OPEN(fp_in,argv[argc])
-	
-/*		if (!fp_in)
-		{
-			fprintf(stderr,
-			"Cannot open %s	No such input file!!!\n", argv[argc]);
-			exit(1);
-		}*/
-		printf("input file:%s\n****************\n",input_file);
-
 
 /*Initializing Instruction table (IC)*/	
 	putchar('\n');
@@ -104,8 +85,6 @@ int main(int argc , char *argv[])
 	 for(j=0;j<WORD_SIZE;j++)	
 	 	main_table[i].binary_op[j]='0';
 	}
-
-
 /*Initializing Data table (DC)*/	
 	putchar('\n');
 	for (i=0;i<MEMORY_SIZE/2;i++)
@@ -118,13 +97,10 @@ int main(int argc , char *argv[])
 	 	data_table[i].binary_op[j]='0';
 
 	}
-
-
 /*Initializing Symbols table*/	
 		sym_head=sym_alloc();
 		sym_head->next=NULL;
 	
-
 /****************************************FIRST SCAN****************************************/
 		error = first_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
 		print_sym_table(sym_head);
@@ -135,36 +111,15 @@ int main(int argc , char *argv[])
 			fp_out=fopen(output_file,"w+");
 			CHECK_OPEN(fp_out,output_file)
 		}
-
-/*Printing IC Table*/
-/*		for (i=100;i<MEMORY_SIZE;i++)
-		{
-			bin_to_weird(main_table[i].binary_op,main_table[i].weird_four_op);
-			fprintf(fp_out,"%d\t%s\t%s\t%s\n",
-												main_table[i].dec_add,
-												main_table[i].weird_four_add,
-												main_table[i].binary_op,
-												main_table[i].weird_four_op);
-		}*/
-/*Printing DC Table*/
-/*		for (i=0;i<MEMORY_SIZE/2;i++)
-		{
-			bin_to_weird(data_table[i].binary_op,data_table[i].weird_four_op);
-			fprintf(fp_out,"%d\t%s\t%s\t%s\n",	
-												data_table[i].dec_add,
-												data_table[i].weird_four_add,
-												data_table[i].binary_op,
-												data_table[i].weird_four_op);
-		}*/
 /****************************************SECOND SCAN****************************************/
 		IC=INITIAL_IC;
-		DC=INITIAL_DC;
+	/*	DC=INITIAL_DC;*/
 		rewind(fp_in);
 		error = second_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
 		print_sym_table(sym_head);
 
 /*Printing IC Table*/
-		for (i=100;i<MEMORY_SIZE;i++)
+		for (i=100;i<(IC-1);i++)
 		{
 			bin_to_weird(main_table[i].binary_op,main_table[i].weird_four_op);
 			fprintf(fp_out,"%d\t%s\t%s\t%s\n",
@@ -173,8 +128,20 @@ int main(int argc , char *argv[])
 												main_table[i].binary_op,
 												main_table[i].weird_four_op);
 		}
+
+
+/*Initializing Data table (DC)*/	
+	putchar('\n');
+	for (i=0;i<DC;i++)
+	{
+		data_table[i].dec_add=i+IC-1;
+		dec_to_weird(data_table[i].weird_four_add,
+				  	 data_table[i].dec_add);
+	}
+
+
 /*Printing DC Table*/
-		for (i=0;i<MEMORY_SIZE/2;i++)
+		for (i=0;i<DC;i++)
 		{
 			bin_to_weird(data_table[i].binary_op,data_table[i].weird_four_op);
 			fprintf(fp_out,"%d\t%s\t%s\t%s\n",	
@@ -184,11 +151,7 @@ int main(int argc , char *argv[])
 												data_table[i].weird_four_op);
 		}
 
-
-/****************************************END SCAN****************************************/
-
-		initialize_sym_table(sym_head);
-
+/****************************************END SCANS****************************************/
 		if (error) continue;
 			
 	/*	fp_out=fopen(output_file,"w+");

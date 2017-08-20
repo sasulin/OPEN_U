@@ -166,6 +166,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 	char label_buf[MAX_LABEL_SIZE*2];
 	char *label;
 	char *op_tok, *buf_p;
+    sym_row_p tmp; 
 	
 	sym_head->dec_add=*IC;
 	
@@ -203,11 +204,8 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 			continue;
 		}
 		
-
 	strcpy(arr_tmp,row_buf);
-
 		strtok(arr_tmp,":") ;	
-
 		if (strcmp(arr_tmp,row_buf))
 			buf_p=strchr(row_buf,':')+1;
 
@@ -221,7 +219,6 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 			buf_p=strstr(row_buf,op_tok);
 			op_len=strlen(op_tok);
 			buf_p+=op_len;
-			printf("in row#%d THE ARGUMENT STRING IS: %s\n",row_num,buf_p);
 			
 
 			if (	(!is_ext) && (!is_ent)	)
@@ -249,23 +246,35 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 		}
 	
 /*Managing labels after ".entry"*/
+/*
 	if(is_ent)
 	{
 		arr_tmp[0]='\0';
-		label = tok_label(buf_p,arr_tmp,MID,&error); /*Call tok_label function to search in the middle of the line*/
+		label = tok_label(buf_p,arr_tmp,MID,&error); 
 		if(label!=NULL)
 		{
 			no_space(label);			
 			strcpy(label_buf,label);
-			printf("in row#%d Found label %s\n",row_num,label);
-			is_label=check_label(label_buf,sym_head,&error,NO);
-			ent_add=return_label_address(label,sym_head);
+			is_label=check_label(label_buf,sym_head,&error,YES);
 		}
 		else is_label=NO;			
 	}
-/*	if (is_label)	*/
-				
 	
+	if (is_label)	
+	{
+		printf("ENTRY FOUND,%s%d\n",label_buf,is_label);
+    	for(tmp=sym_head;tmp->next!=NULL;tmp=tmp->next)
+		{
+				
+			printf("%s\n",tmp->label);
+			if (!strcmp(label,tmp->label))
+			{
+		    	tmp->is_ent=YES; 	
+				break;
+			}
+		}
+	}
+*/	
 		row_num++; /*Line ends*/
 	} /*End of while(fgets...*/   
 
@@ -398,7 +407,10 @@ void add_symbol(sym_row_p head,char *label,int IC,int DC,bool is_ent,
 		else
 			head->dec_add=IC;
 		if(is_ext)
+		{
+			head->is_data_op=NO;
 			head->dec_add=0;			
+		}	
 
 		strcpy(head->label,label);
 		head->is_ent=is_ent;
@@ -554,6 +566,7 @@ it tests:
     if (should_exists)
     {
 	if(exists)
+  /*  return YES;*/
 	return NO;
 	printf("LABEL: %s does not exists!!!\n",label);
 	*error=YES;
@@ -572,6 +585,7 @@ it tests:
     return YES;
 
 }
+
 
 int return_label_address(char *label,sym_row_p head)
 {
