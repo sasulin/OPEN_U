@@ -161,7 +161,7 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 		{		    
 		    case TYPE_MATRIX:
 			/*check that label exiset */
-			if(check_label( parser_t_p->label_name[0] , sym_head , &error_flag , YES))
+			if(!check_label( parser_t_p->label_name[0] , sym_head , &error_flag , YES))
 			{
 			return 1;
 			}
@@ -206,7 +206,7 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 		    
 		    case TYPE_LABEL:
 			/*check label */
-			if(check_label( parser_t_p->label_name[0] , sym_head ,&error_flag , YES))
+			if(!check_label( parser_t_p->label_name[0] , sym_head ,&error_flag , YES))
 			{
 			return 1;
 			}
@@ -242,8 +242,8 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 	    switch(parser_t_p->type[k])
 		{		    
 		    case TYPE_MATRIX:
-		    	/*check that label exiset */
-			if(check_label( parser_t_p->label_name[k] , sym_head , &error_flag , YES))
+		    	/*check that label exist */
+			if(!check_label( parser_t_p->label_name[k] , sym_head , &error_flag , YES))
 			{
 			return 1;
 			}
@@ -282,7 +282,7 @@ int encoding(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym
 		    
 		    case TYPE_LABEL:
 			/*check label */
-			if(check_label( parser_t_p->label_name[k] , sym_head ,&error_flag , YES))
+			if(!check_label( parser_t_p->label_name[k] , sym_head ,&error_flag , YES))
 			{
 			return 1;
 			}

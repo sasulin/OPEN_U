@@ -1,3 +1,9 @@
+/*MAMAN 14 Final Project*/
+/*Shmuel Asulin ,ID:          */
+/*Yotam Klein* , ID:066546896 */
+
+/*Assembler*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -60,7 +66,6 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 			row_num++;
 			continue;
 		}
-
 		/*	3)CHECK AND SAVE LABELS	(IF APPEAR AT BEGINNING OF LINE)*/
 
 		label=tok_label(row_buf,arr_tmp,START,&error);	
@@ -80,11 +85,9 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 		if(check_op(
 		op_tok,&is_op,&is_data_op,&is_ext,&is_ent))
 		{
-	/*		printf("in row#%d THE OPERATION IS: %s\n",row_num,op_tok);*/
 			buf_p=strstr(row_buf,op_tok);
 			op_len=strlen(op_tok);
 			buf_p+=op_len;
-	/*		printf("in row#%d THE ARGUMENT STRING IS: %s\n",row_num,buf_p);*/
 			
 			if (	(!is_ext) && (!is_ent)	)
 			{
@@ -94,8 +97,9 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 					break;
 				}
 				/*SEND TO ARGUMENT PARSING*/
-			    parser(buf_p , &parser_t);
-			    encoding_first_scan(&op_list[i],DC_table,IC_table,sym_head,
+			    error=parser(buf_p ,&parser_t);
+				/*SEND TO ENCODING*/
+			    error=encoding_first_scan(&op_list[i],DC_table,IC_table,sym_head,
 									&parser_t,DC,IC);
 			}
 
@@ -108,27 +112,33 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 			row_num++;
 			continue;	
 		}
+
+	if(is_label && is_ext)
+		printf("WARNING!in row#%d: Ignoring Labels before \".extern\" commands\n",row_num);
+
 	
 	/*5) MANAGING EXTERNAL LABELS*/
 	if(is_ext)
 	{
 		arr_tmp[0]='\0';
 		label = tok_label(buf_p,arr_tmp,MID,&error); 
-	/*	label=tok_get(buf_p,arr_tmp);*/
 /*Call tok_label function to search in the middle of the line*/
 		if(label!=NULL)
 		{
 			no_space(label);			
 			strcpy(label_buf,label);
-			/*printf("in row#%d Found label %s\n",row_num,label_buf);*/
 			is_label=check_label(label_buf,sym_head,&error,NO);
 		}
 		else is_label=NO;			
 	}
 
-	if (is_label)		
+	if (is_label)
+	{	
+			if(!is_ent)
 			add_symbol(sym_head,label_buf,IC_NOW,DC_NOW,is_ent,is_ext,is_data_op);	
-		
+			else 
+				printf("WARNING!in row#%d: Ignoring Labels before \".entry\" commands\n",row_num);
+	}	
 		row_num++; /*Line ends*/
 	} /*End of while(fgets...*/   
 
@@ -154,7 +164,7 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC)
 {
 
-	int row_num,i,op_len/*ent_add*/;
+	int row_num,i,op_len;
 
 	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
 	parser_table parser_t ;
@@ -164,8 +174,6 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 	char *label;
 	char *op_tok, *buf_p;
     sym_row_p tmp; 
-	
-/*	sym_head->dec_add=*IC;*/
 	
 /*Loop on input file*/
 	
@@ -209,7 +217,6 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 		if(check_op(
 		op_tok,&is_op,&is_data_op,&is_ext,&is_ent))
 		{
-		/*	printf("in row#%d THE OPERATION IS: %s\n",row_num,op_tok);*/
 			buf_p=strstr(row_buf,op_tok);
 			op_len=strlen(op_tok);
 			buf_p+=op_len;
@@ -224,8 +231,9 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 				}
 
 				/*SEND TO ARGUMENT PARSING*/
-			    parser(buf_p , &parser_t);
-			    encoding_second_scan(&op_list[i],DC_table,IC_table,sym_head,
+			    error=parser(buf_p , &parser_t);
+				/*SEND TO ENCODING*/
+			    error=encoding_second_scan(&op_list[i],DC_table,IC_table,sym_head,
 									&parser_t,DC,IC);
 			}
 
@@ -297,7 +305,7 @@ void reverse (char *string)
 }
 
 void dec_to_weird (char *quad_num ,int dec_num)
-{   /* Convert decimal int to base four string*/
+{   /* Convert decimal int to weird base string*/
    int i;
    int base;
    base=WEIRD_BASE;

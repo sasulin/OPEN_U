@@ -1,3 +1,9 @@
+/*MAMAN 14 Final Project*/
+/*Shmuel Asulin ,ID:          */
+/*Yotam Klein* , ID:066546896 */
+
+/*Assembler*/
+
 int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC )
 
 {
@@ -39,7 +45,7 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 		if(parser_t_p->type[i] != TYPE_NUM )
 		{
 		printf("\nERROR , Wrong argument to .data command %d != %d \n" , parser_t_p->type[i] ,TYPE_NUM);
-		error_flag = 1 ;
+		error_flag = 1;
 		break;
 		}
 		/* check that all |numbers| < MAX_NUM*/
@@ -89,7 +95,6 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 	    }
 	    return error_flag;
 	}
-
 
 	
 /**IC count starts*/
@@ -142,9 +147,6 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
     {
 	k = 0;
     }
-
-
-
 
 	    switch(parser_t_p->type[k])
 		{		    

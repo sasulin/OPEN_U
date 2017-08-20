@@ -1,6 +1,8 @@
 /*MAMAN 14 Final Project*/
-/*Shmuel Asulin*/
-/*Yotam Klein*/
+/*Shmuel Asulin ,ID:          */
+/*Yotam Klein* , ID:066546896 */
+
+/*Assembler*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -57,7 +59,7 @@ int main(int argc , char *argv[])
 	IC_p = &main_table[0];
 	DC_p = &data_table[0];
 	
-	if (argc==1) /*No arguments*/
+	if (argc==1) /*No command line arguments*/
 	{
 		fprintf(stderr,"No input files!!!\n");
 		exit(1);
@@ -107,19 +109,24 @@ int main(int argc , char *argv[])
 		sym_head->next=NULL;
 	
 /****************************************FIRST SCAN****************************************/
+		printf("********** Input file: %s **********\n\n",input_file);
 		error = first_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
-		print_sym_table(sym_head);
-
 
 		if(!error)
 		{
 			fp_out=fopen(output_file,"w+");
 			CHECK_OPEN(fp_out,output_file)
 		}
+		else continue;
 /****************************************SECOND SCAN****************************************/
 		IC=INITIAL_IC;
 		rewind(fp_in);
 		error = second_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
+		if(error)
+		{
+		printf("ERROR!!!"); 
+		continue;
+		}
 		print_sym_table(sym_head);
 
 /*Printing IC Table*/
@@ -149,6 +156,9 @@ int main(int argc , char *argv[])
 				  	 data_table[i].dec_add);
 	}
 
+/****************************************END SCANS****************************************/
+		if (error) continue;
+/****************************************PRINTING OUTPUT****************************************/
 /*Printing DC Table*/
 	for (i=0;i<DC;i++)
 	{
@@ -160,8 +170,6 @@ int main(int argc , char *argv[])
 										/*	data_table[i].binary_op,*/
 											data_table[i].weird_four_op);
 	}
-/****************************************END SCANS****************************************/
-		if (error) continue;
 	
 /*Extern Log */	
 		fp_ext=fopen(ext_file,"w+");
@@ -198,6 +206,7 @@ int main(int argc , char *argv[])
 return 0;
 }
 
+
 void print_sym_table(sym_row_p head)
 {
 	sym_row_p tmp;
@@ -231,7 +240,6 @@ sym_row_p sym_alloc(void)
 void initialize_sym_table(sym_row_p head)
 {
 	sym_row_p tmp;
-	printf("\n****INITIALIZING SYMBOL TABLE****\n");
 	while(head != NULL )
 	{
 		tmp=head;

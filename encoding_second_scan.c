@@ -1,3 +1,8 @@
+/*MAMAN 14 Final Project*/
+/*Shmuel Asulin ,ID:          */
+/*Yotam Klein* , ID:066546896 */
+
+/*Assembler*/
 
 int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC  )
 {

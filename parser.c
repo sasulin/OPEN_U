@@ -1,11 +1,8 @@
-/*#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+/*MAMAN 14 Final Project*/
+/*Shmuel Asulin ,ID:          */
+/*Yotam Klein* , ID:066546896 */
 
-#include "aux_func.h"
-#include "scan.h"*/
-
+/*Assembler*/
 
 int parser(char *input ,parser_table_p parser_t_p)
 { 
@@ -31,8 +28,8 @@ int parser(char *input ,parser_table_p parser_t_p)
 
     if(strstr( bad_token , input ))
     {
-    printf("\n ERROR recieve bad_token %s ", bad_token);
-    return 1;
+    	printf("\n ERROR recieve bad_token %s ", bad_token);
+    	return 1;
     }
       token[i]=strtok(input,delimit);
     

@@ -1,19 +1,30 @@
 /*MAMAN 14 Final Project*/
-/*Shmuel Asulin*/
-/*Yotam Klein*/
+/*Shmuel Asulin ,ID:          */
+/*Yotam Klein* , ID:066546896 */
 
 /*Assembler*/
-/*#include <stdio.h>
-#include <stdlib.h>*/
 
+#ifndef MEMORY_SIZE
 #define MEMORY_SIZE 256
+#endif
+#ifndef MAX_LABEL_SIZE
 #define MAX_LABEL_SIZE 31 /*Defined in instructions*/
+#endif
+#ifndef WORD_SIZE
 #define WORD_SIZE 10 
+#endif
+#ifndef WEIRD_BASE
 #define WEIRD_BASE 4
+#endif
+#ifndef MAX_ROW_LEN
 #define MAX_ROW_LEN 81
-#define FILE_NAME_LEN 65000
+#endif
+#ifndef FILE_NAME_LEN
+#define FILE_NAME_LEN 65535
+#endif
+#ifndef LAST
 #define LAST "999"
-
+#endif
 #ifndef INITIAL_IC
 #define INITIAL_IC 100
 #endif
@@ -73,9 +84,6 @@ typedef struct parser_table
     int  second_arg[MAX_ROW_LEN];
 
 } parser_table;
-
-
-
 
 /*Functions declarations*/
 int parser(char *input ,parser_table_p parser_t_p);

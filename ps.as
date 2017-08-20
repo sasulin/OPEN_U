@@ -1,8 +1,8 @@
 ;file ps.as
 
-.entry LOOP
+LABEL:.entry LOOP
 .entry LENGTH
-.extern L3
+TEST: .extern L3
 .extern W
 MAIN:	mov	M1[r2][r7],W
 		add	r2,STR
