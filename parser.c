@@ -31,7 +31,7 @@ int parser(char *input ,parser_table_p parser_t_p)
 
     if(strstr( bad_token , input ))
     {
-    printf("\n Error recive bad_token %s ", bad_token);
+    printf("\n ERROR recieve bad_token %s ", bad_token);
     return 1;
     }
       token[i]=strtok(input,delimit);
@@ -49,12 +49,12 @@ int parser(char *input ,parser_table_p parser_t_p)
 	 state=FIRST;
 	 j = 0;
 	 }
-         printf("\n token [%d]=%s",i,token[i]);
+         /*printf("\n token [%d]=%s",i,token[i]);*/
          for( found_digit_flag = 0 , sign_flag = 0 , found_br_flag = 0; 
          ( c=token[i][j] ) != '\0' && c != ' ' ;j++)
     
          {
-          printf("\n%d %c  %d\n", j , c , state); 
+         /* printf("\n%d %c  %d\n", j , c , state); */
           switch(state){
               case FIRST:
           	if(isalpha(c))
@@ -67,7 +67,7 @@ int parser(char *input ,parser_table_p parser_t_p)
 		    }
           	    if( c == 'r' )
           	    {
-          	    printf("found r %c" , c);
+          /*	    printf("found r %c" , c);*/
           	    state = FIRST_CHAR_IN_TOKEN_IS_R;
           	    break;
           	    }
@@ -118,7 +118,7 @@ int parser(char *input ,parser_table_p parser_t_p)
           	    printf("ERROR in case FIRST");
           	    break;
                   }
-          	printf("first is alpha");
+          /*	printf("first is alpha");*/
     
     
               case DEF_METRIX_FIRST_ARG:
@@ -207,7 +207,7 @@ int parser(char *input ,parser_table_p parser_t_p)
           	{
           	    if(sign_flag)
           	    {
-          		printf("ERROR in case pound expected number but get %c " , c );
+          		printf("ERROR in case POUND expected number but get %c " , c );
           		return 1;
           	    }
           	    if(isdigit(token[i][j+1]))
@@ -217,21 +217,21 @@ int parser(char *input ,parser_table_p parser_t_p)
           		temp_string[i][++k] = '\0';
           		break;
           	    }
-          	    printf("ERROR in case pound expected number but get %c " , temp_string[i][j+1] );
+          	    printf("ERROR in case POUND expected number but get %c " , temp_string[i][j+1] );
           	    return 1;
           	}
           	if( isdigit(c) )
           	{
           	    temp_string[i][k] = c;
           	    temp_string[i][++k] = '\0';
-		    printf("found direct %s " , temp_string[i] );
+		   /* printf("found direct %s " , temp_string[i] );*/
           	    first_arg[i] = atoi(temp_string[i]);
           	    break;
           	}
           	else
           	{
           	    state = ERROR;
-          	    printf("ERROR in case pound");
+          	    printf("ERROR in case POUND");
           	    break;
           	}
     
@@ -252,7 +252,7 @@ int parser(char *input ,parser_table_p parser_t_p)
               case ALPHA:
           	if( isalpha(c) || isdigit(c))
           	{
-          	    printf("\n %c is alpha" , c);
+          	   /* printf("\n %c is alpha" , c);*/
           	    type[i] = TYPE_LABEL;
           	    label_name[i][j] = c;
           	    label_name[i][j+1] = '\0';
@@ -262,7 +262,7 @@ int parser(char *input ,parser_table_p parser_t_p)
           	{	
           	    type[i] = TYPE_MATRIX;
           	    state = READING_MATRIX_FIRST_ARG;
-          	    printf("\nfound matrix %s \n j is %d \n" , label_name[i] , j );
+          	  /*  printf("\nfound matrix %s \n j is %d \n" , label_name[i] , j );*/
           	    break;
           	}
           	else
@@ -279,7 +279,7 @@ int parser(char *input ,parser_table_p parser_t_p)
           	    state = INSIDE_MATRIX_FIRST_R;
           	    break;
           	}
-          	printf("Error in case READING_MATRIX_FIRST_ARG expected r but get %c " , c );
+          	printf("ERROR in case READING_MATRIX_FIRST_ARG expected r but get %c " , c );
           	return 1;
     
     
@@ -288,22 +288,22 @@ int parser(char *input ,parser_table_p parser_t_p)
           	if( ((c>='0') && (c<='7')) )
           	{
           	    first_arg[i] = c - '0' ;
-          	    printf("\n reg is r%d" , first_arg[i] );
+          	    /*printf("\n reg is r%d" , first_arg[i] );*/
           	    if(!(token[i][j + 1] == ']'))
           	    {
-          		printf(" error in case INSIDE_MATRIX_FIRST_R expected ] but get %c ",  token[i][j + 1] );
+          		printf("ERROR in case INSIDE_MATRIX_FIRST_R expected ] but get %c ",  token[i][j + 1] );
           		return 1;
           	    }
           	    if(!(token[i][j + 2] == '['))
           	    {
-          		printf(" error in case INSIDE_MATRIX_FIRST_R expected [ but get %c ",  token[i][j + 2] );
+          		printf("ERROR in case INSIDE_MATRIX_FIRST_R expected [ but get %c ",  token[i][j + 2] );
           		return 1;
           	    }			
           	    j = j + 2 ;
           	    state = READING_MATRIX_SECOUND_ARG ;
           	    break;
           	}
-          	printf(" error in case INSIDE_MATRIX_FIRST_R expected 0 - 7 but get %c ", c );
+          	printf("ERROR in case INSIDE_MATRIX_FIRST_R expected 0 - 7 but get %c ", c );
           	return 1;
     
     
@@ -313,7 +313,7 @@ int parser(char *input ,parser_table_p parser_t_p)
           	    state = INSIDE_MATRIX_SECOUND_R;
           	    break;
           	}
-          	printf(" error in case READING_MATRIX_SECOUND_ARG expected r but get %c ", c );
+          	printf("ERROR in case READING_MATRIX_SECOUND_ARG expected r but get %c ", c );
           	return 1;
     
     
@@ -321,17 +321,17 @@ int parser(char *input ,parser_table_p parser_t_p)
           	if( ((c>='0') && (c<='7')) )
           	{
           	    second_arg[i] = c - '0';
-          	    printf("\n reg is r%d" , second_arg[i] );
+   /*       	    printf("\n reg is r%d" , second_arg[i] );*/
           	    if(!(token[i][j + 1] == ']'))
           	    {
-          		printf(" error in case INSIDE_MATRIX_SECOUND_R expected ] but get %c ",  token[i][j + 1] );
+          		printf("ERROR in case INSIDE_MATRIX_SECOUND_R expected ] but get %c ",  token[i][j + 1] );
           		return 1;
           	    }
           	    j++;
           	    state = NO_MORE_ARGS ;
           	    break;
           	}
-          	printf(" error in case INSIDE_MATRIX_SECOUND_R expected 0 - 7 but get %c ", c );
+          	printf("ERROR in case INSIDE_MATRIX_SECOUND_R expected 0 - 7 but get %c ", c );
           	return 1;
     
               case FIRST_CHAR_IN_TOKEN_IS_R:
@@ -339,7 +339,7 @@ int parser(char *input ,parser_table_p parser_t_p)
           	{
           	    type[i] = TYPE_REG;
           	    first_arg[i]  = c - '0';
-          	    printf("\n reg is r%d" , first_arg[i] );
+          	  /*  printf("\n reg is r%d" , first_arg[i] );*/
           	    label_name[i][0] = 'r';
           	    label_name[i][j] = c;
           	    label_name[i][j+1] = '\0';
@@ -353,7 +353,7 @@ int parser(char *input ,parser_table_p parser_t_p)
     
     
               case NO_MORE_ARGS:
-          	printf("Error in case NO_MORE_ARGS expected end of string but get %c ", c );
+          	printf("ERROR in case NO_MORE_ARGS expected end of string but get %c ", c );
           	return 1;
     
           }
@@ -368,11 +368,11 @@ int parser(char *input ,parser_table_p parser_t_p)
 	    parser_t_p->first_arg[i] = first_arg[i]; 
 	    parser_t_p->second_arg[i] = second_arg[i]; 
 
-          printf("\n TYPE is %d "  , type[i] );
+        /*  printf("\n TYPE is %d "  , type[i] );
           printf("\n first_arg %d " , first_arg[i] );
           printf("\n second_arg %d " , second_arg[i] );
           printf("\n temp_string %s " , temp_string[i] );
-          printf("\n label_name %s\n " , label_name[i] );
+          printf("\n label_name %s\n " , label_name[i] );*/
     
           i++;
         token[i]=strtok(NULL,delimit);

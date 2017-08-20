@@ -18,7 +18,7 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 		{
 		dec_to_bin(parser_t_p->temp_string[0][i],DC_table[*DC].binary_op,WORD_LEN);
 		(*DC)++;
-		printf("DC value incrised by 1 %d" , *DC);		
+		/*printf("DC value incrised by 1 %d" , *DC);		*/
 		}
 
 	    /*adding zero to the string end*/
@@ -53,7 +53,7 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 		
 		dec_to_bin(parser_t_p->first_arg[i],DC_table[*DC].binary_op,WORD_LEN);
 		(*DC)++;
-		printf("DC value incrised by 1 %d" , *DC);
+	/*	printf("DC value incrised by 1 %d" , *DC);*/
 	    }
 	    return error_flag;
 
@@ -84,7 +84,7 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 	    {
 		dec_to_bin(0,DC_table[*DC].binary_op,WORD_LEN);
 		(*DC)++;
-		printf("DC value incrised by 1 %d" , *DC);
+		/*printf("DC value incrised by 1 %d" , *DC);*/
 
 	    }
 	    return error_flag;

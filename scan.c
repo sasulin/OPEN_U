@@ -5,8 +5,8 @@
 #include "aux_func.h"
 #include "scan.h"
 #include "parser.c"
-#include "encoding.c"
 #include "encoding_first_scan.c"
+#include "encoding_second_scan.c"
 
 bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC)
 {
@@ -22,7 +22,6 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 	char label_buf[MAX_LABEL_SIZE*2];
 	char *label ,*op_tok, *buf_p;
 	
-
 	sym_head->dec_add=*IC;
 	
 /*Loop on input file*/
@@ -69,25 +68,24 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 		{
 			no_space(label);			
 			strcpy(label_buf,label);
-			printf("in row#%d Found label %s\n",row_num,label);
+			/*printf("in row#%d Found label %s\n",row_num,label);*/
 			buf_p=strchr(row_buf,':')+1;
 			is_label=check_label(label_buf,sym_head,&error,NO);
 		}
 		else is_label=NO;				
 	/*		4)IS DATA INSTRUCTION? .data, .string .mat?	
-			Or one of the 15 operations	*/																	
+			Or one of the other operations	*/																	
 		op_tok=tok_get(buf_p,arr_tmp);
 
 		if(check_op(
 		op_tok,&is_op,&is_data_op,&is_ext,&is_ent))
 		{
-			printf("in row#%d THE OPERATION IS: %s\n",row_num,op_tok);
+	/*		printf("in row#%d THE OPERATION IS: %s\n",row_num,op_tok);*/
 			buf_p=strstr(row_buf,op_tok);
 			op_len=strlen(op_tok);
 			buf_p+=op_len;
-			printf("in row#%d THE ARGUMENT STRING IS: %s\n",row_num,buf_p);
+	/*		printf("in row#%d THE ARGUMENT STRING IS: %s\n",row_num,buf_p);*/
 			
-
 			if (	(!is_ext) && (!is_ent)	)
 			{
 			    for ( i = 0 ; i < OP_NUM ; i++)
@@ -111,27 +109,26 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 			continue;	
 		}
 	
-	/*MANAGING EXTERNAL LABELS*/
+	/*5) MANAGING EXTERNAL LABELS*/
 	if(is_ext)
 	{
 		arr_tmp[0]='\0';
-		label = tok_label(buf_p,arr_tmp,MID,&error); /*Call tok_label function to search in the middle of the line*/
+		label = tok_label(buf_p,arr_tmp,MID,&error); 
+	/*	label=tok_get(buf_p,arr_tmp);*/
+/*Call tok_label function to search in the middle of the line*/
 		if(label!=NULL)
 		{
 			no_space(label);			
 			strcpy(label_buf,label);
-			printf("in row#%d Found label %s\n",row_num,label);
+			/*printf("in row#%d Found label %s\n",row_num,label_buf);*/
 			is_label=check_label(label_buf,sym_head,&error,NO);
 		}
 		else is_label=NO;			
 	}
 
-			
-
 	if (is_label)		
 			add_symbol(sym_head,label_buf,IC_NOW,DC_NOW,is_ent,is_ext,is_data_op);	
-	
-	
+		
 		row_num++; /*Line ends*/
 	} /*End of while(fgets...*/   
 
@@ -157,7 +154,7 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC)
 {
 
-	int row_num,i,op_len,ent_add;
+	int row_num,i,op_len/*ent_add*/;
 
 	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
 	parser_table parser_t ;
@@ -168,7 +165,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 	char *op_tok, *buf_p;
     sym_row_p tmp; 
 	
-	sym_head->dec_add=*IC;
+/*	sym_head->dec_add=*IC;*/
 	
 /*Loop on input file*/
 	
@@ -186,9 +183,6 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 		is_label=NO;	
 		is_ext=NO;	
 		is_ent=NO;	
-
-	/*	IC_NOW=*IC;
-		DC_NOW=*DC;*/
 
 		/*	1) CHECK AND IGNORE COMMENT LINES*/	
 		if (is_comment(row_buf,arr_tmp))
@@ -215,7 +209,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 		if(check_op(
 		op_tok,&is_op,&is_data_op,&is_ext,&is_ent))
 		{
-			printf("in row#%d THE OPERATION IS: %s\n",row_num,op_tok);
+		/*	printf("in row#%d THE OPERATION IS: %s\n",row_num,op_tok);*/
 			buf_p=strstr(row_buf,op_tok);
 			op_len=strlen(op_tok);
 			buf_p+=op_len;
@@ -231,7 +225,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 
 				/*SEND TO ARGUMENT PARSING*/
 			    parser(buf_p , &parser_t);
-			    encoding(&op_list[i],DC_table,IC_table,sym_head,
+			    encoding_second_scan(&op_list[i],DC_table,IC_table,sym_head,
 									&parser_t,DC,IC);
 			}
 
@@ -246,7 +240,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 		}
 	
 /*Managing labels after ".entry"*/
-/*
+
 	if(is_ent)
 	{
 		arr_tmp[0]='\0';
@@ -262,11 +256,8 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 	
 	if (is_label)	
 	{
-		printf("ENTRY FOUND,%s%d\n",label_buf,is_label);
     	for(tmp=sym_head;tmp->next!=NULL;tmp=tmp->next)
 		{
-				
-			printf("%s\n",tmp->label);
 			if (!strcmp(label,tmp->label))
 			{
 		    	tmp->is_ent=YES; 	
@@ -274,15 +265,13 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 			}
 		}
 	}
-*/	
+	
 		row_num++; /*Line ends*/
 	} /*End of while(fgets...*/   
 
 	return error;
 }
 /*End of Second Scan*/
-
-
 
 void reverse (char *string) 
 {
@@ -353,7 +342,6 @@ char *tok_label(char *arr,char *arr_tmp,int label_pos,bool *error)
 	if (label_pos == START)
 	{
 		strcpy(arr_tmp,arr);
-	/*	printf("%s\n",arr_tmp);*/
 		strtok(arr_tmp,":");
 
 		if (!(strcmp(arr_tmp,arr)))
@@ -447,7 +435,7 @@ void add_symbol(sym_row_p head,char *label,int IC,int DC,bool is_ent,
 }
 
 
-char *tok_get(char *arr , char *arr_tmp)
+char *tok_get(char *arr,char *arr_tmp)
 {
 	int i,j;
 	for(i=0;(i<MAX_ROW_LEN) && (arr[i]!='\0');i++)
@@ -456,7 +444,7 @@ char *tok_get(char *arr , char *arr_tmp)
 			continue;
 		else
 		{
-			for(j=0;(j<MAX_OP_LEN);i++,j++)	
+			for(j=0;(j<MAX_LABEL_SIZE);i++,j++)	
 			{
 				arr_tmp[j]=arr[i];		
 				if(isspace(arr[i]))
@@ -566,11 +554,11 @@ it tests:
     if (should_exists)
     {
 	if(exists)
-  /*  return YES;*/
-	return NO;
-	printf("LABEL: %s does not exists!!!\n",label);
-	*error=YES;
 	return YES;
+/*	return NO;*/
+	printf("LABEL: %s does not exists!!!\n",label);
+/*	*error=YES;
+	return YES;*/
     }
     else 
     {

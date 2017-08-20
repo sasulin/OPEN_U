@@ -42,7 +42,6 @@ typedef struct I_table_row
 typedef struct D_table_row *D_row_p;
 typedef struct D_table_row
 {
-	char label[MAX_LABEL_SIZE];
 	unsigned int dec_add;
 	char weird_four_add[WEIRD_BASE+1];
 	word binary_op;

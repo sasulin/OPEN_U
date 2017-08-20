@@ -14,9 +14,9 @@
 #define OP_NUM 19
 #endif
 
-#ifndef MAX_OP_LEN
+/*#ifndef MAX_OP_LEN
 #define MAX_OP_LEN 8
-#endif
+#endif*/
 
 #ifndef REG_LEN
 #define REG_LEN 4

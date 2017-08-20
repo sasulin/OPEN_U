@@ -1,36 +1,24 @@
-;file tc.as
+;file ps.as
 
-LENGTH:	.data 6,-9,15
-
-
-
-
-.extern A
-.extern B
-.extern r
-.extern D
-.extern E 
-.extern F
+.entry LOOP
 .entry LENGTH
 .extern L3
 .extern W
+;.extern Loooooooooong
 
-  		;
-		;
-
-	MAIN:	mov	M1[r2][r7],LENGTH
+MAIN:	mov	M1[r2][r7],W
 		add	r2,STR
-LOOP:	jmp	END
-
+LOOP:	jmp W
 		prn	#-5
 		sub	r1,r4
 		inc	K
-		mov M1[r3][r3],r3
-		bne LOOP
-END:	stop
-STR			:	.string "abcdef"
-K:		.data	22
-M1:		.mat [2][2] 1,2,3,4
-.extern ASUL
 
-			;End of file
+		mov M1[r3][r3],r3
+		bne L3
+END:	stop
+STR:	.string "abcdef"
+LENGTH:	.data 6,-9,15
+K: 		.data 22
+M1:		.mat [2][2] 1,2,3,4
+;STRUext:	.string "abcd  ef"
+;End of file
