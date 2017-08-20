@@ -97,7 +97,7 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 					break;
 				}
 				/*SEND TO ARGUMENT PARSING*/
-			    error=parser(buf_p ,&parser_t);
+			    error=parser(buf_p ,&parser_t , row_num);
 				/*SEND TO ENCODING*/
 			    error=encoding_first_scan(&op_list[i],DC_table,IC_table,sym_head,
 									&parser_t,DC,IC);
@@ -231,7 +231,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 				}
 
 				/*SEND TO ARGUMENT PARSING*/
-			    error=parser(buf_p , &parser_t);
+			    error=parser(buf_p , &parser_t , row_num);
 				/*SEND TO ENCODING*/
 			    error=encoding_second_scan(&op_list[i],DC_table,IC_table,sym_head,
 									&parser_t,DC,IC);
