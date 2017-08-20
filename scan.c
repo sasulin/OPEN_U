@@ -550,10 +550,9 @@ it tests:
     if (should_exists)
     {
 	if(exists) return YES;
-/*	return NO;*/
 	printf("ERROR! in row#%d:LABEL %s does not exists!!!\n",row_num,label);
-/*	*error=YES;
-	return YES;*/
+	*error=YES;
+	return NO;
     }
     else 
     {
