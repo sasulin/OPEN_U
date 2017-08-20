@@ -134,13 +134,12 @@ int main(int argc , char *argv[])
 			fp_out=fopen(output_file,"w+");
 			CHECK_OPEN(fp_out,output_file)
 		}
-		else continue;
+/*		else continue;*/
 /****************************************SECOND SCAN****************************************/
 		IC=INITIAL_IC;
 		rewind(fp_in);
 		error = second_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
 		if(error) continue;
-/*		print_sym_table(sym_head);*/
 
 /*Printing IC Table*/
  		dec_to_weird(str_print,(IC-INITIAL_IC-1));
