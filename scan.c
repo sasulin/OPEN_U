@@ -73,6 +73,7 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 		{
 			row_num++;
 			continue;
+		}
 		/*	3)CHECK AND SAVE LABELS	(IF APPEAR AT BEGINNING OF LINE)*/
 		label=tok_label(row_buf,arr_tmp,START,&error);	
 		if(label!=NULL)
@@ -158,7 +159,7 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 	if (error)	/*End of input lines*/
 		printf("ERRORS FOUND IN INPUT FILE!!!\n");					
 
-	}/*End of while*/
+
 	return error;
 }/*End of First Scan*/
 
@@ -252,7 +253,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 			continue;	
 		}
 	
-/*Managing labels after ".entry"*/
+/*4) Managing labels after ".entry"*/
 	if(is_ent)
 	{
 		arr_tmp[0]='\0';
