@@ -31,12 +31,12 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 	    dec_to_bin(0,DC_table[*DC].binary_op,WORD_SIZE);
 	    (*DC)++;
 	    /*Checking that there is no more ags after string*/
-	    if(parser_t_p->type[1] != 0)
+	    if(parser_t_p->type[1])
 	    {
-		printf("ERROR , Too many arguments .string command %d ", parser_t_p->type[1]);
-		error_flag = 1 ;
+		printf("ERROR in row#%d: Too many arguments .string command \n",row_num);
+		return 1;
 	    }
-	    return error_flag;
+	    return 0;
 
 	case DATA:
 	    for(i=0;parser_t_p->type[i];i++)
@@ -45,23 +45,21 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 		if(parser_t_p->type[i] != TYPE_NUM )
 		{
 		printf("\nERROR , Wrong argument to .data command %d != %d \n" , parser_t_p->type[i] ,TYPE_NUM);
-		error_flag = 1;
-		break;
+		return 1;
 		}
-		/* check that all |numbers| < MAX_NUM*/
-		if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (MIN_NUM)))  )
+		/* check that all |numbers| < MAX_NUM_10*/
+		if(!((parser_t_p->first_arg[i] < MAX_NUM_10)  &&  (parser_t_p->first_arg[i] > (MIN_NUM_10)))  )
 		{
 		printf("\nERROR ,\"%d\" is Out Of Range\n" , parser_t_p->first_arg[i] );
-		error_flag = 1 ;
-		break;
+		return 1;
 		}
-
 		
+		/* add to table*/
 		dec_to_bin(parser_t_p->first_arg[i],DC_table[*DC].binary_op,WORD_SIZE);
 		(*DC)++;
-	/*	printf("DC value incrised by 1 %d" , *DC);*/
 	    }
-	    return error_flag;
+	    return 0;
+	    
 
 	case MAT:
 	    for(i=1;parser_t_p->type[i];i++)
@@ -73,11 +71,9 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 		error_flag = 1 ;
 		break;
 		}
-		/* check that all |numbers| < MAX_NUM*/
-		if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (MIN_NUM)))  )
-		/*if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (-MAX_NUM)))  )*/
+		/* check that all |numbers| < MAX_NUM_10*/
+		if(!((parser_t_p->first_arg[i] < MAX_NUM_10)  &&  (parser_t_p->first_arg[i] > (MIN_NUM_10)))  )
 		{
-	/*	printf("\nERROR , Number is Out Of Range  |%d| > MAX_NUM \n" , parser_t_p->first_arg[i] );*/
 		printf("\nERROR ,\"%d\" is Out Of Range\n" , parser_t_p->first_arg[i] );
 		error_flag = 1 ;
 		break;
@@ -95,7 +91,12 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 		/*printf("DC value incrised by 1 %d" , *DC);*/
 
 	    }
-	    return error_flag;
+	    if(parser_t_p->type[i])
+	    {
+		printf("ERROR in row#%d: Too many arguments .string command \n",row_num);
+		return 1;
+	    }
+	    return 0;
 	}
 
 	

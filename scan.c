@@ -627,3 +627,16 @@ void dec_to_weird (char *quad_num ,int dec_num)
 	reverse(quad_num);
 
 }
+
+/* check that octal digit is in limit , if not print error*/
+
+int check_in_limit(int NUM , int row_num)
+{
+
+    if(!(NUM < MAX_NUM_8)  &&  (NUM > (-MIN_NUM_8)))  
+	{
+	printf("ERROR! in row#%d: Number %d Is out of range\n",row_num,NUM);				
+	return 1 ;
+	}
+    return 0 ;
+}

@@ -9,12 +9,22 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 
     int k , label_address;
     bool error_flag = 0 ;
-/*case need DC encoding*/
-	if (command->EnuM==STRING || 
-		command->EnuM ==DATA  || 
-		command->EnuM==MAT)	    
-	return 0;
+/*DC encoding was already done in the first scan*/
+    if (command->EnuM==STRING || 
+	command->EnuM ==DATA  || 
+	command->EnuM==MAT)	    
+    return 0;
 	
+
+/*Error if more than 2 tokens for a command*/
+    if(parser_t_p->type[2])
+    {
+    printf("ERROR! in row#%d: Command %s have too many (tokens > 2 ) \n",row_num,command->name);
+    return 1;
+    }
+
+
+
 /**IC encoding starts*/
 	strcpy(IC_table[*IC].binary_op,command->op_code_bin);/*Command op number*/
 	IC_table[*IC].binary_op[8] = '0';/*encoding of a command is always absulote 00*/
@@ -29,6 +39,7 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
     )
     {
 	k = 1;
+
 
 	switch(parser_t_p->type[0])
 		{		    
@@ -185,7 +196,9 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 			}
 			(*IC)++;
 			/* encode matrix */
+			if(check_in_limit(parser_t_p->first_arg[0],row_num)) return 1;
 			dec_to_bin((parser_t_p->first_arg[0]),IC_table[*IC].binary_op,REG_LEN);
+			if(check_in_limit(parser_t_p->second_arg[0],row_num)) return 1;
 			dec_to_bin((parser_t_p->second_arg[0]),IC_table[*IC].binary_op + 4,REG_LEN);
 			IC_table[*IC].binary_op[8] = '0';
 			IC_table[*IC].binary_op[9] = '0';
@@ -205,6 +218,7 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 
 
 		    case TYPE_DIRECT:
+			if(check_in_limit(parser_t_p->first_arg[0],row_num)) return 1;
 			dec_to_bin((parser_t_p->first_arg[0]),IC_table[*IC].binary_op,COMMAND_LEN);
 			IC_table[*IC].binary_op[8] = '0';
 			IC_table[*IC].binary_op[9] = '0';
@@ -288,6 +302,7 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 
 
 		    case TYPE_DIRECT:
+			if(check_in_limit(parser_t_p->first_arg[k],row_num)) return 1;
 			dec_to_bin((parser_t_p->first_arg[k]),IC_table[*IC].binary_op,COMMAND_LEN);
 			IC_table[*IC].binary_op[8] = '0';
 			IC_table[*IC].binary_op[9] = '0';
