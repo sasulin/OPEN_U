@@ -1,8 +1,21 @@
 /*MAMAN 14 Final Project*/
-/*Shmuel Asulin ,ID:          */
+/*Shmuel Asulin ,ID:036760676  */
 /*Yotam Klein* , ID:066546896 */
 
 /*Assembler*/
+
+/*This program emulates an assembler from 
+an imaginary programming language to an imaginary machine code*/
+
+/*The algorithm is based on two scans(passes) on an input file*/
+
+/*The program can recieve several input files at once, but deals with each one
+indivudually and one at a time*/
+
+/*The main function depends on another source file and a header file:
+	scan.c
+	aux_func.h
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,6 +39,7 @@
 
 const short int sym_size = sizeof(symbol_row);
 
+/*Filename extensions*/
 char *in_post = ".as";
 char *out_post = ".ob";
 char *ext_post = ".ext";
@@ -55,7 +69,7 @@ int main(int argc , char *argv[])
 	FILE *fp_ext;
 	FILE *fp_ent;
 
-	error=NO;;
+	error=NO;
 	IC_p = &main_table[0];
 	DC_p = &data_table[0];
 	
@@ -65,7 +79,7 @@ int main(int argc , char *argv[])
 		exit(1);
 	}	
 
-	while( --argc > 0 )
+	while( --argc > 0 )  /*Loop on all the input files*/
 	{
 		IC=INITIAL_IC;
 		DC=INITIAL_DC;
@@ -80,7 +94,10 @@ int main(int argc , char *argv[])
 		fp_in=fopen(input_file,"r");
 		CHECK_OPEN(fp_in,argv[argc])
 
-/*Initializing Instruction table (IC)*/	
+
+/*Initializing data structures before scanning the file*/
+
+/*Initializing Instruction table(IC)*/	
 	putchar('\n');
 	for (i=INITIAL_IC;i<MEMORY_SIZE;i++)
 	{
@@ -122,12 +139,8 @@ int main(int argc , char *argv[])
 		IC=INITIAL_IC;
 		rewind(fp_in);
 		error = second_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
-		if(error)
-		{
-		printf("ERROR!!!"); 
-		continue;
-		}
-		print_sym_table(sym_head);
+		if(error) continue;
+/*		print_sym_table(sym_head);*/
 
 /*Printing IC Table*/
  		dec_to_weird(str_print,(IC-INITIAL_IC-1));
@@ -147,7 +160,7 @@ int main(int argc , char *argv[])
 								
 		}
 
-/*Initializing Data table (DC)*/	
+/*Re-Initializing Data table (DC)*/	
 	putchar('\n');
 	for (i=0;i<DC;i++)
 	{
@@ -171,7 +184,7 @@ int main(int argc , char *argv[])
 											data_table[i].weird_four_op);
 	}
 	
-/*Extern Log */	
+/*Extern log: writhing file.ext */	
 		fp_ext=fopen(ext_file,"w+");
 		CHECK_OPEN(fp_ext,ext_file)
 
@@ -190,7 +203,7 @@ int main(int argc , char *argv[])
 
 			}
 
-/*Entry Log*/	
+/*Entry log: writhing file.ent*/	
 		fp_ent=fopen(ent_file,"w+");
 		CHECK_OPEN(fp_ent,ent_file)
 
@@ -204,9 +217,13 @@ int main(int argc , char *argv[])
 	}/*end of while(--argc...)*/
 	
 return 0;
-}
+}/*End of main*/
 
 
+
+
+/*This is an optional function for debugging and clarity of the work flow*/
+/*It prints the symbol table*/
 void print_sym_table(sym_row_p head)
 {
 	sym_row_p tmp;
@@ -226,6 +243,7 @@ void print_sym_table(sym_row_p head)
 
 sym_row_p sym_alloc(void)
 {
+/*This function allocates dynamic memory for a row in the symbol table*/
 	sym_row_p node;
 	node=(sym_row_p)malloc(sym_size);
 	if (!node)
@@ -239,6 +257,7 @@ sym_row_p sym_alloc(void)
 
 void initialize_sym_table(sym_row_p head)
 {
+/*This functioni frees dynamic memory previously allocated for a the symbol table*/
 	sym_row_p tmp;
 	while(head != NULL )
 	{

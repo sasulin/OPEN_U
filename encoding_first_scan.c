@@ -1,10 +1,10 @@
 /*MAMAN 14 Final Project*/
-/*Shmuel Asulin ,ID:          */
+/*Shmuel Asulin ,ID:036760676  */
 /*Yotam Klein* , ID:066546896 */
 
 /*Assembler*/
 
-int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC )
+int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC ,int row_num)
 
 {
 
@@ -22,13 +22,13 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 	    } 
 	    for(i=1;parser_t_p->temp_string[0][i] != '"';i++)
 		{
-		dec_to_bin(parser_t_p->temp_string[0][i],DC_table[*DC].binary_op,WORD_LEN);
+		dec_to_bin(parser_t_p->temp_string[0][i],DC_table[*DC].binary_op,WORD_SIZE);
 		(*DC)++;
 		/*printf("DC value incrised by 1 %d" , *DC);		*/
 		}
 
 	    /*adding zero to the string end*/
-	    dec_to_bin(0,DC_table[*DC].binary_op,WORD_LEN);
+	    dec_to_bin(0,DC_table[*DC].binary_op,WORD_SIZE);
 	    (*DC)++;
 	    /*Checking that there is no more ags after string*/
 	    if(parser_t_p->type[1] != 0)
@@ -49,15 +49,15 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 		break;
 		}
 		/* check that all |numbers| < MAX_NUM*/
-		if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (-MAX_NUM)))  )
+		if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (MIN_NUM)))  )
 		{
-		printf("\nERROR , Number is Out Of Range  |%d| > MAX_NUM \n" , parser_t_p->first_arg[i] );
+		printf("\nERROR ,\"%d\" is Out Of Range\n" , parser_t_p->first_arg[i] );
 		error_flag = 1 ;
 		break;
 		}
 
 		
-		dec_to_bin(parser_t_p->first_arg[i],DC_table[*DC].binary_op,WORD_LEN);
+		dec_to_bin(parser_t_p->first_arg[i],DC_table[*DC].binary_op,WORD_SIZE);
 		(*DC)++;
 	/*	printf("DC value incrised by 1 %d" , *DC);*/
 	    }
@@ -74,21 +74,23 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 		break;
 		}
 		/* check that all |numbers| < MAX_NUM*/
-		if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (-MAX_NUM)))  )
+		if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (MIN_NUM)))  )
+		/*if(!((parser_t_p->first_arg[i] < MAX_NUM)  &&  (parser_t_p->first_arg[i] > (-MAX_NUM)))  )*/
 		{
-		printf("\nERROR , Number is Out Of Range  |%d| > MAX_NUM \n" , parser_t_p->first_arg[i] );
+	/*	printf("\nERROR , Number is Out Of Range  |%d| > MAX_NUM \n" , parser_t_p->first_arg[i] );*/
+		printf("\nERROR ,\"%d\" is Out Of Range\n" , parser_t_p->first_arg[i] );
 		error_flag = 1 ;
 		break;
 		}
 		
-		dec_to_bin(parser_t_p->first_arg[i],DC_table[*DC].binary_op,WORD_LEN);
+		dec_to_bin(parser_t_p->first_arg[i],DC_table[*DC].binary_op,WORD_SIZE);
 		(*DC)++;
 	    }
 	    /* padding data tabel with zeros */
 
 	    for(--i;(parser_t_p->first_arg[0])*(parser_t_p->second_arg[0]) > i;i++)
 	    {
-		dec_to_bin(0,DC_table[*DC].binary_op,WORD_LEN);
+		dec_to_bin(0,DC_table[*DC].binary_op,WORD_SIZE);
 		(*DC)++;
 		/*printf("DC value incrised by 1 %d" , *DC);*/
 

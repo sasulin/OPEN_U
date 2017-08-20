@@ -1,10 +1,10 @@
 /*MAMAN 14 Final Project*/
-/*Shmuel Asulin ,ID:          */
+/*Shmuel Asulin ,ID:036760676  */
 /*Yotam Klein* , ID:066546896 */
 
 /*Assembler*/
 
-int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC  )
+int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC ,int row_num)
 {
 
     int k , label_address;
@@ -164,7 +164,7 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		{		    
 		    case TYPE_MATRIX:
 			/*check that label exiset */
-			if(!check_label( parser_t_p->label_name[0] , sym_head , &error_flag , YES))
+			if(!check_label( parser_t_p->label_name[0] , sym_head , &error_flag , YES,row_num))
 			{
 			return 1;
 			}
@@ -212,7 +212,7 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		    
 		    case TYPE_LABEL:
 			/*check label */
-			if(!check_label( parser_t_p->label_name[0] , sym_head ,&error_flag , YES))
+			if(!check_label( parser_t_p->label_name[0] , sym_head ,&error_flag , YES,row_num))
 			{
 			return 1;
 			}
@@ -249,7 +249,7 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		{		    
 		    case TYPE_MATRIX:
 		    	/*check that label exist */
-			if(!check_label( parser_t_p->label_name[k] , sym_head , &error_flag , YES))
+			if(!check_label( parser_t_p->label_name[k] , sym_head , &error_flag , YES,row_num))
 			{
 			return 1;
 			}
@@ -295,7 +295,7 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		    
 		    case TYPE_LABEL:
 			/*check label */
-			if(!check_label( parser_t_p->label_name[k] , sym_head ,&error_flag , YES))
+			if(!check_label( parser_t_p->label_name[k] , sym_head ,&error_flag , YES,row_num))
 			{
 			return 1;
 			}

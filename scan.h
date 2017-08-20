@@ -1,5 +1,5 @@
 /*MAMAN 14 Final Project*/
-/*Shmuel Asulin ,ID:          */
+/*Shmuel Asulin ,ID:036760676 */
 /*Yotam Klein* , ID:066546896 */
 
 /*Assembler*/
@@ -18,17 +18,34 @@
 #define REG_LEN 4
 #endif
 
+/*
 #ifndef WORD_LEN
 #define WORD_LEN 10
 #endif
-
+*/
 #ifndef COMMAND_LEN
 #define COMMAND_LEN 8
 #endif
 
-#ifndef MAX_NUM
+
+/*DECIMAL DIGIT LIMIT*/
+#ifndef MAX_NUM 
 #define MAX_NUM 512
 #endif
+
+#ifndef MIN_NUM 
+#define MIN_NUM -513
+#endif
+
+/*OCTAL DIGIT LIMIT*/
+#ifndef MAX_NUM_8 
+#define MAX_NUM_8 128
+#endif
+
+#ifndef MIN_NUM_8 
+#define MIN_NUM_8 -129
+#endif
+
 const char *reserved_words[]={"mov","cmp","add",
                     "sub","not","clr",
                     "lea","inc","dec",

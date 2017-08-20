@@ -1,8 +1,18 @@
 /*MAMAN 14 Final Project*/
-/*Shmuel Asulin ,ID:          */
+/*Shmuel Asulin ,ID:036760676  */
 /*Yotam Klein* , ID:066546896 */
 
 /*Assembler*/
+
+/*This file contains the algorithm for the two scans, diveded into two
+main functions: first_scan & second scan, each dependent on several more large
+source file: 
+			parser.c : parses the command arguments
+			encoding_first_scan.c : Operates the IC & DC counters, and encodes the data table.
+			encoding_first_scan.c   Encodes the main(Instructions)
+and two header files: aux.h & scan.h*/
+
+/*The file also contains several small aux functions*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,13 +24,14 @@
 #include "encoding_first_scan.c"
 #include "encoding_second_scan.c"
 
+/***************************************************************/	
 bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC)
 {
 		int IC_NOW,DC_NOW,  /*Counters*/
 		row_num,i,
 		op_len;
 
-	bool error,is_label,is_op,is_data_op,is_ext,is_ent;
+	bool error,is_label,is_op,is_data_op,is_ext,is_ent; /*Boolean flags*/
 	parser_table parser_t ;
 	sym_row_p tmp;
 	char row_buf[MAX_ROW_LEN];	
@@ -36,12 +47,10 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 	row_num=1;
 
 /***************************************************************/	
-/***************************************************************/
-
-	while(fgets(row_buf,MAX_ROW_LEN,fp) !=NULL)
+	while(fgets(row_buf,MAX_ROW_LEN,fp) !=NULL) /*Loops through all input lines*/
 	{
 
-		buf_p=row_buf; /*Global pointer to search the recorded row*/
+		buf_p=row_buf; /*Global pointer to search current line*/
 		op_len=0;
 
 		is_op=NO;	
@@ -59,27 +68,23 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 			row_num++;
 			continue;
 		}
-		/*	2) CHECK AND IGNORE EMPTY LINES	*/
-		
+		/*	2) CHECK AND IGNORE EMPTY LINES	*/	
 		if (is_empty(row_buf))
 		{
 			row_num++;
 			continue;
-		}
 		/*	3)CHECK AND SAVE LABELS	(IF APPEAR AT BEGINNING OF LINE)*/
-
 		label=tok_label(row_buf,arr_tmp,START,&error);	
 		if(label!=NULL)
 		{
 			no_space(label);			
 			strcpy(label_buf,label);
-			/*printf("in row#%d Found label %s\n",row_num,label);*/
 			buf_p=strchr(row_buf,':')+1;
-			is_label=check_label(label_buf,sym_head,&error,NO);
+			is_label=check_label(label_buf,sym_head,&error,NO,row_num);
 		}
 		else is_label=NO;				
 	/*		4)IS DATA INSTRUCTION? .data, .string .mat?	
-			Or one of the other operations	*/																	
+			Or one of the other operations(INSTRUCTION)	*/																	
 		op_tok=tok_get(buf_p,arr_tmp);
 
 		if(check_op(
@@ -89,7 +94,7 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 			op_len=strlen(op_tok);
 			buf_p+=op_len;
 			
-			if (	(!is_ext) && (!is_ent)	)
+			if (  (!is_ext) && (!is_ent)	)
 			{
 			    for ( i = 0 ; i < OP_NUM ; i++)
 				{    
@@ -97,24 +102,24 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 					break;
 				}
 				/*SEND TO ARGUMENT PARSING*/
-			    error=parser(buf_p ,&parser_t , row_num);
+			    error = (error || parser(buf_p ,&parser_t , row_num));
 				/*SEND TO ENCODING*/
-			    error=encoding_first_scan(&op_list[i],DC_table,IC_table,sym_head,
-									&parser_t,DC,IC);
+			    error=  (error || encoding_first_scan(&op_list[i],DC_table,IC_table,sym_head,
+									&parser_t,DC,IC,row_num));
 			}
 
 
 		}
 		else
 		{ 
-			printf("ERROR ,in row#%d OPERATION %s DOESN'T EXIST\n",row_num,op_tok);				
+			printf("ERROR! in row#%d: OPERATION %s DOESN'T EXIST\n",row_num,op_tok);				
 			error=YES;
 			row_num++;
 			continue;	
 		}
 
 	if(is_label && is_ext)
-		printf("WARNING!in row#%d: Ignoring Labels before \".extern\" commands\n",row_num);
+		printf("WARNING!in row#%d: Ignoring Labels before \".extern\" command\n",row_num);
 
 	
 	/*5) MANAGING EXTERNAL LABELS*/
@@ -122,20 +127,19 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 	{
 		arr_tmp[0]='\0';
 		label = tok_label(buf_p,arr_tmp,MID,&error); 
-/*Call tok_label function to search in the middle of the line*/
 		if(label!=NULL)
 		{
 			no_space(label);			
 			strcpy(label_buf,label);
-			is_label=check_label(label_buf,sym_head,&error,NO);
+			is_label=check_label(label_buf,sym_head,&error,NO,row_num);
 		}
 		else is_label=NO;			
 	}
 
-	if (is_label)
+	if (is_label) /*If label is OK then add it to the symbol table*/
 	{	
-			if(!is_ent)
-			add_symbol(sym_head,label_buf,IC_NOW,DC_NOW,is_ent,is_ext,is_data_op);	
+			if(!is_ent) /*Entry labels are enterned in the second scan*/
+				add_symbol(sym_head,label_buf,IC_NOW,DC_NOW,is_ent,is_ext,is_data_op);	
 			else 
 				printf("WARNING!in row#%d: Ignoring Labels before \".entry\" commands\n",row_num);
 	}	
@@ -143,13 +147,7 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 	} /*End of while(fgets...*/   
 
 
-	if (error)				/*End of lines*/
-	{
-		printf("ERRORS FOUND IN INPUT FILE!!!\n");					
-	}
-
 	--(*IC); /*IC is always one step ahead*/
-
 /*Adding IC final value to DC value*/
     for(tmp=sym_head;tmp->next!=NULL;tmp=tmp->next)
 	{	
@@ -157,10 +155,15 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 				tmp->dec_add+=(*IC);
 	}
 
+	if (error)	/*End of input lines*/
+		printf("ERRORS FOUND IN INPUT FILE!!!\n");					
+
+	}/*End of while*/
 	return error;
-} /*End of First Scan*/
+}/*End of First Scan*/
 
 
+/***************************************************************/	
 bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC)
 {
 
@@ -180,10 +183,11 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 	error=NO;
 	row_num=1;
 
+/***************************************************************/	
 	while(fgets(row_buf,MAX_ROW_LEN,fp) !=NULL)
 	{
 
-		buf_p=row_buf; /*Global pointer to search the recorded row*/
+		buf_p=row_buf; 
 		op_len=0;
 
 		is_op=NO;	
@@ -198,24 +202,25 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 			row_num++;
 			continue;
 		}
-		/*	2) CHECK AND IGNORE EMPTY LINES	*/
-		
+		/*	2) CHECK AND IGNORE EMPTY LINES	*/	
 		if (is_empty(row_buf))
 		{
 			row_num++;
 			continue;
 		}
-		
+
+/*In the second scan we ignore the labels that were already added in the first scan*/
 	strcpy(arr_tmp,row_buf);
-		strtok(arr_tmp,":") ;	
+	strtok(arr_tmp,":");	
 		if (strcmp(arr_tmp,row_buf))
 			buf_p=strchr(row_buf,':')+1;
 
-
+		/*	3) PARSING INSTRUCTIONS BEFORE FINAL ENCODING	*/	
+		/*	IS DATA INSTRUCTION? .data, .string .mat?	
+			Or one of the other operations(INSTRUCTION)	*/					
+												
 		op_tok=tok_get(buf_p,arr_tmp);
-
-		if(check_op(
-		op_tok,&is_op,&is_data_op,&is_ext,&is_ent))
+		if(check_op(op_tok,&is_op,&is_data_op,&is_ext,&is_ent))
 		{
 			buf_p=strstr(row_buf,op_tok);
 			op_len=strlen(op_tok);
@@ -231,24 +236,23 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 				}
 
 				/*SEND TO ARGUMENT PARSING*/
-			    error=parser(buf_p , &parser_t , row_num);
+			    error = (error || parser(buf_p , &parser_t , row_num));
 				/*SEND TO ENCODING*/
-			    error=encoding_second_scan(&op_list[i],DC_table,IC_table,sym_head,
-									&parser_t,DC,IC);
+			    error = (error || encoding_second_scan(&op_list[i],DC_table,IC_table,sym_head,
+									&parser_t,DC,IC,row_num));
 			}
 
 
 		}
 		else
 		{ 
-			printf("ERROR ,in row#%d OPERATION %s DOESN'T EXIST\n",row_num,op_tok);				
+			printf("ERROR! in row#%d OPERATION %s DOESN'T EXIST\n",row_num,op_tok);				
 			error=YES;
 			row_num++;
 			continue;	
 		}
 	
 /*Managing labels after ".entry"*/
-
 	if(is_ent)
 	{
 		arr_tmp[0]='\0';
@@ -257,7 +261,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 		{
 			no_space(label);			
 			strcpy(label_buf,label);
-			is_label=check_label(label_buf,sym_head,&error,YES);
+			is_label=check_label(label_buf,sym_head,&error,YES,row_num);
 		}
 		else is_label=NO;			
 	}
@@ -278,8 +282,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 	} /*End of while(fgets...*/   
 
 	return error;
-}
-/*End of Second Scan*/
+}/*End of Second Scan*/
 
 void reverse (char *string) 
 {
@@ -304,21 +307,6 @@ void reverse (char *string)
    }
 }
 
-void dec_to_weird (char *quad_num ,int dec_num)
-{   /* Convert decimal int to weird base string*/
-   int i;
-   int base;
-   base=WEIRD_BASE;
-   for(i=0;i<base;i++)
-   {
-	 quad_num[i] = (dec_num % base) + 'a';
-	 dec_num = dec_num / base;
-   }
-
-   	quad_num[base]='\0';
-	reverse(quad_num);
-
-}
 
 
 bool is_comment(char *arr , char *arr_tmp)
@@ -366,7 +354,7 @@ char *tok_label(char *arr,char *arr_tmp,int label_pos,bool *error)
 
 		if (*arr_tmp == '\0') 
 		{	
-			printf("ERROR!LABEL after extern is empty!!! expected label name\n");
+			printf("ERROR! LABEL after extern is empty!!! expected label name\n");
 			*error=YES;
 			return NULL;
 		}
@@ -510,7 +498,7 @@ bool check_op(  char *op_string,
 	return NO;
 }
 
-bool check_label(char *label,sym_row_p head,bool *error , bool should_exists)
+bool check_label(char *label,sym_row_p head,bool *error , bool should_exists,int row_num)
 {
 /*This function tests if a label is OK
 it tests:
@@ -526,7 +514,7 @@ it tests:
 	if (!isalpha(label[0]))
 	{ 
 		printf
-		("LABEL: %s is illegal!\nA LABEL has to start with a letter\n",label);
+		("ERROR! in row#%d:LABEL %s is illegal!\nA LABEL has to start with a letter\n",row_num,label);
 		*error=YES;
 		return NO;
 	}
@@ -535,7 +523,7 @@ it tests:
 	if (strlen(label)>MAX_LABEL_SIZE) 
 	{
 		printf
-		("LABEL: %s is illegal!\nA LABEL cannot be longer than %d\n",label,MAX_LABEL_SIZE);
+		("ERROR! in row#%d:LABEL %s is illegal!\nA LABEL cannot be longer than %d\n",row_num,label,MAX_LABEL_SIZE);
 		*error=YES;
 		return NO;
 	}	
@@ -545,7 +533,7 @@ it tests:
 		if (!strcmp(label,reserved_words[i]))
 		{
 			printf
-			("LABEL: %s is illegal!\n%s is a reserved word!\n",label,reserved_words[i]);
+			("ERROR! in row#%d:LABEL %s is illegal!\n%s is a reserved word!\n",row_num,label,reserved_words[i]);
 			*error=YES;
 			return NO;
 		}
@@ -561,10 +549,9 @@ it tests:
 	}
     if (should_exists)
     {
-	if(exists)
-	return YES;
+	if(exists) return YES;
 /*	return NO;*/
-	printf("LABEL: %s does not exists!!!\n",label);
+	printf("ERROR! in row#%d:LABEL %s does not exists!!!\n",row_num,label);
 /*	*error=YES;
 	return YES;*/
     }
@@ -572,8 +559,7 @@ it tests:
     {
 	if(exists)
 	{
-	    printf
-	    ("LABEL: %s already exists!!!\n",label);
+	    printf("ERROR! in row#%d:LABEL %s already exists!!!\n",row_num,label);
 	    *error=YES;
 	    return NO;
 	}    
@@ -623,4 +609,21 @@ void bin_to_weird(char *bin,char *weird)
 		dec=(bin[i] - '0')*2+(bin[i+1]-'0');
 		weird[i/2]=('a'+dec);
 	}
+}
+
+
+void dec_to_weird (char *quad_num ,int dec_num)
+{   /* Convert decimal int to weird base string*/
+   int i;
+   int base;
+   base=WEIRD_BASE;
+   for(i=0;i<base;i++)
+   {
+	 quad_num[i] = (dec_num % base) + 'a';
+	 dec_num = dec_num / base;
+   }
+
+   	quad_num[base]='\0';
+	reverse(quad_num);
+
 }

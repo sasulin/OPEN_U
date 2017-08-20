@@ -1,5 +1,5 @@
 /*MAMAN 14 Final Project*/
-/*Shmuel Asulin ,ID:          */
+/*Shmuel Asulin ,ID:036760676  */
 /*Yotam Klein* , ID:066546896 */
 
 /*Assembler*/
@@ -74,6 +74,7 @@ typedef struct symbol_table_row
 
 }symbol_row;
 
+/*Structure that holds parsing temp parsing information*/
 typedef struct parser_table *parser_table_p;
 typedef struct parser_table 
 {
@@ -85,28 +86,35 @@ typedef struct parser_table
 
 } parser_table;
 
-/*Functions declarations*/
-int parser(char *input ,parser_table_p parser_t_p);
-bool first_scan(FILE *fp, sym_row_p head,I_row_p,D_row_p,int *IC,int *DC);
-bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC);
-void reverse(char *string); 
-void dec_to_weird(char *quad_num ,int dec_num);
-void quad_weird(char *quad_num);
+	/*Functions declarations*/
+bool        first_scan(FILE *fp, sym_row_p head,I_row_p,D_row_p,int *IC,int *DC);
+bool        second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC);
+/*int parser(char *input ,parser_table_p parser_t_p,int);*/
+
+/*File lines*/
+bool        is_comment(char *arr,char *arr_tmp);
+bool        is_empty(char *arr);
+
+/*parsing*/
+bool        check_op(char *op_string,bool*,bool*,bool*,bool*);
+char        *tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
+char        *tok_get(char *arr , char *arr_tmp);
+int         return_label_address(char *label,sym_row_p head);
+
+/*General aux*/
+void        no_space(char *str);
+void        reverse(char *string); 
+
+/*Base transformations*/
+void        dec_to_weird(char *quad_num ,int dec_num);
+void        quad_weird(char *quad_num);
+void        dec_to_bin(int n,char *word , int);
+void        bin_to_weird(char *bin,char *weird);
+
+/*Symbo table*/
 sym_row_p 	sym_alloc(void);
 void 		print_sym_table(sym_row_p head);
-void initialize_sym_table(sym_row_p head);
-void 		no_space(char *str);
-void dec_to_bin(int n,char *word , int j);
-void bin_to_weird(char *bin,char *weird);
+void        initialize_sym_table(sym_row_p head);
+void        add_symbol(sym_row_p head, char *label,int IC,int DC,bool is_ent, bool is_ext, bool is_data_op);
 
-
-bool 		is_comment(char *arr,char *arr_tmp);
-bool 		is_empty(char *arr);
-bool 		check_op(char *op_string,bool*,bool*,bool*,bool*);
-bool 		check_label(char *label,sym_row_p head,bool* , bool);
-char 		*tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
-char 		*tok_get(char *arr , char *arr_tmp);
-void 		add_symbol(sym_row_p head, char *label,int IC,int DC,bool is_ent, bool is_ext, bool is_data_op);
-int 		return_label_address(char *label,sym_row_p head);
-bool check_label(char *label,sym_row_p head,bool* , bool);
-int return_label_address(char *label,sym_row_p head);
+bool        check_label(char *label,sym_row_p head,bool*,bool,int row_number);
