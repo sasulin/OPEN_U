@@ -3,7 +3,9 @@
 output
 main
 backup*
-
-
+*.ext
+*.ent
+*.ob
+*.orig
 # But not these files...
 !gitignore

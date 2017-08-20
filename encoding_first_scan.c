@@ -17,8 +17,8 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 	    if(parser_t_p->type[0] != TYPE_STRING )
 	    {
 		
-		printf("\nERROR , Wrong argument to .string command %d != %d \n" , parser_t_p->type[0] ,TYPE_STRING);
-		break;
+		printf("ERROR in row#%d:, Wrong argument to .string command\n" ,row_num);
+		return 1;
 	    } 
 	    for(i=1;parser_t_p->temp_string[0][i] != '"';i++)
 		{
@@ -44,13 +44,13 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 		/* check that all types are numbers */
 		if(parser_t_p->type[i] != TYPE_NUM )
 		{
-		printf("\nERROR , Wrong argument to .data command %d != %d \n" , parser_t_p->type[i] ,TYPE_NUM);
+		printf("ERROR in row#%d: Wrong argument to .data \n" , row_num);
 		return 1;
 		}
 		/* check that all |numbers| < MAX_NUM_10*/
 		if(!((parser_t_p->first_arg[i] < MAX_NUM_10)  &&  (parser_t_p->first_arg[i] > (MIN_NUM_10)))  )
 		{
-		printf("\nERROR ,\"%d\" is Out Of Range\n" , parser_t_p->first_arg[i] );
+		printf("ERROR in row#%d:,\"%d\" is Out Of Range\n",row_num , parser_t_p->first_arg[i] );
 		return 1;
 		}
 		
@@ -67,36 +67,35 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 		/* need to add check that all types are numbers */
 		if(parser_t_p->type[i] != TYPE_NUM )
 		{
-		printf("\nERROR , Wrong argument to .mat command %d != %d \n" , parser_t_p->type[i] ,TYPE_NUM);
-		error_flag = 1 ;
-		break;
+		printf("ERROR in row#%d: Wrong argument to .mat command  \n",row_num );
+		return 1; 
 		}
 		/* check that all |numbers| < MAX_NUM_10*/
 		if(!((parser_t_p->first_arg[i] < MAX_NUM_10)  &&  (parser_t_p->first_arg[i] > (MIN_NUM_10)))  )
 		{
-		printf("\nERROR ,\"%d\" is Out Of Range\n" , parser_t_p->first_arg[i] );
-		error_flag = 1 ;
-		break;
+		printf("ERROR in row#%d:\"%d\" is Out Of Range\n",row_num , parser_t_p->first_arg[i] );
+		return 1; 
 		}
-		
+		/* add to table*/
 		dec_to_bin(parser_t_p->first_arg[i],DC_table[*DC].binary_op,WORD_SIZE);
 		(*DC)++;
 	    }
+
+	    if((parser_t_p->first_arg[0])*(parser_t_p->second_arg[0]) < i-1)
+	    {
+		printf("ERROR in row#%d: Too many arguments .mat command \n",row_num);
+		return 1;
+	    }
+
 	    /* padding data tabel with zeros */
 
 	    for(--i;(parser_t_p->first_arg[0])*(parser_t_p->second_arg[0]) > i;i++)
 	    {
 		dec_to_bin(0,DC_table[*DC].binary_op,WORD_SIZE);
 		(*DC)++;
-		/*printf("DC value incrised by 1 %d" , *DC);*/
-
-	    }
-	    if(parser_t_p->type[i])
-	    {
-		printf("ERROR in row#%d: Too many arguments .string command \n",row_num);
-		return 1;
 	    }
 	    return 0;
+
 	}
 
 	
@@ -124,7 +123,7 @@ int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_
 
 		    
 		    case TYPE_REG:
-			if(parser_t_p->type[1] == TYPE_REG) /* need to check that is working */
+			if(parser_t_p->type[1] == TYPE_REG) 
 			{
 			    (*IC)++;
 			    return 0;
