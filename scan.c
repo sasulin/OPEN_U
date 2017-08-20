@@ -553,10 +553,9 @@ it tests:
     if (should_exists)
     {
 	if(exists) return YES;
-/*	return NO;*/
 	printf("ERROR! in row#%d:LABEL %s does not exists!!!\n",row_num,label);
-/*	*error=YES;
-	return YES;*/
+	*error=YES;
+	return NO;
     }
     else 
     {
@@ -629,4 +628,17 @@ void dec_to_weird (char *quad_num ,int dec_num)
    	quad_num[base]='\0';
 	reverse(quad_num);
 
+}
+
+/* check that octal digit is in limit , if not print error*/
+
+int check_in_limit(int NUM , int row_num)
+{
+
+    if(!(NUM < MAX_NUM_8)  &&  (NUM > (-MIN_NUM_8)))  
+	{
+	printf("ERROR! in row#%d: Number %d Is out of range\n",row_num,NUM);				
+	return 1 ;
+	}
+    return 0 ;
 }

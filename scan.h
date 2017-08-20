@@ -29,12 +29,12 @@
 
 
 /*DECIMAL DIGIT LIMIT*/
-#ifndef MAX_NUM 
-#define MAX_NUM 512
+#ifndef MAX_NUM_10 
+#define MAX_NUM_10 512
 #endif
 
-#ifndef MIN_NUM 
-#define MIN_NUM -513
+#ifndef MIN_NUM_10 
+#define MIN_NUM_10 -513
 #endif
 
 /*OCTAL DIGIT LIMIT*/

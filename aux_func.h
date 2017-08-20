@@ -111,6 +111,7 @@ void        dec_to_weird(char *quad_num ,int dec_num);
 void        quad_weird(char *quad_num);
 void        dec_to_bin(int n,char *word , int);
 void        bin_to_weird(char *bin,char *weird);
+int 	    check_in_limit(int NUM , int row_num);
 
 /*Symbo table*/
 sym_row_p 	sym_alloc(void);
