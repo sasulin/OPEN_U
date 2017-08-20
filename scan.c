@@ -157,7 +157,7 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 	}
 
 	if (error)	/*End of input lines*/
-		printf("ERRORS FOUND IN INPUT FILE!!!\n");					
+		printf("ERRORS FOUND IN INPUT FILE DURING FIRST SCAN!!!\n");					
 
 
 	return error;
@@ -260,7 +260,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 		label = tok_label(buf_p,arr_tmp,MID,&error); 
 		if(label!=NULL)
 		{
-			no_space(label);			
+			no_space(label);		
 			strcpy(label_buf,label);
 			is_label=check_label(label_buf,sym_head,&error,YES,row_num);
 		}
@@ -282,6 +282,8 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 		row_num++; /*Line ends*/
 	} /*End of while(fgets...*/   
 
+	if (error)	/*End of input lines*/
+		printf("ERRORS FOUND IN INPUT FILE DURING SECOND SCAN!!!\n");					
 	return error;
 }/*End of Second Scan*/
 
@@ -355,7 +357,7 @@ char *tok_label(char *arr,char *arr_tmp,int label_pos,bool *error)
 
 		if (*arr_tmp == '\0') 
 		{	
-			printf("ERROR! LABEL after extern is empty!!! expected label name\n");
+			printf("ERROR! LABEL after extern/entry is empty!!! expected label name\n");
 			*error=YES;
 			return NULL;
 		}
