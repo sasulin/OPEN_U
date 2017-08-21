@@ -20,9 +20,13 @@ and two header files: aux.h & scan.h*/
 #include <ctype.h>
 #include "aux_func.h"
 #include "scan.h"
-#include "parser.c"
-#include "encoding_first_scan.c"
-#include "encoding_second_scan.c"
+#include "extern_gobal_vars.h"
+
+
+/*extra functions declarations*/
+
+int encoding_first_scan(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC ,int row_num);
+int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC_table , sym_row_p sym_head , parser_table_p parser_t_p , int *DC , int *IC ,int row_num);
 
 /***************************************************************/	
 bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC)

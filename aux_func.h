@@ -1,12 +1,14 @@
-#ifndef AUX_FUNC_H
-#define AUX_FUNC_H
-#endif
-
 /*MAMAN 14 Final Project*/
 /*Shmuel Asulin ,ID:036760676  */
 /*Yotam Klein* , ID:066546896 */
 
 /*Assembler*/
+#ifndef AUX_FUNC_H
+#define AUX_FUNC_H
+#endif
+
+
+
 
 #ifndef MEMORY_SIZE
 #define MEMORY_SIZE 256
@@ -93,6 +95,10 @@ typedef struct parser_table
 	/*Functions declarations*/
 bool        first_scan(FILE *fp, sym_row_p head,I_row_p,D_row_p,int *IC,int *DC);
 bool        second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC);
+
+
+
+
 /*int parser(char *input ,parser_table_p parser_t_p,int);*/
 
 /*File lines*/
@@ -105,6 +111,7 @@ bool        check_op(char *op_string,bool*,bool*,bool*,bool*);
 char        *tok_label(char * arr,char * arr_tmp,int label_pos,bool*);
 char        *tok_get(char *arr , char *arr_tmp);
 int         return_label_address(char *label,sym_row_p head);
+int 	    parser(char *input ,parser_table_p parser_t_p ,int row_num);
 
 /*General aux*/
 void        no_space(char *str);

@@ -7,7 +7,7 @@ TEST: .extern L3
 MAIN:	mov	M1[r2][r7],W
 
 
-        add  #5,#6
+        add  #5,M1[r2][r7]
 ;THIS IS AN ERROR:
 ;        .mat [2][3] 1,2,3,4,5,6,7,8
 

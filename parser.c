@@ -16,6 +16,14 @@
   else return 0.
 */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include "aux_func.h"
+#include "scan.h"
+
+
 int parser(char *input ,parser_table_p parser_t_p ,int row_num)
 { 
     char *token[MAX_ROW_LEN]= {0} ;
@@ -39,7 +47,7 @@ int parser(char *input ,parser_table_p parser_t_p ,int row_num)
     parser_t_p->second_arg[0] = second_arg[0]; 
 
     /*looks for ,, in the input string */
-    if(strstr( bad_token , input ))
+    if(strstr( input , bad_token ))
     {
     	printf("ERROR ,in row#%d recieve bad_token %s \n ",row_num, bad_token);
     	return 1;

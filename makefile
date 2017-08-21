@@ -1,25 +1,24 @@
+TARGET = assembler 
+LIBS = -lm
 CC = gcc
-CFLAGS = -ansi -pedantic -Wall -g
+CFLAGS = -g -Wall -ansi -pedantic
 
-# -g flag is for debugging information
+.PHONY: default all clean
 
-assembler: assembler.o scan.o
-#A command that generates the target assembler:
-	$(CC) $(CFLAGS) -o assembler assembler.o scan.o -lm
+all: default
+default: $(TARGET)
 
-assembler.o : assembler.c aux_func.h	
-	$(CC) $(CFLAGS) -c assembler.c 
+OBJECTS = $(patsubst %.c, %.o, $(wildcard *.c))
+HEADERS = $(wildcard *.h)
 
-scan.o : scan.c aux_func.h scan.h parser.c encoding_first_scan.c encoding_second_scan.c
-	$(CC) $(CFLAGS) -c scan.c
+%.o: %.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-#parser.o : parser.c aux_func.h scan.h
-#	$(CC) $(CFLAGS) -c parser.c 
+.PRECIOUS: $(TARGET) $(OBJECTS)
 
-#encoding.o : encoding.c aux_func.h scan.h
-#	$(CC) $(CFLAGS) -c encoding.c 
+$(TARGET): $(OBJECTS)
+	$(CC) $(OBJECTS) -Wall -ansi -pedantic $(LIBS) -o $@
 
-
-clean:  
-	rm *.o
-	
+clean:
+	-rm -f *.o *.ent *.ext *.ob
+	-rm -f $(TARGET)
