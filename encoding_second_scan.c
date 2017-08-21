@@ -10,9 +10,9 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
     int k , label_address;
     bool error_flag = 0 ;
 /*DC encoding was already done in the first scan*/
-    if (command->EnuM==STRING || 
-	command->EnuM ==DATA  || 
-	command->EnuM==MAT)	    
+    if (command->EnuM == STRING || 
+	command->EnuM == DATA  || 
+	command->EnuM == MAT)	    
     return 0;
 	
 
@@ -47,8 +47,8 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		    case TYPE_DIRECT:
 			if(!command->src_immediate)
 			{
-			    printf("ERROR can't get type immediate");
-			    error_flag = 1 ;
+			    printf("ERROR! in row#%d: Command %s can't get immediate addressing \n",row_num,command->name);
+			    return 1 ;
 			}
 			IC_table[*IC].binary_op[4] = '0';
 			IC_table[*IC].binary_op[5] = '0';
@@ -57,8 +57,8 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		    case TYPE_MATRIX:
 			if(!command->src_matrix)
 			{
-			    printf("ERROR can't get type matrix");
-			    error_flag = 1 ;
+			    printf("ERROR! in row#%d: Command %s can't get  matrix addressing\n",row_num,command->name);
+			    return 1 ;
 			}
 			IC_table[*IC].binary_op[4] = '1';
 			IC_table[*IC].binary_op[5] = '0';
@@ -67,8 +67,8 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		    case TYPE_LABEL:
 			if(!command->src_direct)
 			{
-			    printf("ERROR can't get type direct");
-			    error_flag = 1 ;
+			    printf("ERROR! in row#%d: Command %s can't get direct  addressing\n",row_num,command->name);
+			    return 1 ;
 			}
 			IC_table[*IC].binary_op[4] = '0';
 			IC_table[*IC].binary_op[5] = '1';
@@ -77,19 +77,16 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		    case TYPE_REG:
 			if(!command->src_register)
 			{
-			    printf("ERROR can't get type reg");
-			    error_flag = 1 ;
+			    printf("ERROR! in row#%d: Command %s can't get reg  addressing\n",row_num,command->name);
+			    return 1 ;
 			}
 			IC_table[*IC].binary_op[4] = '1';
 			IC_table[*IC].binary_op[5] = '1';
 			break;
 
 		    case TYPE_ERROR:
-			printf("\n ERROR missing args to cmd ");
-			error_flag = 1 ;
-			IC_table[*IC].binary_op[4] = '0';
-			IC_table[*IC].binary_op[5] = '0';
-			break;
+			printf("ERROR! in row#%d: missing args to Command %s\n",row_num,command->name);
+			return 1 ;
 		}
     }
 
@@ -106,8 +103,8 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		    case TYPE_DIRECT:
 			if(!command->dest_immediate)
 			{
-			    error_flag = 1 ;
-			    printf("ERROR can't get type immediate");
+			    printf("ERROR! in row#%d: Command %s can't get immediate  addressing\n",row_num,command->name);
+			    return 1;
 			}
 			IC_table[*IC].binary_op[6] = '0';
 			IC_table[*IC].binary_op[7] = '0';
@@ -116,8 +113,8 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		    case TYPE_MATRIX:
 			if(!command->dest_matrix)
 			{
-			    error_flag = 1 ;
-			    printf("ERROR can't get type matrix");
+			    printf("ERROR! in row#%d: Command %s can't get matrix addressing\n",row_num,command->name);
+			    return 1;
 			}
 			IC_table[*IC].binary_op[6] = '1';
 			IC_table[*IC].binary_op[7] = '0';
@@ -127,8 +124,8 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		    case TYPE_LABEL:
 			if(!command->dest_direct)
 			{
-			    error_flag = 1 ;
-			    printf("ERROR can't get type direct");
+			    printf("ERROR! in row#%d: Command %s can't get direct  addressing\n",row_num,command->name);
+			    return 1;
 			}
 			IC_table[*IC].binary_op[6] = '0';
 			IC_table[*IC].binary_op[7] = '1';
@@ -137,21 +134,21 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 		    case TYPE_REG:
 			if(!command->dest_register)
 			{
-			    error_flag = 1 ;
-			    printf("ERROR can't get type reg");
+			    printf("ERROR! in row#%d: Command %s can't get reg  addressing\n",row_num,command->name);
+			    return 1;
 			}
 			IC_table[*IC].binary_op[6] = '1';
 			IC_table[*IC].binary_op[7] = '1';
 			break;
 
 		    case TYPE_ERROR:
+			printf("ERROR! in row#%d: missing args to Command %s\n",row_num,command->name);
 			if(command->dest_direct || 
 			    command->dest_immediate || 
 			    command->dest_register || 
 			    command->dest_matrix)
 			{    
-			    error_flag = 1 ;
-			    printf("\n missing args to cmd ");
+			return 1 ;
 			}
 			IC_table[*IC].binary_op[6] = '0';
 			IC_table[*IC].binary_op[7] = '0';
@@ -334,6 +331,6 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 	    (*IC)++;
 
     	
-return error_flag;
+return 0;
 }
 
