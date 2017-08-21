@@ -69,7 +69,7 @@ int main(int argc , char *argv[])
 	FILE *fp_ext;
 	FILE *fp_ent;
 
-	error=NO;
+/*	error=NO;*/
 	IC_p = &main_table[0];
 	DC_p = &data_table[0];
 	
@@ -81,6 +81,7 @@ int main(int argc , char *argv[])
 
 	while( --argc > 0 )  /*Loop on all the input files*/
 	{
+		error=NO;
 		IC=INITIAL_IC;
 		DC=INITIAL_DC;
 		initialize_sym_table(sym_head);
@@ -128,20 +129,18 @@ int main(int argc , char *argv[])
 /****************************************FIRST SCAN****************************************/
 		printf("********** Input file: %s **********\n\n",input_file);
 		error = first_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
-
-		if(!error)
-		{
-			fp_out=fopen(output_file,"w+");
-			CHECK_OPEN(fp_out,output_file)
-		}
-/*		else continue;*/
+		if (error) continue;
 /****************************************SECOND SCAN****************************************/
 		IC=INITIAL_IC;
 		rewind(fp_in);
-		error = second_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC);
+		error = (error || second_scan(fp_in,sym_head,IC_p,DC_p,&IC,&DC));
 		if(error) continue;
 
 /*Printing IC Table*/
+
+		fp_out=fopen(output_file,"w+");
+		CHECK_OPEN(fp_out,output_file)
+
  		dec_to_weird(str_print,(IC-INITIAL_IC-1));
 		fprintf(fp_out," %s ",str_print);
  		dec_to_weird(str_print,DC);

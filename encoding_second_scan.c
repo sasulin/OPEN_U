@@ -142,12 +142,12 @@ int encoding_second_scan(operation_list *command , D_row_p DC_table , I_row_p IC
 			break;
 
 		    case TYPE_ERROR:
-			printf("ERROR! in row#%d: missing args to Command %s\n",row_num,command->name);
 			if(command->dest_direct || 
 			    command->dest_immediate || 
 			    command->dest_register || 
 			    command->dest_matrix)
 			{    
+			printf("ERROR! in row#%d: missing args to Command %s\n",row_num,command->name);
 			return 1 ;
 			}
 			IC_table[*IC].binary_op[6] = '0';

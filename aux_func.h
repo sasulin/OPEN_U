@@ -1,3 +1,6 @@
+#ifndef AUX_FUNC_H
+#define AUX_FUNC_H
+#endif
 
 /*MAMAN 14 Final Project*/
 /*Shmuel Asulin ,ID:036760676  */
@@ -95,6 +98,7 @@ bool        second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_
 /*File lines*/
 bool        is_comment(char *arr,char *arr_tmp);
 bool        is_empty(char *arr);
+bool        check_label(char *label,sym_row_p head,bool*,bool,int row_number);
 
 /*parsing*/
 bool        check_op(char *op_string,bool*,bool*,bool*,bool*);
@@ -119,4 +123,3 @@ void 		print_sym_table(sym_row_p head);
 void        initialize_sym_table(sym_row_p head);
 void        add_symbol(sym_row_p head, char *label,int IC,int DC,bool is_ent, bool is_ext, bool is_data_op);
 
-bool        check_label(char *label,sym_row_p head,bool*,bool,int row_number);

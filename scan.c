@@ -27,9 +27,9 @@ and two header files: aux.h & scan.h*/
 /***************************************************************/	
 bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,int *IC,int *DC)
 {
-		int IC_NOW,DC_NOW,  /*Counters*/
-		row_num,i,
-		op_len;
+	int IC_NOW,DC_NOW,  /*Counters*/
+	row_num,i,
+	op_len;
 
 	bool error,is_label,is_op,is_data_op,is_ext,is_ent; /*Boolean flags*/
 	parser_table parser_t ;
@@ -116,12 +116,11 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 			printf("ERROR! in row#%d: OPERATION %s DOESN'T EXIST\n",row_num,op_tok);				
 			error=YES;
 			row_num++;
-			continue;	
+			/*continue;	*/
 		}
 
 	if(is_label && is_ext)
 		printf("WARNING!in row#%d: Ignoring Labels before \".extern\" command\n",row_num);
-
 	
 	/*5) MANAGING EXTERNAL LABELS*/
 	if(is_ext)
@@ -157,8 +156,10 @@ bool first_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,in
 	}
 
 	if (error)	/*End of input lines*/
-		printf("ERRORS FOUND IN INPUT FILE DURING FIRST SCAN!!!\n");					
-
+	{
+		printf("ERRORS FOUND IN INPUT FILE DURING FIRST SCAN!!!\n");
+	    printf("NOT MOVING ON TO SECOND SCAN\n");					
+	}
 
 	return error;
 }/*End of First Scan*/
@@ -227,8 +228,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 			op_len=strlen(op_tok);
 			buf_p+=op_len;
 			
-
-			if (	(!is_ext) && (!is_ent)	)
+			if ( (!is_ext) && (!is_ent)	)
 			{
 			    for ( i = 0 ; i < OP_NUM ; i++)
 				{ 
@@ -250,7 +250,7 @@ bool second_scan(FILE *fp,sym_row_p sym_head,I_row_p IC_table,D_row_p DC_table,i
 			printf("ERROR! in row#%d OPERATION %s DOESN'T EXIST\n",row_num,op_tok);				
 			error=YES;
 			row_num++;
-			continue;	
+		/*	continue;	*/
 		}
 	
 /*4) Managing labels after ".entry"*/
@@ -314,6 +314,7 @@ void reverse (char *string)
 
 bool is_comment(char *arr , char *arr_tmp)
 	{
+/*This function searches for comment sign*/
 		strcpy(arr_tmp,arr);
 		no_space(arr_tmp);
 
@@ -322,6 +323,7 @@ bool is_comment(char *arr , char *arr_tmp)
 	}
 
 bool is_empty(char *arr)
+/*This function searches for empty lines*/
 {
 		int i,empty_flag;
 		empty_flag=1;
@@ -336,6 +338,8 @@ bool is_empty(char *arr)
 
 char *tok_label(char *arr,char *arr_tmp,int label_pos,bool *error)
 {
+/*This function searches for a label at the beggining of a row or in the middle
+Depending on the label_pos flag, and returns the label if finds one, and NULL if not*/
 
 	/*If row starts with a label*/
 	if (label_pos == START)
@@ -369,6 +373,7 @@ char *tok_label(char *arr,char *arr_tmp,int label_pos,bool *error)
 
 void no_space(char *str)
 {
+/*Aux func to delete spaces from existing string*/
    char* p1 = str;
    char* p2 = str;
    while(*p2 != '\0')
@@ -384,6 +389,8 @@ void no_space(char *str)
 
 void add_symbol(sym_row_p head,char *label,int IC,int DC,bool is_ent,
 				bool is_ext, bool is_data_op)
+/*This function adds a label to the symbol tabel
+It distinguishes a label in the head form any other row*/
 {
 	sym_row_p tmp;
 	if (head->next==NULL)
@@ -415,7 +422,7 @@ void add_symbol(sym_row_p head,char *label,int IC,int DC,bool is_ent,
 	
 			strcpy(tmp->label,label);      
 
-/*Updating counters*/
+/*Updating counters in symbol table*/
 			if (is_data_op)
 				tmp->dec_add=DC;
 			else
@@ -436,6 +443,7 @@ void add_symbol(sym_row_p head,char *label,int IC,int DC,bool is_ent,
 
 char *tok_get(char *arr,char *arr_tmp)
 {
+/*Aux function to get the next token encountered*/
 	int i,j;
 	for(i=0;(i<MAX_ROW_LEN) && (arr[i]!='\0');i++)
 	{	
@@ -464,6 +472,7 @@ bool check_op(  char *op_string,
 				bool *is_ext, 
 				bool *is_ent)
 {
+/*This function tests if an operation is legal, using some predifined data structures*/
 	int i;
 
 	no_space(op_string);

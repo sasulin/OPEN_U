@@ -1,3 +1,7 @@
+#ifndef SCAN_H
+#define SCAN_H
+#endif
+
 /*MAMAN 14 Final Project*/
 /*Shmuel Asulin ,ID:036760676 */
 /*Yotam Klein* , ID:066546896 */
@@ -18,17 +22,11 @@
 #define REG_LEN 4
 #endif
 
-/*
-#ifndef WORD_LEN
-#define WORD_LEN 10
-#endif
-*/
 #ifndef COMMAND_LEN
 #define COMMAND_LEN 8
 #endif
 
-
-/*DECIMAL DIGIT LIMIT*/
+/*TEN DIGIT LIMIT*/
 #ifndef MAX_NUM_10 
 #define MAX_NUM_10 512
 #endif
@@ -37,7 +35,7 @@
 #define MIN_NUM_10 -513
 #endif
 
-/*OCTAL DIGIT LIMIT*/
+/*EIGHT DIGIT LIMIT*/
 #ifndef MAX_NUM_8 
 #define MAX_NUM_8 128
 #endif
